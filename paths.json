@@ -1,8 +1,9 @@
 {
   "mappings": [
-    "/content/aem-eds-demo/en:/",
+    "/content/cecebank/:/",
     "https://author-p34633-e913315.adobeaemcloud.com/:/",
-    "https://develop--aem-eds-demo--danetesu27.hlx.page/:/"
+    "https://main--eds-demo--idelllano-hiberuscom.aem.page/:/",
+    "https://main--eds-demo--idelllano-hiberuscom.aem.live/:/"
   ]
 }
 
