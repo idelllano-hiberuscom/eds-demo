@@ -30,17 +30,12 @@ export default async function decorate(block) {
       li.className = cardStyle;
     }
 
-    // Read CTA style from the fourth div (index 3)
-    const ctaDiv = row.children[3];
-    const ctaParagraph = ctaDiv?.querySelector('p');
-    const ctaStyle = ctaParagraph?.textContent?.trim() || 'default';
-
-    // Read optional button text from the fifth div (index 4)
-    const btnTextDiv = row.children[4];
+    // Read optional button text from the fourth div (index 3)
+    const btnTextDiv = row.children[3];
     const btnText = btnTextDiv?.querySelector('p')?.textContent?.trim() || '';
 
-    // Read optional button link from the sixth div (index 5)
-    const btnLinkDiv = row.children[5];
+    // Read optional button link from the fifth div (index 4)
+    const btnLinkDiv = row.children[4];
     const btnLink = btnLinkDiv?.querySelector('a')?.href
       || btnLinkDiv?.querySelector('p')?.textContent?.trim() || '';
 
@@ -56,12 +51,8 @@ export default async function decorate(block) {
       // Second div (index 1) - Content with button
         div.className = 'cards-card-body';
       } else {
-      // All other divs are config (style, cta, button text, button link)
+      // All other divs are config (style, button text, button link)
         div.className = 'cards-config';
-        const p = div.querySelector('p');
-        if (p) {
-          p.style.display = 'none';
-        }
       }
     });
 
@@ -79,15 +70,6 @@ export default async function decorate(block) {
         cardBody.appendChild(btnContainer);
       }
     }
-
-    // Apply CTA styles to button containers
-    const buttonContainers = li.querySelectorAll('p.button-container');
-    buttonContainers.forEach((buttonContainer) => {
-      // Remove any existing CTA classes
-      buttonContainer.classList.remove('default', 'cta-button', 'cta-button-secondary', 'cta-button-dark', 'cta-default');
-      // Add the correct CTA class
-      buttonContainer.classList.add(ctaStyle);
-    });
 
     ul.append(li);
   });

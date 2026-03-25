@@ -159,38 +159,6 @@
   padding-top: 1rem;
 }
 
-.cards .cards-card-body p.button-container a.button {
-  display: inline-block;
-  background-color: var(--button-primary-bg);
-  color: var(--button-primary-text);
-  border: 2px solid var(--button-primary-bg);
-  padding: 10px 24px;
-  border-radius: 4px;
-  font-weight: var(--font-weight-medium);
-  font-size: var(--font-size-sm);
-  text-decoration: none;
-  transition: all var(--transition-base);
-}
-
-.cards .cards-card-body p.button-container a.button:hover {
-  background-color: var(--button-primary-hover);
-  border-color: var(--button-primary-hover);
-  color: var(--button-primary-text);
-  transform: translateY(-2px);
-  box-shadow: var(--box-shadow-md);
-}
-
-/* Secondary button variant */
-.cards .cards-card-body p.button-container.cta-button-secondary a.button {
-  background-color: transparent;
-  color: var(--button-secondary-text);
-  border-color: var(--button-secondary-border);
-}
-
-.cards .cards-card-body p.button-container.cta-button-secondary a.button:hover {
-  background-color: var(--button-secondary-hover);
-  color: var(--button-secondary-text);
-}
 
 /* === RESPONSIVE - MOBILE FIRST === */
 

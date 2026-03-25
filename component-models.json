@@ -91,6 +91,39 @@
     ]
   },
   {
+    "id": "text",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Text",
+        "valueType": "string"
+      },
+      {
+        "component": "select",
+        "name": "textAlign",
+        "value": "left",
+        "label": "Text Alignment",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Left",
+            "value": "left"
+          },
+          {
+            "name": "Center",
+            "value": "center"
+          },
+          {
+            "name": "Right",
+            "value": "right"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "title",
     "fields": [
       {
@@ -126,6 +159,27 @@
           {
             "name": "h6",
             "value": "h6"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "textAlign",
+        "value": "left",
+        "label": "Text Alignment",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Left",
+            "value": "left"
+          },
+          {
+            "name": "Center",
+            "value": "center"
+          },
+          {
+            "name": "Right",
+            "value": "right"
           }
         ]
       }
@@ -356,48 +410,56 @@
         "valueType": "string"
       },
       {
-        "component": "container",
-        "label": "Button (Optional)",
-        "name": "buttonProperties",
+        "component": "select",
+        "name": "cardStyle",
+        "label": "Card Style",
         "valueType": "string",
-        "fields": [
+        "value": "default",
+        "options": [
           {
-            "component": "text",
-            "valueType": "string",
-            "name": "buttonText",
-            "value": "",
-            "label": "Button Text",
-            "description": "Leave empty to hide the button"
+            "name": "Default",
+            "value": "default"
           },
           {
-            "component": "aem-content",
-            "name": "buttonLink",
-            "label": "Button Link",
-            "valueType": "string",
-            "rootPath": ""
+            "name": "Image Top",
+            "value": "image-top"
+          },
+          {
+            "name": "Image Bottom",
+            "value": "image-bottom"
+          },
+          {
+            "name": "Image Left",
+            "value": "image-left"
+          },
+          {
+            "name": "Image Right",
+            "value": "image-right"
+          },
+          {
+            "name": "Teaser Overlay",
+            "value": "teaser-overlay"
+          },
+          {
+            "name": "Teaser Card",
+            "value": "teaser-card"
           }
         ]
       },
       {
-        "component": "select",
-        "name": "ctastyle",
-        "label": "CTA Style",
+        "component": "text",
         "valueType": "string",
-        "value": "button",
-        "options": [
-          {
-            "name": "Primary Button",
-            "value": "button"
-          },
-          {
-            "name": "Secondary Button",
-            "value": "button-secondary"
-          },
-          {
-            "name": "Dark Button",
-            "value": "button-dark"
-          }
-        ]
+        "name": "buttonText",
+        "value": "",
+        "label": "Button Text",
+        "description": "Leave empty to hide the button"
+      },
+      {
+        "component": "aem-content",
+        "name": "buttonLink",
+        "label": "Button Link",
+        "valueType": "string",
+        "rootPath": ""
       }
     ]
   },

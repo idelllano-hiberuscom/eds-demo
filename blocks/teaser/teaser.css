@@ -219,27 +219,28 @@ html[lang="ru"] .teaser-wrapper .button-container > a {
   align-content: center;
 }
 
-.teaser-wrapper .teaser-swoosh-wrapper a,
-.teaser-wrapper .teaser-swoosh-wrapper a.button:any-link,
-.teaser-wrapper .teaser-swoosh-wrapper button {
+/* Button/link color overrides for teaser on dark background */
+.teaser-wrapper .teaser-title-wrapper a,
+.teaser-wrapper .teaser-title-wrapper a.button:any-link,
+.teaser-wrapper .teaser-title-wrapper button {
   color: var(--text-light);
 }
 
-.teaser-wrapper .teaser-swoosh-wrapper a::after,
-.teaser-wrapper .teaser-swoosh-wrapper a.button::after,
-.teaser-wrapper .teaser-swoosh-wrapper button::after {
+.teaser-wrapper .teaser-title-wrapper a::after,
+.teaser-wrapper .teaser-title-wrapper a.button::after,
+.teaser-wrapper .teaser-title-wrapper button::after {
   color: var(--text-light);
 }
 
 /* Button hover styles for teaser with dark background */
-.teaser-wrapper .teaser-swoosh-wrapper .cta-button a.button:hover {
+.teaser-wrapper .teaser-title-wrapper .cta-button a.button:hover {
   background-color: rgb(255 255 255 / 10%) !important;
   color: var(--text-light) !important;
   border-color: var(--text-light) !important;
   box-shadow: 0 4px 8px rgb(0 0 0 / 30%) !important;
 }
 
-.teaser-wrapper .teaser-swoosh-wrapper .cta-button a.button:hover::after {
+.teaser-wrapper .teaser-title-wrapper .cta-button a.button:hover::after {
   color: var(--text-light) !important;
 }
 
@@ -294,48 +295,27 @@ html[lang="ru"] .teaser-wrapper .button-container > a {
   display: none;
 }
 
-/* button style - default teal */
-.teaser-wrapper .teaser-swoosh-wrapper a.button,
-.teaser-wrapper .teaser-swoosh-wrapper a.button:any-link {
-  background-color: var(--primary-color);
-  color: #fff;
-  border-color: var(--primary-color);
-  padding: 12px 24px;
-  border-radius: 4px;
-  border: 2px solid var(--primary-color);
+/* button style - inherit default link style with white color for dark bg */
+.teaser-wrapper .teaser-title-wrapper a.button,
+.teaser-wrapper .teaser-title-wrapper a.button:any-link {
+  color: var(--text-light);
+  background-color: transparent;
+  border: none;
+  padding: 0;
   font-weight: var(--font-weight-medium);
 }
 
-.teaser-wrapper .teaser-swoosh-wrapper a.button:hover {
-  background-color: var(--primary-dark);
-  border-color: var(--primary-dark);
-  color: #fff;
-  text-decoration: none;
-}
-
-/* Dark button variant */
-.teaser-wrapper .teaser-swoosh-wrapper .cta-button-dark a.button {
+.teaser-wrapper .teaser-title-wrapper a.button::after {
   color: var(--text-light);
-  background-color: transparent;
-  border-color: var(--text-light);
 }
 
-.teaser-wrapper .teaser-swoosh-wrapper .cta-button-dark a.button::after {
-  content: "\f105";
-  font-family: "Font Awesome 5 Solid";
+.teaser-wrapper .teaser-title-wrapper a.button:hover {
   color: var(--text-light);
-  font-size: 20px;
-  margin-left: 8px;
-  transition: all 0.3s ease;
+  text-decoration: underline;
 }
 
-.teaser-wrapper .teaser-swoosh-wrapper .cta-button-dark a.button:hover {
-  background-color: var(--text-light);
-  color: var(--dark-color);
-}
-
-.teaser-wrapper .teaser-swoosh-wrapper .cta-button-dark a.button:hover::after {
-  color: var(--dark-color);
+.teaser-wrapper .teaser-title-wrapper a.button:hover::after {
+  color: var(--text-light);
 }
 
 /* === RESPONSIVE STYLES === */
