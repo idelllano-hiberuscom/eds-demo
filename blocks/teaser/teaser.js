@@ -135,7 +135,7 @@ export default function decorate(block) {
   const buttonText = (properties.buttontext) ? properties.buttontext : 'Button';
   const buttonStyle = properties.ctastyle || properties['btn-style'] || 'dark-bg';
   const buttonLink = (properties['btn-link']) ? properties['btn-link'] : '';
-  const subtitleText = properties.subtitle || '';
+  const subtitleText = (properties.subtitle && properties.subtitle !== 'null') ? properties.subtitle : '';
   const textAlign = properties.textalign || 'left';
   const videoReference = isVideo ? properties.videoreference : sampleVideo;
   const teaser = div({ class: 'teaser-container' },

@@ -295,10 +295,10 @@ html[lang="ru"] .teaser-wrapper .button-container > a {
   display: none;
 }
 
-/* button style - inherit default link style with white color for dark bg */
+/* button style - inherit default link style with blue/teal color for dark bg */
 .teaser-wrapper .teaser-title-wrapper a.button,
 .teaser-wrapper .teaser-title-wrapper a.button:any-link {
-  color: var(--text-light);
+  color: var(--link-color);
   background-color: transparent;
   border: none;
   padding: 0;
@@ -306,16 +306,16 @@ html[lang="ru"] .teaser-wrapper .button-container > a {
 }
 
 .teaser-wrapper .teaser-title-wrapper a.button::after {
-  color: var(--text-light);
+  color: var(--link-color);
 }
 
 .teaser-wrapper .teaser-title-wrapper a.button:hover {
-  color: var(--text-light);
+  color: var(--link-hover-color);
   text-decoration: underline;
 }
 
 .teaser-wrapper .teaser-title-wrapper a.button:hover::after {
-  color: var(--text-light);
+  color: var(--link-hover-color);
 }
 
 /* === RESPONSIVE STYLES === */

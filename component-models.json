@@ -99,27 +99,6 @@
         "value": "",
         "label": "Text",
         "valueType": "string"
-      },
-      {
-        "component": "select",
-        "name": "textAlign",
-        "value": "left",
-        "label": "Text Alignment",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Left",
-            "value": "left"
-          },
-          {
-            "name": "Center",
-            "value": "center"
-          },
-          {
-            "name": "Right",
-            "value": "right"
-          }
-        ]
       }
     ]
   },
@@ -159,27 +138,6 @@
           {
             "name": "h6",
             "value": "h6"
-          }
-        ]
-      },
-      {
-        "component": "select",
-        "name": "textAlign",
-        "value": "left",
-        "label": "Text Alignment",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Left",
-            "value": "left"
-          },
-          {
-            "name": "Center",
-            "value": "center"
-          },
-          {
-            "name": "Right",
-            "value": "right"
           }
         ]
       }
@@ -241,6 +199,18 @@
           {
             "name": "Highlight",
             "value": "highlight"
+          },
+          {
+            "name": "Text Align Left",
+            "value": "text-align-left"
+          },
+          {
+            "name": "Text Align Center",
+            "value": "text-align-center"
+          },
+          {
+            "name": "Text Align Right",
+            "value": "text-align-right"
           }
         ]
       }
@@ -6123,6 +6093,14 @@
         "value": "Your text will show here.",
         "name": "title",
         "label": "Title"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "value": "",
+        "name": "subtitle",
+        "label": "Subtitle",
+        "description": "Optional subtitle text below the title"
       },
       {
         "component": "select",

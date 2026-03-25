@@ -29,6 +29,14 @@
           "label": "Title"
         },
         {
+          "component": "text",
+          "valueType": "string",
+          "value": "",
+          "name": "subtitle",
+          "label": "Subtitle",
+          "description": "Optional subtitle text below the title"
+        },
+        {
           "component": "select",
           "name": "teaserStyle",
           "value": "image",

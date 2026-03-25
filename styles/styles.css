@@ -997,6 +997,19 @@ main .section.highlight {
   padding: 40px 0;
 }
 
+/* Section text alignment */
+main .section.text-align-left {
+  text-align: left;
+}
+
+main .section.text-align-center {
+  text-align: center;
+}
+
+main .section.text-align-right {
+  text-align: right;
+}
+
 main .section[data-sec-spacing="section-none"] {
   padding-top: var(--spacing-none);
   margin:0;
