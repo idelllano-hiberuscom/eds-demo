@@ -114,17 +114,17 @@ export default function decorate(block) {
 
   const properties = readBlockConfig(block);
 
-  var swooshbgClass = 'swoosh-bg';
-  var swooshlayersClass = 'swoosh-layers';
+  let swooshbgClass = 'swoosh-bg';
+  let swooshlayersClass = 'swoosh-layers';
 
-  if(properties.useswoosh && properties.useswoosh == "false"){
+  if (properties.useswoosh && properties.useswoosh === 'false') {
     swooshbgClass = 'swoosh-bg-hidden';
     swooshlayersClass = 'swoosh-layers-hidden';
   }
 
   // Get CTA style and set button container class
-  var buttonContainerClass = 'button-container';
-  if(properties.ctastyle){
+  let buttonContainerClass = 'button-container';
+  if (properties.ctastyle) {
     buttonContainerClass = `cta-${properties.ctastyle}`;
   }
 
@@ -132,10 +132,11 @@ export default function decorate(block) {
   const swooshSecond = `${window.hlx.codeBasePath}/icons/teaser_outerswoosh.svg`;
   const isVideo = (properties.teaserstyle && properties.teaserstyle === 'video');
   const videoAutoplay = (properties.videobehavior && properties.videobehavior === 'autoplay');
-  const buttonText = (properties['buttontext']) ? properties['buttontext'] : 'Button';
-  const buttonStyle = (properties['btn-style']) ? properties['btn-style'] : 'dark-bg';
+  const buttonText = (properties.buttontext) ? properties.buttontext : 'Button';
+  const buttonStyle = properties.ctastyle || properties['btn-style'] || 'dark-bg';
   const buttonLink = (properties['btn-link']) ? properties['btn-link'] : '';
   const subtitleText = properties.subtitle || '';
+  const textAlign = properties.textalign || 'left';
   const videoReference = isVideo ? properties.videoreference : sampleVideo;
   const teaser = div({ class: 'teaser-container' },
     isVideo ? createVideoPlayer(videoReference) : createBackgroundImage(properties),
@@ -145,7 +146,7 @@ export default function decorate(block) {
         img({ class: 'swoosh first', src: swooshFirst, alt: 'background swoosh first' }),
         img({ class: 'swoosh second', src: swooshSecond, alt: 'background swoosh second' }),
       ),
-      div({ class: 'teaser-title-wrapper' },
+      div({ class: `teaser-title-wrapper align-${textAlign}` },
         h1({ class: 'teaser-title' }),
         subtitleText ? div({ class: 'teaser-subtitle' }, subtitleText) : null,
         div({ class: buttonContainerClass },

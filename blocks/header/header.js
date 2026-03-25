@@ -34,6 +34,10 @@ function openDrawer(drawer) {
  * @param {Element} block The header block element
  */
 export default async function decorate(block) {
+  // Prevent double-decoration (can happen in Universal Editor or with loadHeader race)
+  if (block.dataset.initialized) return;
+  block.dataset.initialized = 'true';
+
   // Extract configuration
   const headerConfig = {
     logo: null,
@@ -97,6 +101,7 @@ export default async function decorate(block) {
   const hamburger = document.createElement('div');
   hamburger.className = 'nav-hamburger';
   hamburger.innerHTML = `<button type="button" aria-label="Open navigation" aria-controls="header-drawer" aria-expanded="false">
+    <span class="nav-hamburger-label">MENÚ</span>
     <span class="nav-hamburger-icon"></span>
   </button>`;
 

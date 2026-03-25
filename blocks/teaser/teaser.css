@@ -84,6 +84,35 @@ html[dir="rtl"] .teaser-wrapper .video-container .video-pause .video-pause-btn{
     width: 72%;
 }
 
+/* Text alignment variants */
+.teaser-wrapper .teaser-title-wrapper.align-left {
+    align-items: flex-start;
+    left: 5%;
+    transform: translateY(-50%);
+}
+
+.teaser-wrapper .teaser-title-wrapper.align-left .teaser-title,
+.teaser-wrapper .teaser-title-wrapper.align-left .teaser-subtitle {
+    text-align: left;
+}
+
+.teaser-wrapper .teaser-title-wrapper.align-right {
+    align-items: flex-end;
+    left: auto;
+    right: 5%;
+    transform: translateY(-50%);
+}
+
+.teaser-wrapper .teaser-title-wrapper.align-right .teaser-title,
+.teaser-wrapper .teaser-title-wrapper.align-right .teaser-subtitle {
+    text-align: right;
+}
+
+.teaser-wrapper .teaser-title-wrapper.align-center .teaser-title,
+.teaser-wrapper .teaser-title-wrapper.align-center .teaser-subtitle {
+    text-align: center;
+}
+
 .teaser-wrapper .teaser-title {
     font-family: var(--body-font-family);
     font-size: var(--font-size-1000);
@@ -130,6 +159,7 @@ html[lang="ru"] .teaser-wrapper .button-container > a {
 .teaser-wrapper .teaser-swoosh-wrapper button {
     color: var(--text-light);
 }
+
 .teaser-wrapper .teaser-swoosh-wrapper a::after,
 .teaser-wrapper .teaser-swoosh-wrapper a.button::after,
 .teaser-wrapper .teaser-swoosh-wrapper button::after {
@@ -138,10 +168,10 @@ html[lang="ru"] .teaser-wrapper .button-container > a {
 
 /* Button hover styles for teaser with dark background */
 .teaser-wrapper .teaser-swoosh-wrapper .cta-button a.button:hover {
-    background-color: rgba(255, 255, 255, 0.1) !important;
+    background-color: rgb(255 255 255 / 10%) !important;
     color: var(--text-light) !important;
     border-color: var(--text-light) !important;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+    box-shadow: 0 4px 8px rgb(0 0 0 / 30%) !important;
 }
 
 .teaser-wrapper .teaser-swoosh-wrapper .cta-button a.button:hover::after {
@@ -208,7 +238,7 @@ html[lang="ru"] .teaser-wrapper .button-container > a {
     opacity: 0.85;
 }
 
-/*button style - default teal */
+/* button style - default teal */
 .teaser-wrapper .teaser-swoosh-wrapper a.button,
 .teaser-wrapper .teaser-swoosh-wrapper a.button:any-link {
     background-color: var(--primary-color);

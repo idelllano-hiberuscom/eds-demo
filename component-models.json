@@ -193,25 +193,6 @@
     ]
   },
   {
-    "id": "card",
-    "fields": [
-      {
-        "component": "reference",
-        "valueType": "string",
-        "name": "image",
-        "label": "Image",
-        "multi": false
-      },
-      {
-        "component": "richtext",
-        "name": "text",
-        "value": "",
-        "label": "Text",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
     "id": "columns",
     "fields": [
       {
@@ -6013,6 +5994,18 @@
         "value": "",
         "name": "subtitle",
         "label": "Subtitle"
+      },
+      {
+        "component": "select",
+        "name": "textAlign",
+        "label": "Text Alignment",
+        "valueType": "string",
+        "value": "left",
+        "options": [
+          { "name": "Left", "value": "left" },
+          { "name": "Center", "value": "center" },
+          { "name": "Right", "value": "right" }
+        ]
       },
       {
         "component": "select",

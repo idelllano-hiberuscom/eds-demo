@@ -48,17 +48,27 @@ header nav {
 }
 
 .nav-hamburger button {
-  width: 40px;
+  width: auto;
   height: 40px;
   border: none;
   background: transparent;
   cursor: pointer;
   color: var(--text-color);
   padding: 8px;
+  gap: 8px;
   transition: color var(--transition-base);
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.nav-hamburger-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary-color);
+  line-height: 1;
 }
 
 .nav-hamburger button:hover {
