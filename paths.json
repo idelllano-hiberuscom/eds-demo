@@ -1,8 +1,6 @@
 {
   "mappings": [
     "/content/aem-eds-demo/en:/",
-    "/content/caixa-demo-eds/:/",
-    "/content/caixa-demo-eds:/",
     "https://author-p34633-e913315.adobeaemcloud.com/:/",
     "https://develop--aem-eds-demo--danetesu27.hlx.page/:/"
   ]
