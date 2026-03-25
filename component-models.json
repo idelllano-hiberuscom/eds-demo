@@ -380,7 +380,33 @@
   },
   {
     "id": "carousel",
-    "fields": []
+    "fields": [
+      {
+        "component": "select",
+        "name": "itemsPerView",
+        "label": "Items visible at once",
+        "valueType": "string",
+        "value": "2",
+        "options": [
+          {
+            "name": "1",
+            "value": "1"
+          },
+          {
+            "name": "2",
+            "value": "2"
+          },
+          {
+            "name": "3",
+            "value": "3"
+          },
+          {
+            "name": "4",
+            "value": "4"
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "columns",

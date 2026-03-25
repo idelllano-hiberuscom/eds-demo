@@ -2,20 +2,23 @@ import { createOptimizedPicture } from '../../scripts/aem.js';
 import { moveInstrumentation } from '../../scripts/scripts.js';
 import createSlider from '../../scripts/slider.js';
 
-
 function setCarouselItems(number) {
-    document.querySelector('.carousel > ul')?.style.setProperty('--items-per-view', number);
+  document.querySelector('.carousel > ul')?.style.setProperty('--items-per-view', number);
 }
 
 export default function decorate(block) {
   let i = 0;
-  setCarouselItems(2);
+  // Read itemsPerView from block config (first row before cards)
+  const firstRow = block.children[0];
+  const configText = firstRow?.querySelector('p')?.textContent?.trim();
+  const itemsPerView = (configText && /^[1-4]$/.test(configText)) ? configText : '2';
+  setCarouselItems(itemsPerView);
   const slider = document.createElement('ul');
   const leftContent = document.createElement('div');
   [...block.children].forEach((row) => {
     if (i > 3) {
       const li = document.createElement('li');
-      
+
       // Read card style from the third div (index 2)
       const styleDiv = row.children[2];
       const styleParagraph = styleDiv?.querySelector('p');
@@ -23,7 +26,7 @@ export default function decorate(block) {
       if (cardStyle && cardStyle !== 'default') {
         li.className = cardStyle;
       }
-      
+
       // Read CTA style from the fourth div (index 3)
       const ctaDiv = row.children[3];
       const ctaParagraph = ctaDiv?.querySelector('p');
@@ -31,7 +34,7 @@ export default function decorate(block) {
 
       moveInstrumentation(row, li);
       while (row.firstElementChild) li.append(row.firstElementChild);
-      
+
       // Process the li children to identify and style them correctly
       [...li.children].forEach((div, index) => {
         // First div (index 0) - Image
@@ -63,16 +66,16 @@ export default function decorate(block) {
           div.className = 'cards-card-body';
         }
       });
-      
+
       // Apply CTA styles to button containers
       const buttonContainers = li.querySelectorAll('p.button-container');
-      buttonContainers.forEach(buttonContainer => {
+      buttonContainers.forEach((buttonContainer) => {
         // Remove any existing CTA classes
         buttonContainer.classList.remove('default', 'cta-button', 'cta-button-secondary', 'cta-button-dark', 'cta-default');
         // Add the correct CTA class
         buttonContainer.classList.add(ctaStyle);
       });
-      
+
       slider.append(li);
     } else {
       if (row.firstElementChild.firstElementChild) {
