@@ -41,8 +41,8 @@ export default function decorate(block) {
 
   const NODE_COUNT = 80;
   const PROXIMITY = 130;
-  const ATTRACTION_RADIUS = 250;  // larger zone so nodes track the cursor from farther away
-  const NODE_SPEED = 0.3;         // slower base drift
+  const ATTRACTION_RADIUS = 250; // larger zone so nodes track the cursor from farther away
+  const NODE_SPEED = 0.3; // slower base drift
 
   const tealColor = getComputedStyle(document.documentElement)
     .getPropertyValue('--primary-color').trim() || '#00A8B5';

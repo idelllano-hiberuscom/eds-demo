@@ -87,7 +87,27 @@ export default async function decorate(block) {
   block.textContent = '';
   block.append(ul);
 
-  // Video-card variant: add play button overlay on cards with a video URL
+  // Add play button overlay on ALL cards with images
+  const playIconPath = `${window.hlx.codeBasePath}/icons/play-circle.svg`;
+  ul.querySelectorAll('li').forEach((card) => {
+    const imgWrapper = card.querySelector('.cards-card-image');
+    if (imgWrapper && imgWrapper.querySelector('img')) {
+      const playBtn = document.createElement('button');
+      playBtn.type = 'button';
+      playBtn.className = 'play-btn-overlay';
+      playBtn.setAttribute('aria-label', 'Play');
+
+      const playIcon = document.createElement('img');
+      playIcon.src = playIconPath;
+      playIcon.alt = 'Play';
+      playIcon.setAttribute('loading', 'lazy');
+      playBtn.appendChild(playIcon);
+
+      imgWrapper.appendChild(playBtn);
+    }
+  });
+
+  // Video-card variant: add click handler for video modal
   if (isVideoCard && openVideoModal) {
     ul.querySelectorAll('li').forEach((card) => {
       // Find a video URL in any text node or link href within hidden config divs
@@ -109,14 +129,12 @@ export default async function decorate(block) {
       }
 
       if (videoUrl) {
-        const imgWrapper = card.querySelector('.cards-card-image');
-        if (imgWrapper) {
-          const playBtn = document.createElement('button');
-          playBtn.type = 'button';
-          playBtn.className = 'play-btn-overlay';
-          playBtn.setAttribute('aria-label', 'Play video');
-          playBtn.addEventListener('click', () => openVideoModal(videoUrl, playBtn));
-          imgWrapper.appendChild(playBtn);
+        const playBtn = card.querySelector('.play-btn-overlay');
+        if (playBtn) {
+          playBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openVideoModal(videoUrl, playBtn);
+          });
         }
       }
     });

@@ -4,6 +4,7 @@
   padding: 4px;
   cursor: pointer;
 }
+
 .search.search-icon .search-overlay {
   position: fixed;
   inset: 0;
@@ -22,19 +23,23 @@
   background: var(--background-color);
   border: 1px solid #dadada;
   border-radius: 12px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  box-shadow: 0 20px 40px rgb(0 0 0 / 20%);
   padding: 16px;
 }
+
 .search.search-icon .search-overlay-panel .search-box {
   max-width: unset;
-  margin: 0 0 0 0;
+  margin: 0;
 }
+
 .search.search-icon .search-overlay-panel .search-dropdown {
   position: static;
 }
+
 /* search box */
 .search {
   --search-input-height: 40px;
+
   padding-top: 0;
   max-width: 100%;
   box-sizing: border-box;
@@ -56,7 +61,6 @@
   height: var(--search-input-height);
   padding: 0 40px 0 14px;
   border-radius: 4px;
-  border: 1px solid var(--dark-color);
   background-color: var(--background-color);
   color: var(--text-color);
   font-size: var(--body-font-size-s);
@@ -64,15 +68,17 @@
   border:none;
 }
 
- /*.search .search-box input:hover {
+ /* .search .search-box input:hover {
  border: 1px solid var(--text-color);
-}*/
+} */
 .search.block.search-bar input.search-input {
   border: 1px solid var(--light-color);
 }
+
 .search.block.search-bar {
   padding-top: 20px;
 }
+
 .search .search-box input:focus {
   outline: none;
   
@@ -117,6 +123,7 @@
 
 /* expanded layout (search-bar variant) */
 .search.search-bar.expanded .search-dropdown { display: none; }
+
 .search .search-expanded {
   display: grid;
   grid-template-columns:194px 1fr;
@@ -124,7 +131,7 @@
   margin-top: 16px;
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .search .search-expanded {
     grid-template-columns: 1fr;
   }
@@ -151,7 +158,7 @@
 }
 
 .search .search-filters .filter-group h4 {
-  margin: 0 0 8px 0;
+  margin: 0 0 8px;
   font-size: var(--body-font-size-s);
 }
 
@@ -218,7 +225,7 @@
 
 .search .search-expanded-results .search-results > li .search-result-title {
   font-weight: 600;
-  margin: 2px 0 2px;
+  margin: 2px 0;
   grid-column: 2;
 }
 
@@ -241,10 +248,9 @@
   border: 1px solid #dadada;
   border-radius: 8px;
   max-height: 60vh;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden auto;
   padding: 12px;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 12px 24px rgb(0 0 0 / 12%);
   display: block; /* list view inside dropdown */
   margin-top: 16px;
   max-width: 100%;
@@ -260,8 +266,8 @@
   margin-right: var(--spacing-xsmall);
   cursor: pointer;
   background:
-    linear-gradient(45deg, rgb(0 0 0 / 0%) 0%, rgb(0 0 0 / 0%) 43%, currentColor 45%, currentColor 55%, rgb(0 0 0 / 0%) 57%, rgb(0 0 0 / 0%) 100%),
-    linear-gradient(135deg, transparent 0%, transparent 43%, currentColor 45%, currentColor 55%, transparent 57%, transparent 100%);
+    linear-gradient(45deg, rgb(0 0 0 / 0%) 0%, rgb(0 0 0 / 0%) 43%, currentcolor 45%, currentcolor 55%, rgb(0 0 0 / 0%) 57%, rgb(0 0 0 / 0%) 100%),
+    linear-gradient(135deg, transparent 0%, transparent 43%, currentcolor 45%, currentcolor 55%, transparent 57%, transparent 100%);
 }
 
 html[dir="rtl"] .search .search-box input[type="search"]::-webkit-search-cancel-button {
@@ -293,7 +299,7 @@ html[dir="rtl"] .search .search-box input[type="search"]::-webkit-search-cancel-
 }
 
 .search ul.search-results > li:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 6%);
 }
 
 /* list layout for dropdown */
@@ -345,7 +351,7 @@ html[dir="rtl"] .search .search-box input[type="search"]::-webkit-search-cancel-
 
 .search .search-dropdown .search-results > li .search-result-title {
   font-weight: 600;
-  margin: 2px 0 2px;
+  margin: 2px 0;
   grid-column: 2;
 }
 

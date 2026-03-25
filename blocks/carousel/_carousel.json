@@ -48,7 +48,8 @@
     {
       "id": "carousel",
       "components": [
-        "card"
+        "card",
+        "image"
       ]
     }
   ]

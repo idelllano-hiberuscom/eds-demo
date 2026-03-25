@@ -42,7 +42,7 @@ function getVideoElement(source, autoplay, background) {
 
   const sourceEl = document.createElement('source');
   sourceEl.setAttribute('src', source);
-  sourceEl.setAttribute('type', `video/mp4`);
+  sourceEl.setAttribute('type', 'video/mp4');
   video.append(sourceEl);
 
   return video;
@@ -67,10 +67,10 @@ const loadVideoEmbed = (block, link, autoplay, background) => {
 };
 
 export default function decorate(block) {
-  console.log("video component called successfully");
+  console.log('video component called successfully');
   const link = block.querySelector(':scope div:nth-child(1) > div a').innerHTML.trim();
-  console.log("link", link);
-  //const link = block.querySelector(':scope div:nth-child(1) > div a').innerHTML.trim();
+  console.log('link', link);
+  // const link = block.querySelector(':scope div:nth-child(1) > div a').innerHTML.trim();
   block.textContent = '';
   block.dataset.embedLoaded = false;
   const autoplay = block.classList ? block.classList.contains('autoplay') : false;

@@ -2,33 +2,33 @@ import {
   div, p, section, a, button,
   span,
 } from './dom-helpers.js';
+import { fetchPlaceholders } from './aem.js';
+import { isAuthorEnvironment } from './scripts.js';
 
 export const PATH_PREFIX = '/language-masters';
 export const TAG_ROOT = 'wknd-universal:';
-//export const SITE_NAME = 'wknd-universal';
+// export const SITE_NAME = 'wknd-universal';
 export const SUPPORTED_LANGUAGES = [
-  'en',    // English
-  'fr',    // French
-  'de',    // German
-  'es',    // Spanish
-  'it',    // Italian
-  'pt',    // Portuguese
-  'nl',    // Dutch
-  'sv',    // Swedish
-  'da',    // Danish
-  'ru',    // Russian
-  'ja',    // Japanese
-  'zh',    // Chinese (Simplified)
+  'en', // English
+  'fr', // French
+  'de', // German
+  'es', // Spanish
+  'it', // Italian
+  'pt', // Portuguese
+  'nl', // Dutch
+  'sv', // Swedish
+  'da', // Danish
+  'ru', // Russian
+  'ja', // Japanese
+  'zh', // Chinese (Simplified)
   'zh_TW', // Chinese (Traditional)
-  'ko',    // Korean
-  'ar',    // Arabic
-  'he',    // Hebrew
+  'ko', // Korean
+  'ar', // Arabic
+  'he', // Hebrew
 ];
 export const INTERNAL_PAGES = ['/footer', '/nav', '/fragments', '/data', '/drafts'];
 
 let lang;
-import { fetchPlaceholders } from './aem.js';
-import { isAuthorEnvironment } from './scripts.js';
 
 /**
  * Extracts the site name from the current URL pathname
@@ -38,25 +38,23 @@ import { isAuthorEnvironment } from './scripts.js';
  * - From "/content/wknd-universal/language-masters/en/path/to/content.html" returns "wknd-universal"
  * @returns {string} The site name extracted from the path, or empty string if not found
  */
-  export async function getSiteName() {
-    try {
-      if(isAuthorEnvironment()){
-          // Fallback to extracting from pathname
-          const { pathname } = window.location;
-          const siteNameFromPath = pathname.split('/content/')[1]?.split('/')[0] || '';
-          return siteNameFromPath;
-      } else {
-        const listOfAllPlaceholdersData = await fetchPlaceholders();
-        const siteName = listOfAllPlaceholdersData?.siteName;
-        if (siteName) {
-          return siteName.replaceAll('/content/', '');
-        }
-      }
-    } catch (error) {
-      console.warn('Error fetching placeholders for siteName:', error);
+export async function getSiteName() {
+  try {
+    if (isAuthorEnvironment()) {
+      // Fallback to extracting from pathname
+      const { pathname } = window.location;
+      const siteNameFromPath = pathname.split('/content/')[1]?.split('/')[0] || '';
+      return siteNameFromPath;
     }
+    const listOfAllPlaceholdersData = await fetchPlaceholders();
+    const siteName = listOfAllPlaceholdersData?.siteName;
+    if (siteName) {
+      return siteName.replaceAll('/content/', '');
+    }
+  } catch (error) {
+    console.warn('Error fetching placeholders for siteName:', error);
+  }
 }
-
 
 /**
  * Extracts the site name from the current URL pathname
@@ -78,7 +76,6 @@ export async function getHostname() {
   }
 }
 
-
 /**
  * Get Inherited Page Properties
  * Considers pathnames like /en/path/to/content and
@@ -93,15 +90,14 @@ export function getInheritedPageProperties() {
      /content/wknd-universal/language-masters/en/path/to/content.html
      2 is the index of the language in the path for EDS paths like /en/path/to/content
     */
-  
+
   let langCode = isContentPath ? safeLangGet(3) : safeLangGet(0);
 
-  
   // remove suffix from lang if any
   if (langCode.indexOf('.') > -1) {
     langCode = langCode.substring(0, langCode.indexOf('.'));
   }
-  
+
   if (!langCode) langCode = 'en'; // default to en
   // substring before lang
   const prefix = pathname.substring(0, pathname.indexOf(`/${langCode}`)) || '';
@@ -115,7 +111,6 @@ export function getInheritedPageProperties() {
     isContentPath,
   };
 }
-
 
 /**
  * Process current pathname and return details for use in language switching
@@ -256,7 +251,6 @@ export function formatDate(dObjStr) {
   return '';
 }
 
-
 /**
  * Remove prefix from tag
  * @param {*} tag
@@ -309,7 +303,6 @@ export async function fetchLanguageNavigation(langCode) {
   await window.navigationData[langCode];
 }
 
-
 export async function fetchData(url, method = 'GET', headers = {}, body = null) {
   try {
     const options = { method, headers: { ...headers } };
@@ -348,7 +341,6 @@ export function isInternalPage() {
   INTERNAL_PAGES.forEach((element) => { if (pageUrl.indexOf(element) > 0) return true; });
   return false;
 }
-
 
 /**
  * Get the query string value

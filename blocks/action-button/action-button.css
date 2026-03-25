@@ -14,7 +14,7 @@
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
   position: relative;
 }
   
@@ -31,7 +31,7 @@
   background-color: transparent;
   color: var(--main-accent-color);
   border-color: var(--main-accent-color);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 8px rgb(0 0 0 / 15%);
   transform: translateY(-1px);
 }
 
@@ -42,7 +42,7 @@
 
 .default-button  a.button:active {
   transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
 }
 
 .default-button a.button:active::after {
@@ -62,7 +62,7 @@
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
   position: relative;
   transform: translateY(-1px);
   background-color: transparent;
@@ -107,7 +107,7 @@
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
   position: relative;
 }
   
@@ -124,7 +124,7 @@
   background-color: var(--dark-color);
   color: var(--text-light);
   border-color: var(--dark-color);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 8px rgb(0 0 0 / 15%);
   transform: translateY(-1px);
 }
 
@@ -135,7 +135,7 @@
   
 .default-button-dark a.button:active {
   transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
 }
 
 .default-button-dark a.button:active::after {

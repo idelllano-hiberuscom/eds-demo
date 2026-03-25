@@ -1,6 +1,6 @@
 import {
   createOptimizedPicture,
-  decorateIcons
+  decorateIcons,
 } from '../../scripts/aem.js';
 import { fetchPlaceholders } from '../../scripts/placeholders.js';
 import { getLanguage } from '../../scripts/utils.js';
@@ -402,11 +402,13 @@ function searchBox(block, config) {
 // --- Expanded (inline) results mode for search-bar variant ---
 function buildExpandedLayout(block) {
   let expanded = block.querySelector('.search-expanded');
-  if (expanded) return {
-    expanded,
-    filters: expanded.querySelector('.search-filters'),
-    results: expanded.querySelector('.search-expanded-results .search-results'),
-  };
+  if (expanded) {
+    return {
+      expanded,
+      filters: expanded.querySelector('.search-filters'),
+      results: expanded.querySelector('.search-expanded-results .search-results'),
+    };
+  }
 
   expanded = document.createElement('div');
   expanded.className = 'search-expanded';

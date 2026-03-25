@@ -60,8 +60,8 @@ export const patternDecorate = async (block) => {
 const fetchTemplate = async (block) => {
   const { blockName } = block.dataset;
   try {
-    const resp = await fetch(`https://raw.githubusercontent.com/AdobeHOLs/universal-demo/refs/heads/demo73/blocks/cards/_default.html`);
-    //const resp = await fetch(`${window.hlx.codeBasePath}/blocks/${blockName}/_default.html`);
+    const resp = await fetch('https://raw.githubusercontent.com/AdobeHOLs/universal-demo/refs/heads/demo73/blocks/cards/_default.html');
+    // const resp = await fetch(`${window.hlx.codeBasePath}/blocks/${blockName}/_default.html`);
     const templateText = await resp.text();
     return templateText;
   } catch {

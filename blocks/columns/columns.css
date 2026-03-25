@@ -2,9 +2,11 @@
 .columns-wrapper {
   box-sizing: border-box;
 }
+
 .columns-wrapper .columns {
   box-sizing: border-box;
 }
+
 .columns-wrapper .columns .columns-row {
   box-sizing: border-box;
 }
@@ -64,15 +66,18 @@
   .columns-container .columns-wrapper {
     padding: 0 5%;
   }
+
   .columns-container .columns-wrapper .columns {
     display: block;
   }
+
   .columns-container .columns-wrapper .columns .columns-row {
     display: flex;
     flex-direction: column;
     width: 100%;
     margin: 20px 0;
   }
+
   .columns-container .columns-wrapper .columns .columns-row h1, 
   .columns-container .columns-wrapper .columns .columns-row h2, 
   .columns-container .columns-wrapper .columns .columns-row h3, 
@@ -87,7 +92,6 @@
 }
 
 @media (width < 768px) { 
-
   .columns-container .columns-wrapper {
     padding: 0 4%;
   }
