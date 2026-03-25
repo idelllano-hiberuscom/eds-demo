@@ -199,10 +199,35 @@ html[lang="ru"] .teaser-wrapper .button-container > a {
     display: none;
 }
 
-/*button style*/
-.teaser-wrapper .teaser-swoosh-wrapper .cta-button-dark a.button{
-    color: var(--dark-color);
+/* Subtitle */
+.teaser-wrapper .teaser-subtitle {
+    color: var(--text-light);
+    font-size: var(--font-size-md);
+    text-align: center;
+    margin: 8px 0 16px;
+    opacity: 0.85;
 }
+
+/*button style - default teal */
+.teaser-wrapper .teaser-swoosh-wrapper a.button,
+.teaser-wrapper .teaser-swoosh-wrapper a.button:any-link {
+    background-color: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+}
+
+.teaser-wrapper .teaser-swoosh-wrapper a.button:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+    color: #fff;
+}
+
+.teaser-wrapper .teaser-swoosh-wrapper .cta-button-dark a.button {
+    color: var(--dark-color);
+    background-color: transparent;
+    border-color: var(--dark-color);
+}
+
 .teaser-wrapper .teaser-swoosh-wrapper .cta-button-dark a.button::after {
     content: "\f105";
     font-family: 'Font Awesome 5 Solid';

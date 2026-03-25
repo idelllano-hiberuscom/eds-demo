@@ -295,8 +295,11 @@ async function loadLazy(doc) {
   const element = hash ? doc.getElementById(hash.substring(1)) : false;
   if (hash && element) element.scrollIntoView();
   //decorateSectionImages(doc);
-  loadHeader(doc.querySelector('header'));
-  loadFooter(doc.querySelector('footer'));
+  // Only load header/footer if not already populated (avoids duplicates in Universal Editor)
+  const headerEl = doc.querySelector('header');
+  if (!headerEl.querySelector('.header.block')) loadHeader(headerEl);
+  const footerEl = doc.querySelector('footer');
+  if (!footerEl.querySelector('.footer.block')) loadFooter(footerEl);
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();

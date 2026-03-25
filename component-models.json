@@ -244,25 +244,12 @@
     "id": "hero",
     "fields": [
       {
-        "component": "reference",
-        "valueType": "string",
-        "name": "image",
-        "label": "Image",
-        "multi": false
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "imageAlt",
-        "label": "Alt",
-        "value": ""
-      },
-      {
         "component": "richtext",
-        "name": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title",
         "value": "",
-        "label": "Text",
-        "valueType": "string"
+        "description": "Main hero title (h1)"
       }
     ]
   },
@@ -6021,21 +6008,11 @@
         "label": "Title"
       },
       {
-        "component": "select",
-        "name": "teaserStyle",
-        "value": "image",
-        "label": "Style",
+        "component": "text",
         "valueType": "string",
-        "options": [
-          {
-            "name": "Video",
-            "value": "video"
-          },
-          {
-            "name": "Image",
-            "value": "image"
-          }
-        ]
+        "value": "",
+        "name": "subtitle",
+        "label": "Subtitle"
       },
       {
         "component": "select",

@@ -41,15 +41,15 @@ export default function decorate(block) {
 
   const NODE_COUNT = 80;
   const PROXIMITY = 130;
-  const ATTRACTION_RADIUS = 120;
-  const NODE_SPEED = 0.4;
+  const ATTRACTION_RADIUS = 250;  // larger zone so nodes track the cursor from farther away
+  const NODE_SPEED = 0.3;         // slower base drift
 
   const tealColor = getComputedStyle(document.documentElement)
     .getPropertyValue('--primary-color').trim() || '#00A8B5';
 
   let ctx;
   let nodes = [];
-  const mouse = { x: -9999, y: -9999 };
+  const mouse = { x: -9999, y: -9999, active: false };
   let animationId = null;
 
   function hexToRgb(hex) {
@@ -88,27 +88,35 @@ export default function decorate(block) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     nodes.forEach((node) => {
-      // Attraction toward mouse (desktop only)
-      if (!isTouchOnly.matches) {
+      // Cursor tracking (desktop only) — nodes actively follow the pointer
+      if (!isTouchOnly.matches && mouse.active) {
         const dx = mouse.x - node.x;
         const dy = mouse.y - node.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         if (dist < ATTRACTION_RADIUS && dist > 0) {
-          const force = (ATTRACTION_RADIUS - dist) / ATTRACTION_RADIUS;
-          node.vx += (dx / dist) * force * 0.3;
-          node.vy += (dy / dist) * force * 0.3;
+          // Strong pull: closer nodes follow faster
+          const strength = 1 - dist / ATTRACTION_RADIUS;
+          node.vx += (dx / dist) * strength * 1.5;
+          node.vy += (dy / dist) * strength * 1.5;
         }
       }
 
-      // Dampen back to base velocity
-      node.vx = node.vx * 0.98 + node.baseVx * 0.02;
-      node.vy = node.vy * 0.98 + node.baseVy * 0.02;
+      // Light drift back to base when cursor is away
+      if (!mouse.active) {
+        node.vx = node.vx * 0.97 + node.baseVx * 0.03;
+        node.vy = node.vy * 0.97 + node.baseVy * 0.03;
+      } else {
+        // Gentle drag when cursor is active so nodes don't fly off
+        node.vx *= 0.88;
+        node.vy *= 0.88;
+      }
 
       // Clamp speed
       const speed = Math.sqrt(node.vx ** 2 + node.vy ** 2);
-      if (speed > NODE_SPEED * 3) {
-        node.vx = (node.vx / speed) * NODE_SPEED * 3;
-        node.vy = (node.vy / speed) * NODE_SPEED * 3;
+      const maxSpeed = mouse.active ? NODE_SPEED * 8 : NODE_SPEED * 3;
+      if (speed > maxSpeed) {
+        node.vx = (node.vx / speed) * maxSpeed;
+        node.vy = (node.vy / speed) * maxSpeed;
       }
 
       node.x += node.vx;
@@ -171,9 +179,11 @@ export default function decorate(block) {
     const rect = canvas.getBoundingClientRect();
     mouse.x = e.clientX - rect.left;
     mouse.y = e.clientY - rect.top;
+    mouse.active = true;
   });
 
   block.addEventListener('mouseleave', () => {
+    mouse.active = false;
     mouse.x = -9999;
     mouse.y = -9999;
   });

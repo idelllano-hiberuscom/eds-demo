@@ -135,6 +135,7 @@ export default function decorate(block) {
   const buttonText = (properties['buttontext']) ? properties['buttontext'] : 'Button';
   const buttonStyle = (properties['btn-style']) ? properties['btn-style'] : 'dark-bg';
   const buttonLink = (properties['btn-link']) ? properties['btn-link'] : '';
+  const subtitleText = properties.subtitle || '';
   const videoReference = isVideo ? properties.videoreference : sampleVideo;
   const teaser = div({ class: 'teaser-container' },
     isVideo ? createVideoPlayer(videoReference) : createBackgroundImage(properties),
@@ -146,6 +147,7 @@ export default function decorate(block) {
       ),
       div({ class: 'teaser-title-wrapper' },
         h1({ class: 'teaser-title' }),
+        subtitleText ? div({ class: 'teaser-subtitle' }, subtitleText) : null,
         div({ class: buttonContainerClass },
           a({ id: 'button', href: buttonLink, class: `button ${buttonStyle}` },
             span({ class: 'button-text' }, buttonText),
@@ -155,6 +157,8 @@ export default function decorate(block) {
     ),
   );
 
+  // Remove null subtitleText children
+  teaser.querySelectorAll('*').forEach((el) => { if (el === null) el.remove(); });
   teaser.querySelector('.teaser-title').innerHTML = properties.title ? rteContent : 'Title';
   block.innerHTML = '';
   block.appendChild(teaser);

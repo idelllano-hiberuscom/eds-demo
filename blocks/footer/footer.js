@@ -1,6 +1,5 @@
 import { getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
-import { isAuthorEnvironment } from '../../scripts/scripts.js';
 
 /**
  * loads and decorates the footer with Cecabank 5-zone teal layout
@@ -8,14 +7,7 @@ import { isAuthorEnvironment } from '../../scripts/scripts.js';
  */
 export default async function decorate(block) {
   const footerMeta = getMetadata('footer');
-  const isAuthor = isAuthorEnvironment();
-  let footerPath = '/footer';
-
-  if (isAuthor) {
-    footerPath = footerMeta
-      ? new URL(footerMeta, window.location).pathname
-      : '/content/aem-eds-demo/en/footer';
-  }
+  const footerPath = footerMeta ? new URL(footerMeta, window.location).pathname : '/footer';
 
   const fragment = await loadFragment(footerPath);
   block.textContent = '';
