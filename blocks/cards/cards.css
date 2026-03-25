@@ -582,3 +582,41 @@
   }
   
 }
+
+/* === VIDEO-CARD VARIANT === */
+.cards.video-card > ul > li .cards-card-image {
+  position: relative;
+  cursor: pointer;
+}
+
+.cards.video-card > ul > li .play-btn-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.cards.video-card > ul > li .play-btn-overlay::after {
+  content: '';
+  display: block;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 3px solid var(--primary-color);
+  background: rgba(255, 255, 255, 0.85);
+  /* play triangle */
+  box-shadow: inset 14px 0 0 0 var(--primary-color),
+              inset 28px -8px 0 -5px var(--primary-color),
+              inset 28px 8px 0 -5px var(--primary-color);
+  transition: transform var(--transition-base);
+}
+
+.cards.video-card > ul > li .play-btn-overlay:hover::after {
+  transform: scale(1.1);
+}
+

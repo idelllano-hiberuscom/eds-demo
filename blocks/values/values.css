@@ -1,0 +1,122 @@
+/* === VALUES BLOCK — Full-viewport panels === */
+.values {
+  padding: 0;
+}
+
+.values-panel {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.values-panel.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Background image */
+.values-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.values-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* Dark overlay */
+.values-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: rgb(0 0 0 / 50%);
+}
+
+/* Content */
+.values-content {
+  position: relative;
+  z-index: 2;
+  padding: 60px 24px;
+  max-width: 600px;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.values-title {
+  font-family: var(--font-family-heading);
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  font-weight: var(--font-weight-bold);
+  color: #fff;
+  margin: 0 0 1rem;
+  line-height: var(--line-height-tight);
+}
+
+.values-description {
+  font-size: var(--font-size-lg);
+  color: rgb(255 255 255 / 90%);
+  margin: 0 0 1.5rem;
+  line-height: var(--line-height-relaxed);
+}
+
+.values-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--primary-color);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-base);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: color var(--transition-base);
+}
+
+.values-cta:hover {
+  color: #fff;
+}
+
+/* Alternating text alignment */
+.values-panel:nth-child(odd) .values-content {
+  text-align: left;
+  margin: 0 auto 0 0;
+}
+
+.values-panel:nth-child(even) .values-content {
+  text-align: right;
+  margin: 0 0 0 auto;
+}
+
+/* Mobile: always centered */
+@media (width <= 599px) {
+  .values-panel:nth-child(odd) .values-content,
+  .values-panel:nth-child(even) .values-content {
+    text-align: center;
+    margin: 0 auto;
+  }
+}
+
+@media (width >= 900px) {
+  .values-content {
+    padding: 80px 48px;
+    max-width: 700px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .values-panel {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

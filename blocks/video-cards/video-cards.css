@@ -1,0 +1,150 @@
+/* === VIDEO CARDS BLOCK === */
+.video-cards {
+  padding: 40px 24px;
+}
+
+.video-cards-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+/* Axes variant: light blue background */
+.video-cards.axes {
+  background-color: var(--color-light-blue-bg);
+}
+
+/* === CARD ITEM === */
+.video-card-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Thumbnail */
+.video-card-thumb {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  line-height: 0;
+  background: var(--background-alt);
+}
+
+.video-card-thumb picture,
+.video-card-thumb img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--transition-slow) ease;
+}
+
+.video-card-item:hover .video-card-thumb img {
+  transform: scale(1.04);
+}
+
+/* Play button overlay */
+.video-card-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.video-card-play::after {
+  content: '';
+  display: block;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 3px solid var(--primary-color);
+  background: rgb(255 255 255 / 90%);
+
+  /* CSS play triangle using box-shadow trick */
+  box-shadow: inset 14px 0 0 0 var(--primary-color),
+              inset 28px -8px 0 -5px var(--primary-color),
+              inset 28px 8px 0 -5px var(--primary-color);
+  transition: transform var(--transition-base), background var(--transition-base);
+}
+
+.video-card-play:hover::after {
+  transform: scale(1.12);
+  background: rgb(255 255 255 / 100%);
+}
+
+/* Title */
+.video-card-title {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--heading-color);
+  margin: 0;
+  line-height: var(--line-height-tight);
+}
+
+/* Per-card CTA link (axes variant) */
+.video-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--primary-color);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: color var(--transition-base);
+}
+
+.video-card-cta:hover {
+  color: var(--primary-dark);
+}
+
+/* Section CTA */
+.video-cards-section-cta {
+  text-align: center;
+  margin-top: 2.5rem;
+}
+
+.video-cards-section-cta a.button {
+  display: inline-block;
+  background-color: var(--button-primary-bg);
+  color: var(--button-primary-text);
+  border: 2px solid var(--button-primary-bg);
+  padding: 12px 32px;
+  border-radius: 4px;
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  transition: all var(--transition-base);
+}
+
+.video-cards-section-cta a.button:hover {
+  background-color: var(--button-primary-hover);
+  border-color: var(--button-primary-hover);
+}
+
+/* === RESPONSIVE === */
+@media (width >= 600px) {
+  .video-cards-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (width >= 900px) {
+  .video-cards {
+    padding: 60px 32px;
+  }
+
+  .video-cards-list {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+}

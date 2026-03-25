@@ -19,15 +19,12 @@ window.targetGlobalSettings = {
 function loadAT() {
   function targetPageParams() {
     return {
-      "at_property": "549d426b-0bcc-be60-ce27-b9923bfcad4f"
+      at_property: '549d426b-0bcc-be60-ce27-b9923bfcad4f',
     };
   }
-    loadScript(window.hlx.codeBasePath+'/scripts/at-lsig.js');
-  
+  loadScript(`${window.hlx.codeBasePath}/scripts/at-lsig.js`);
 }
 // Adobe Target - end
-
-
 
 // refactor tweetable links function
 /**
@@ -45,13 +42,12 @@ function openPopUp(popUrl) {
  */
 function embedCustomLibraries() {
   const externalLibs = getMetadata('js-files');
-  const libsArray = externalLibs?.split(',').map(url => url.trim());
+  const libsArray = externalLibs?.split(',').map((url) => url.trim());
 
   libsArray.forEach((url, index) => {
-    //console.log(`Loading script ${index + 1}: ${url}`);
+    // console.log(`Loading script ${index + 1}: ${url}`);
     loadScript(`${url}`);
   });
-  
 }
 
 /**
@@ -100,9 +96,63 @@ function buildTwitterLinks() {
 }
 
 if (!window.location.hostname.includes('localhost')) {
-  
   embedCustomLibraries();
   if (window.parent && !(window.parent.location.pathname.indexOf('/canvas/') > -1)) {
     loadAT();
   }
 }
+
+// === CECABANK COOKIE BANNER ===
+const COOKIE_KEY = 'cecabank-cookie-consent';
+
+function initCookieBanner() {
+  if (localStorage.getItem(COOKIE_KEY)) return;
+
+  const banner = document.createElement('div');
+  banner.className = 'cookie-banner';
+  banner.setAttribute('role', 'dialog');
+  banner.setAttribute('aria-modal', 'true');
+  banner.setAttribute('aria-label', 'Aviso de cookies');
+
+  const msg = document.createElement('p');
+  msg.className = 'cookie-banner-msg';
+  msg.textContent = 'Utilizamos cookies propias y de terceros para mejorar tu experiencia y mostrar contenido personalizado.';
+
+  const actions = document.createElement('div');
+  actions.className = 'cookie-banner-actions';
+
+  const acceptBtn = document.createElement('button');
+  acceptBtn.type = 'button';
+  acceptBtn.className = 'cookie-btn cookie-btn-accept';
+  acceptBtn.textContent = 'Aceptar';
+
+  const rejectBtn = document.createElement('button');
+  rejectBtn.type = 'button';
+  rejectBtn.className = 'cookie-btn cookie-btn-reject';
+  rejectBtn.textContent = 'Rechazar';
+
+  const configA = document.createElement('a');
+  configA.href = '/privacidad';
+  configA.className = 'cookie-btn cookie-btn-config';
+  configA.textContent = 'Configuración';
+
+  actions.appendChild(acceptBtn);
+  actions.appendChild(rejectBtn);
+  actions.appendChild(configA);
+  banner.appendChild(msg);
+  banner.appendChild(actions);
+  document.body.appendChild(banner);
+
+  function dismissBanner(choice) {
+    localStorage.setItem(COOKIE_KEY, choice);
+    banner.style.transform = 'translateY(20px)';
+    banner.style.opacity = '0';
+    banner.style.pointerEvents = 'none';
+    setTimeout(() => banner.remove(), 400);
+  }
+
+  acceptBtn.addEventListener('click', () => dismissBanner('accepted'));
+  rejectBtn.addEventListener('click', () => dismissBanner('rejected'));
+}
+
+initCookieBanner();

@@ -1,0 +1,100 @@
+/* === LOGO CAROUSEL BLOCK === */
+.logo-carousel {
+  padding: 40px 24px;
+  overflow: hidden;
+  position: relative;
+}
+
+.logo-carousel ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.logo-carousel ul::-webkit-scrollbar {
+  display: none;
+}
+
+.logo-carousel ul li {
+  flex: 0 0 calc(100% - 24px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-carousel ul li picture,
+.logo-carousel ul li img {
+  max-width: 160px;
+  max-height: 80px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* Slider arrows (from slider.js) */
+.logo-carousel .button-container {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+}
+
+.logo-carousel .button-container:has(.next) {
+  right: 0;
+}
+
+.logo-carousel .button-container:has(.prev) {
+  left: 0;
+}
+
+.logo-carousel .button-container button {
+  background: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--box-shadow-sm);
+  transition: all var(--transition-base);
+}
+
+.logo-carousel .button-container button:hover {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.logo-carousel .button-container button img {
+  filter: none;
+  transition: filter var(--transition-base);
+}
+
+.logo-carousel .button-container button:hover img {
+  filter: brightness(0) invert(1);
+}
+
+/* === RESPONSIVE === */
+@media (width >= 600px) {
+  .logo-carousel ul li {
+    flex: 0 0 calc(50% - 24px);
+  }
+}
+
+@media (width >= 900px) {
+  .logo-carousel {
+    padding: 48px 64px;
+  }
+
+  .logo-carousel ul li {
+    flex: 0 0 calc(25% - 24px);
+  }
+}

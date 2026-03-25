@@ -1,275 +1,198 @@
 /**
- * Creates carousel navigation dots
- * @param {number} numSlides - Number of slides in the carousel
- * @returns {HTMLElement} - Dots container
- */
-function createDots(numSlides) {
-  const dotsContainer = document.createElement('div');
-  dotsContainer.className = 'hero-dots';
-  dotsContainer.setAttribute('role', 'tablist');
-
-  for (let i = 0; i < numSlides; i += 1) {
-    const dot = document.createElement('button');
-    dot.className = 'hero-dot';
-    dot.setAttribute('type', 'button');
-    dot.setAttribute('role', 'tab');
-    dot.setAttribute('aria-label', `Slide ${i + 1}`);
-    dot.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
-    dot.dataset.index = i;
-    dotsContainer.appendChild(dot);
-  }
-
-  return dotsContainer;
-}
-
-/**
- * Shows a specific slide in the carousel
- * @param {Element} block - Hero block element
- * @param {number} index - Index of slide to show
- */
-function showSlide(block, index) {
-  const slides = block.querySelectorAll('.hero-slide');
-  const dots = block.querySelectorAll('.hero-dot');
-
-  if (!slides.length) return;
-
-  // Update current slide index
-  block.dataset.currentSlide = index;
-
-  // Hide all slides
-  slides.forEach((slide, i) => {
-    slide.classList.remove('active');
-    slide.setAttribute('aria-hidden', i !== index);
-  });
-
-  // Show current slide
-  slides[index].classList.add('active');
-
-  // Update dots
-  dots.forEach((dot, i) => {
-    dot.classList.toggle('active', i === index);
-    dot.setAttribute('aria-selected', i === index ? 'true' : 'false');
-  });
-}
-
-/**
- * Auto-advance carousel
- * @param {Element} block - Hero block element
- * @param {number} interval - Time in ms between slides (default 5000)
- */
-function startAutoPlay(block, interval = 5000) {
-  const slides = block.querySelectorAll('.hero-slide');
-  if (slides.length <= 1) return null;
-
-  const autoPlayInterval = setInterval(() => {
-    const currentIndex = Number.parseInt(block.dataset.currentSlide || '0', 10);
-    const nextIndex = (currentIndex + 1) % slides.length;
-    showSlide(block, nextIndex);
-  }, interval);
-
-  return autoPlayInterval;
-}
-
-/**
- * Decorates hero block as carousel
- * @param {Element} block
+ * Hero block � Cecabank canvas constellation
+ * Replaces the previous carousel implementation.
+ *
+ * Authored table structure:
+ * | hero        |
+ * | title text  |
+ *
+ * The first cell of the first row is used as the h1 title.
  */
 export default function decorate(block) {
-  // === CAROUSEL FUNCTIONALITY ===
+  if (block.dataset.initialized) return;
+  block.dataset.initialized = 'true';
 
-  // Wrap each top-level div as a slide
-  const slides = Array.from(block.children);
+  // Extract title from first row
+  const firstRow = block.querySelector(':scope > div');
+  let titleText = '';
+  if (firstRow) {
+    const titleEl = firstRow.querySelector('h1, h2, h3, h4, h5, h6, p');
+    titleText = titleEl ? titleEl.textContent.trim() : firstRow.textContent.trim();
+  }
 
-  console.log('=== HERO BLOCK DEBUG ===');
-  console.log('Total slides:', slides.length);
+  // Clear block
+  block.textContent = '';
 
-  if (slides.length > 0) {
-    slides.forEach((slide, index) => {
-      console.log(`\n--- Slide ${index + 1} ---`);
-      console.log('Slide HTML:', slide.outerHTML.substring(0, 500));
-      
-      // Extract slide data
-      const picture = slide.querySelector('picture');
-      const link = slide.querySelector('a');
-      const linkUrl = link?.href || '#';
-      const textContent = slide.querySelector('h1, h2, h3, h4, h5, h6, p:not(.button-container)');
+  // Canvas (behind content)
+  const canvas = document.createElement('canvas');
+  canvas.setAttribute('aria-hidden', 'true');
+  canvas.className = 'hero-canvas';
+  block.appendChild(canvas);
 
-      // Extract layout options - works in BOTH Universal Editor AND published site
-      // Model fields order: image, imageAlt, text, link, textPosition, textAlign
-      let textPosition = 'center';
-      let textAlign = 'center';
+  // Title
+  const titleH1 = document.createElement('h1');
+  titleH1.className = 'hero-title';
+  titleH1.textContent = titleText;
+  block.appendChild(titleH1);
 
-      const cells = Array.from(slide.querySelectorAll(':scope > div'));
-      console.log('Direct child cells:', cells.length);
-      cells.forEach((cell, idx) => {
-        console.log(`  Cell ${idx}:`, {
-          classes: cell.className,
-          hasSelect: !!cell.querySelector('select'),
-          hasInput: !!cell.querySelector('input'),
-          text: cell.textContent.trim().substring(0, 50)
-        });
+  // === Canvas Constellation Engine ===
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const isTouchOnly = window.matchMedia('(hover: none)');
+
+  const NODE_COUNT = 80;
+  const PROXIMITY = 130;
+  const ATTRACTION_RADIUS = 120;
+  const NODE_SPEED = 0.4;
+
+  const tealColor = getComputedStyle(document.documentElement)
+    .getPropertyValue('--primary-color').trim() || '#00A8B5';
+
+  let ctx;
+  let nodes = [];
+  const mouse = { x: -9999, y: -9999 };
+  let animationId = null;
+
+  function hexToRgb(hex) {
+    const clean = hex.replace('#', '');
+    const bigint = parseInt(clean, 16);
+    /* eslint-disable no-bitwise */
+    return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
+    /* eslint-enable no-bitwise */
+  }
+
+  const [r, g, b] = hexToRgb(tealColor);
+
+  function resizeCanvas() {
+    canvas.width = block.offsetWidth;
+    canvas.height = block.offsetHeight;
+  }
+
+  function createNodes() {
+    nodes = [];
+    for (let i = 0; i < NODE_COUNT; i += 1) {
+      const bvx = (Math.random() - 0.5) * NODE_SPEED;
+      const bvy = (Math.random() - 0.5) * NODE_SPEED;
+      nodes.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: bvx,
+        vy: bvy,
+        baseVx: bvx,
+        baseVy: bvy,
       });
-      
-      // Helper to extract value from cell - handles both environments:
-      // - Universal Editor: <select> for dropdowns, nested ls-field wrappers
-      // - Published site: simple text in divs
-      const getFieldValue = (cell) => {
-        if (!cell) return '';
-        
-        // 1. Check for select element (Universal Editor dropdowns)
-        const select = cell.querySelector('select');
-        if (select && select.value) {
-          return select.value.trim().toLowerCase();
-        }
-        
-        // 2. Check for input element (Universal Editor text fields)
-        const input = cell.querySelector('input[type="text"]');
-        if (input && input.value) {
-          return input.value.trim().toLowerCase();
-        }
-        
-        // 3. Get text content (works for both - goes deep through nested divs)
-        const text = cell.textContent?.trim().toLowerCase() || '';
-        return text;
-      };
+    }
+  }
 
-      // textPosition at index 4, textAlign at index 5
-      if (cells.length > 4) {
-        const posValue = getFieldValue(cells[4]);
-        console.log(`  Reading textPosition from cell 4: "${posValue}"`);
-        if (['center', 'left', 'right', 'top', 'bottom'].includes(posValue)) {
-          textPosition = posValue;
-          console.log(`  ✓ Applied textPosition: ${textPosition}`);
-        } else {
-          console.log(`  ✗ Invalid textPosition: "${posValue}"`);
+  function draw() {
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    nodes.forEach((node) => {
+      // Attraction toward mouse (desktop only)
+      if (!isTouchOnly.matches) {
+        const dx = mouse.x - node.x;
+        const dy = mouse.y - node.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < ATTRACTION_RADIUS && dist > 0) {
+          const force = (ATTRACTION_RADIUS - dist) / ATTRACTION_RADIUS;
+          node.vx += (dx / dist) * force * 0.3;
+          node.vy += (dy / dist) * force * 0.3;
         }
       }
 
-      if (cells.length > 5) {
-        const alignValue = getFieldValue(cells[5]);
-        console.log(`  Reading textAlign from cell 5: "${alignValue}"`);
-        if (['left', 'center', 'right'].includes(alignValue)) {
-          textAlign = alignValue;
-          console.log(`  ✓ Applied textAlign: ${textAlign}`);
-        } else {
-          console.log(`  ✗ Invalid textAlign: "${alignValue}"`);
-        }
+      // Dampen back to base velocity
+      node.vx = node.vx * 0.98 + node.baseVx * 0.02;
+      node.vy = node.vy * 0.98 + node.baseVy * 0.02;
+
+      // Clamp speed
+      const speed = Math.sqrt(node.vx ** 2 + node.vy ** 2);
+      if (speed > NODE_SPEED * 3) {
+        node.vx = (node.vx / speed) * NODE_SPEED * 3;
+        node.vy = (node.vy / speed) * NODE_SPEED * 3;
       }
 
-      console.log(`Final layout: position=${textPosition}, align=${textAlign}`);
+      node.x += node.vx;
+      node.y += node.vy;
 
-      // Clear slide and set up as carousel item
-      slide.innerHTML = '';
-      slide.classList.add('hero-slide');
-      slide.setAttribute('role', 'tabpanel');
-      slide.setAttribute('aria-label', `Slide ${index + 1}`);
-      slide.setAttribute('aria-hidden', index !== 0 ? 'true' : 'false');
-
-      // Create clickable wrapper
-      const slideLink = document.createElement('a');
-      slideLink.href = linkUrl;
-      slideLink.className = 'hero-slide-link';
-
-      // Add layout classes
-      slideLink.classList.add(`text-position-${textPosition}`);
-      slideLink.classList.add(`text-align-${textAlign}`);
-      slideLink.setAttribute('aria-label', textContent?.textContent || `Slide ${index + 1}`);
-
-      // Add background image
-      if (picture) {
-        const bgPicture = picture.cloneNode(true);
-        bgPicture.classList.add('hero-background');
-        slideLink.appendChild(bgPicture);
+      // Bounce off edges
+      if (node.x < 0 || node.x > canvas.width) {
+        node.vx *= -1;
+        node.baseVx *= -1;
+        node.x = Math.max(0, Math.min(canvas.width, node.x));
       }
-
-      // Add text content
-      if (textContent) {
-        const contentWrapper = document.createElement('div');
-        contentWrapper.className = 'hero-content';
-        contentWrapper.appendChild(textContent.cloneNode(true));
-        slideLink.appendChild(contentWrapper);
-      }
-
-      slide.appendChild(slideLink);
-
-      if (index === 0) {
-        slide.classList.add('active');
+      if (node.y < 0 || node.y > canvas.height) {
+        node.vy *= -1;
+        node.baseVy *= -1;
+        node.y = Math.max(0, Math.min(canvas.height, node.y));
       }
     });
 
-    // Add carousel navigation dots if multiple slides
-    if (slides.length > 1) {
-      const dotsContainer = createDots(slides.length);
-      block.appendChild(dotsContainer);
-
-      // Initialize current slide
-      block.dataset.currentSlide = '0';
-
-      // Add click handlers to dots
-      const dots = dotsContainer.querySelectorAll('.hero-dot');
-      dots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
-          showSlide(block, index);
-          // Reset auto-play timer
-          if (block.autoPlayInterval) {
-            clearInterval(block.autoPlayInterval);
-            block.autoPlayInterval = startAutoPlay(block);
-          }
-        });
-      });
-
-      // Start auto-play
-      block.autoPlayInterval = startAutoPlay(block, 5000);
-
-      // Pause on hover
-      block.addEventListener('mouseenter', () => {
-        if (block.autoPlayInterval) {
-          clearInterval(block.autoPlayInterval);
+    // Draw connections
+    for (let i = 0; i < nodes.length; i += 1) {
+      for (let j = i + 1; j < nodes.length; j += 1) {
+        const dx = nodes[i].x - nodes[j].x;
+        const dy = nodes[i].y - nodes[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < PROXIMITY) {
+          const alpha = (1 - dist / PROXIMITY) * 0.6;
+          ctx.beginPath();
+          ctx.strokeStyle = `rgba(${r},${g},${b},${alpha})`;
+          ctx.lineWidth = 1;
+          ctx.moveTo(nodes[i].x, nodes[i].y);
+          ctx.lineTo(nodes[j].x, nodes[j].y);
+          ctx.stroke();
         }
-      });
+      }
+    }
 
-      block.addEventListener('mouseleave', () => {
-        block.autoPlayInterval = startAutoPlay(block, 5000);
-      });
+    // Draw nodes
+    nodes.forEach((node) => {
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${r},${g},${b},0.8)`;
+      ctx.fill();
+    });
 
-      // Stop auto-play when page is hidden (tab switched)
-      document.addEventListener('visibilitychange', () => {
-        if (document.hidden && block.autoPlayInterval) {
-          clearInterval(block.autoPlayInterval);
-        } else if (!document.hidden && !block.autoPlayInterval) {
-          block.autoPlayInterval = startAutoPlay(block, 5000);
-        }
-      });
+    animationId = requestAnimationFrame(draw);
+  }
 
-      // Keyboard navigation (Arrow keys)
-      block.addEventListener('keydown', (e) => {
-        const currentIndex = Number.parseInt(block.dataset.currentSlide || '0', 10);
-
-        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-          e.preventDefault();
-          const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
-          showSlide(block, prevIndex);
-          // Reset auto-play
-          if (block.autoPlayInterval) {
-            clearInterval(block.autoPlayInterval);
-            block.autoPlayInterval = startAutoPlay(block, 5000);
-          }
-        } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-          e.preventDefault();
-          const nextIndex = (currentIndex + 1) % slides.length;
-          showSlide(block, nextIndex);
-          // Reset auto-play
-          if (block.autoPlayInterval) {
-            clearInterval(block.autoPlayInterval);
-            block.autoPlayInterval = startAutoPlay(block, 5000);
-          }
-        }
-      });
-
-      // Make block focusable for keyboard navigation
-      block.setAttribute('tabindex', '0');
-      block.setAttribute('aria-label', 'Carousel de imágenes. Use las flechas para navegar.');
+  function init() {
+    ctx = canvas.getContext('2d');
+    resizeCanvas();
+    createNodes();
+    if (!prefersReduced.matches) {
+      draw();
     }
   }
-}
 
+  // Mouse interaction
+  block.addEventListener('mousemove', (e) => {
+    if (isTouchOnly.matches) return;
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+  });
+
+  block.addEventListener('mouseleave', () => {
+    mouse.x = -9999;
+    mouse.y = -9999;
+  });
+
+  // Resize handler
+  const resizeObs = new ResizeObserver(() => {
+    resizeCanvas();
+  });
+  resizeObs.observe(block);
+
+  // Respect reduced motion preference change
+  prefersReduced.addEventListener('change', () => {
+    if (prefersReduced.matches) {
+      if (animationId) cancelAnimationFrame(animationId);
+      animationId = null;
+    } else {
+      draw();
+    }
+  });
+
+  init();
+}

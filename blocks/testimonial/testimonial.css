@@ -1,0 +1,124 @@
+/* === TESTIMONIAL BLOCK === */
+.testimonial {
+  padding: 60px 24px;
+}
+
+.testimonial-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* === THUMBNAIL SIDE (60%) === */
+.testimonial-thumb {
+  position: relative;
+  flex: 0 0 auto;
+  border-radius: 4px;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.testimonial-thumb picture,
+.testimonial-thumb img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+/* Play button */
+.testimonial-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.testimonial-play::after {
+  content: '';
+  display: block;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 3px solid var(--primary-color);
+  background: rgb(255 255 255 / 90%);
+  box-shadow: inset 16px 0 0 0 var(--primary-color),
+              inset 32px -9px 0 -6px var(--primary-color),
+              inset 32px 9px 0 -6px var(--primary-color);
+  transition: transform var(--transition-base);
+}
+
+.testimonial-play:hover::after {
+  transform: scale(1.1);
+}
+
+/* Author overlay */
+.testimonial-author-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 20px;
+  background: linear-gradient(transparent, rgb(0 0 0 / 70%));
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.testimonial-author-name {
+  font-weight: var(--font-weight-bold);
+  color: var(--primary-color);
+  font-size: var(--font-size-base);
+}
+
+.testimonial-author-role {
+  font-size: var(--font-size-sm);
+  color: rgb(255 255 255 / 80%);
+}
+
+/* === QUOTE SIDE (40%) === */
+.testimonial-quote-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 24px 0;
+}
+
+.testimonial-quote {
+  font-style: italic;
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-relaxed);
+  color: var(--text-color);
+  margin: 0;
+  padding-left: 1.5rem;
+  border-left: 4px solid var(--primary-color);
+}
+
+/* === RESPONSIVE === */
+@media (width >= 900px) {
+  .testimonial {
+    padding: 80px 32px;
+  }
+
+  .testimonial-card {
+    flex-direction: row;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .testimonial-thumb {
+    flex: 0 0 60%;
+  }
+
+  .testimonial-quote-wrap {
+    flex: 0 0 40%;
+    padding: 0;
+  }
+}
