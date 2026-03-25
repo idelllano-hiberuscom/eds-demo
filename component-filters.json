@@ -29,12 +29,7 @@
       "teaser",
       "text",
       "title",
-      "video",
-      "video-cards",
-      "values",
-      "testimonial",
-      "logo-carousel",
-      "cta-banner"
+      "video"
     ]
   },
   {
@@ -77,24 +72,6 @@
       "text",
       "title",
       "video"
-    ]
-  },
-  {
-    "id": "video-cards",
-    "components": [
-      "video-card-item"
-    ]
-  },
-  {
-    "id": "values",
-    "components": [
-      "values-item"
-    ]
-  },
-  {
-    "id": "logo-carousel",
-    "components": [
-      "logo-carousel-item"
     ]
   }
 ]

@@ -193,6 +193,25 @@
     ]
   },
   {
+    "id": "card",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Text",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "columns",
     "fields": [
       {
@@ -225,12 +244,25 @@
     "id": "hero",
     "fields": [
       {
-        "component": "richtext",
+        "component": "reference",
         "valueType": "string",
-        "name": "title",
-        "label": "Title",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "imageAlt",
+        "label": "Alt",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "text",
         "value": "",
-        "description": "Main hero title (h1)"
+        "label": "Text",
+        "valueType": "string"
       }
     ]
   },
@@ -348,14 +380,7 @@
   },
   {
     "id": "carousel",
-    "fields": [
-      {
-        "component": "reference",
-        "valueType": "string",
-        "name": "card",
-        "value": ""
-      }
-    ]
+    "fields": []
   },
   {
     "id": "columns",
@@ -5989,22 +6014,20 @@
         "label": "Title"
       },
       {
-        "component": "text",
-        "valueType": "string",
-        "value": "",
-        "name": "subtitle",
-        "label": "Subtitle"
-      },
-      {
         "component": "select",
-        "name": "textAlign",
-        "label": "Text Alignment",
+        "name": "teaserStyle",
+        "value": "image",
+        "label": "Style",
         "valueType": "string",
-        "value": "left",
         "options": [
-          { "name": "Left", "value": "left" },
-          { "name": "Center", "value": "center" },
-          { "name": "Right", "value": "right" }
+          {
+            "name": "Video",
+            "value": "video"
+          },
+          {
+            "name": "Image",
+            "value": "image"
+          }
         ]
       },
       {
