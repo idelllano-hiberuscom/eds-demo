@@ -82,8 +82,8 @@
   /* brand-scoped header/footer variables */
   --nav-background-color: var(--background-color);
   --nav-text-color: var(--text-color);
-  --footer-background-color: var(--background-light);
-  --footer-text-color: var(--text-color-light);
+  --footer-background-color: var(--color-footer-bg);
+  --footer-text-color: #fff;
 
   /* === CECABANK SPECIFIC TOKENS === */
   --color-light-blue-bg: #F0F8FA;

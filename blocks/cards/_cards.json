@@ -50,6 +50,29 @@
           "valueType": "string"
         },
         {
+          "component": "container",
+          "label": "Button (Optional)",
+          "name": "buttonProperties",
+          "valueType": "string",
+          "fields": [
+            {
+              "component": "text",
+              "valueType": "string",
+              "name": "buttonText",
+              "value": "",
+              "label": "Button Text",
+              "description": "Leave empty to hide the button"
+            },
+            {
+              "component": "aem-content",
+              "name": "buttonLink",
+              "label": "Button Link",
+              "valueType": "string",
+              "rootPath": ""
+            }
+          ]
+        },
+        {
           "component": "select",
           "name": "ctastyle",
           "label": "CTA Style",

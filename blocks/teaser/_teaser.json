@@ -41,13 +41,14 @@
         },
         {
           "component": "select",
-          "name": "teaserStyle",
-          "value": "image",
-          "label": "Style",
+          "name": "textAlign",
+          "value": "left",
+          "label": "Text Alignment",
           "valueType": "string",
           "options": [
-            { "name": "Video", "value": "video" },
-            { "name": "Image", "value": "image" }
+            { "name": "Left", "value": "left" },
+            { "name": "Center", "value": "center" },
+            { "name": "Right", "value": "right" }
           ]
         },
         {

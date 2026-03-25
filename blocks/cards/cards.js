@@ -35,6 +35,15 @@ export default async function decorate(block) {
     const ctaParagraph = ctaDiv?.querySelector('p');
     const ctaStyle = ctaParagraph?.textContent?.trim() || 'default';
 
+    // Read optional button text from the fifth div (index 4)
+    const btnTextDiv = row.children[4];
+    const btnText = btnTextDiv?.querySelector('p')?.textContent?.trim() || '';
+
+    // Read optional button link from the sixth div (index 5)
+    const btnLinkDiv = row.children[5];
+    const btnLink = btnLinkDiv?.querySelector('a')?.href
+      || btnLinkDiv?.querySelector('p')?.textContent?.trim() || '';
+
     moveInstrumentation(row, li);
     while (row.firstElementChild) li.append(row.firstElementChild);
 
@@ -46,25 +55,30 @@ export default async function decorate(block) {
       } else if (index === 1) {
       // Second div (index 1) - Content with button
         div.className = 'cards-card-body';
-      } else if (index === 2) {
-      // Third div (index 2) - Card style configuration
-        div.className = 'cards-config';
-        const p = div.querySelector('p');
-        if (p) {
-          p.style.display = 'none'; // Hide the configuration text
-        }
-      } else if (index === 3) {
-      // Fourth div (index 3) - CTA style configuration
-        div.className = 'cards-config';
-        const p = div.querySelector('p');
-        if (p) {
-          p.style.display = 'none'; // Hide the configuration text
-        }
       } else {
-      // Any other divs
-        div.className = 'cards-card-body';
+      // All other divs are config (style, cta, button text, button link)
+        div.className = 'cards-config';
+        const p = div.querySelector('p');
+        if (p) {
+          p.style.display = 'none';
+        }
       }
     });
+
+    // Add optional button to card body
+    if (btnText) {
+      const cardBody = li.querySelector('.cards-card-body');
+      if (cardBody) {
+        const btnContainer = document.createElement('p');
+        btnContainer.className = 'button-container';
+        const btnAnchor = document.createElement('a');
+        btnAnchor.href = btnLink || '#';
+        btnAnchor.className = 'button';
+        btnAnchor.textContent = btnText;
+        btnContainer.appendChild(btnAnchor);
+        cardBody.appendChild(btnContainer);
+      }
+    }
 
     // Apply CTA styles to button containers
     const buttonContainers = li.querySelectorAll('p.button-container');
