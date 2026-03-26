@@ -1,3 +1,5 @@
+# Archivo de configuración de mountpoints para Edge Delivery Services (EDS)
+# Define la fuente de contenido principal para el sitio desde AEM Universal Editor
 mountpoints:
   /:
     url: "https://author-p34633-e913315.adobeaemcloud.com/bin/franklin.delivery/idelllano-hiberuscom/eds-demo/main"
