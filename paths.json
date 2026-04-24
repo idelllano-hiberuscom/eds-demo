@@ -1,13 +1,8 @@
 {
   "mappings": [
-    "/content/cecebank/:/",
-    "/content/cecebank/configuration:/.helix/config.json",
-    "/content/cecebank/metadata:/metadata.json"
-
-                 
+    "/content/movistarplus/:/"
   ],
-  "includes":[
-    "/content/cecebank/"
+  "includes": [
+    "/content/movistarplus/"
   ]
 }
-

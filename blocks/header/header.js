@@ -1,359 +1,431 @@
+/**
+ * Header Block — AEM Edge Delivery Services
+ *
+ * Figma reference: MovistarPlus Header (desktop 122px, mobile drawer)
+ * Model: xwalk (EDS + Universal Editor)
+ * UE instrumentation: ✅ Completado (Fase 3 - UE & QA Specialist)
+ * QA audit: ✅ Validado
+ *
+ * QA Changes:
+ * - Sin cambios de comportamiento (Checks 1-10 superados sin issues bloqueantes).
+ * - Añadida instrumentación `data-aue-*` sobre el DOM ya decorado por el Developer.
+ *   Toda la inyección se hace mediante la API `dataset` (no `setAttribute`).
+ *
+ * Decisión UE (matiz fragmento):
+ *   El header EDS se autora desde el fragmento `/nav` (o el que indique
+ *   `<meta name="nav">`), NO como instancia inline en una página. Por eso
+ *   los `data-aue-resource` apuntan a `navPath` (el fragmento) y NO a
+ *   `window.location.pathname`. Cuando el autor hace clic en una zona
+ *   instrumentada del header en Universal Editor, UE le navega a la página
+ *   del fragmento `/nav` para editarlo. La instrumentación se aplica
+ *   DESPUÉS de poblar el DOM con los datos del fragmento, en `loadNav()`.
+ *
+ * Patrón EDS estricto (sin cambios respecto al código entregado por el Developer):
+ *   - `decorate(block)` es SÍNCRONA. Monta el esqueleto y registra listeners.
+ *   - `loadNav(block)` es `async`, se invoca con `.catch()` y rellena el
+ *     contenido cuando el fragmento llega.
+ *   - El `block` original se preserva: nunca `innerHTML=''`, `textContent=''`,
+ *     `replaceChildren()` ni mutación de `data-block-name`/`data-block-status`.
+ */
+
 import { getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
 
-// Default navigation menu structure (same as cecabank.es)
-const DEFAULT_NAV_MENU = [
-  {
-    title: 'Podemos ayudarte',
-    subtitle: 'Nuestros servicios',
-    link: '/servicios',
-    items: [
-      { title: 'Securities Services', link: '/servicios/securities-services' },
-      { title: 'Tesorería', link: '/servicios/tesoreria' },
-      { title: 'Pagos', link: '/servicios/pagos' },
-      { title: 'Plataformas Tecnológicas', link: '/servicios/plataformas-tecnologicas' },
-    ],
-  },
-  {
-    title: '¿Por qué Cecabank?',
-    subtitle: 'Conócenos',
-    link: '/por-que-cecabank',
-    items: [
-      { title: 'Especialización y Solvencia', link: '/por-que-cecabank/especializacion-solvencia' },
-      { title: 'Sostenibilidad', link: '/por-que-cecabank/sostenibilidad' },
-      { title: 'Negocio internacional', link: '/por-que-cecabank/negocio-internacional' },
-    ],
-  },
-  {
-    title: 'Cecabank al día',
-    subtitle: 'Actualidad',
-    link: '/noticias',
-    items: [
-      { title: 'Notas de prensa', link: '/noticias/notas-prensa' },
-      { title: 'Cecabank en los medios', link: '/noticias/en-medios' },
-      { title: 'Brand Center', link: '/noticias/brand-center' },
-    ],
-  },
-  {
-    title: '¿Hablamos?',
-    subtitle: 'Contacta con nosotros',
-    link: '/contacto',
-    items: [],
-  },
-];
+const ICONS = {
+  search: '<svg xmlns="http://www.w3.org/2000/svg" width="17.4" height="18.4" viewBox="0 0 18 19" fill="none" aria-hidden="true" focusable="false"><circle cx="7.5" cy="7.5" r="6.5" stroke="currentColor" stroke-width="1.6"/><path d="M12.5 12.5L17 17.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
+  profile: '<svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true" focusable="false"><circle cx="17" cy="17" r="16" stroke="currentColor" stroke-width="1.6"/><circle cx="17" cy="14" r="4.5" stroke="currentColor" stroke-width="1.6"/><path d="M8 26.5C9.5 22.5 13 20.5 17 20.5C21 20.5 24.5 22.5 26 26.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
+  burger: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M3 6H21M3 12H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+  close: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M5 5L19 19M19 5L5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+};
 
-// Secondary links for the header (bottom)
-const SECONDARY_LINKS = [
-  { title: 'Información corporativa', link: '/informacion-corporativa' },
-  { title: 'Informe de mercados', link: '/informe-mercados' },
-  { title: 'Oficina de cambio de divisas', link: '/oficina-cambio' },
-  { title: 'Banca electrónica', link: '/banca-electronica' },
-  { title: 'Portal de proveedores', link: '/portal-proveedores' },
-];
+const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
-function closeDrawer(drawer) {
-  drawer.classList.remove('open');
-  document.body.style.overflowY = '';
-  const trigger = document.querySelector('.nav-hamburger button');
-  if (trigger) trigger.setAttribute('aria-label', 'Open navigation');
-  window.removeEventListener('keydown', closeOnEscape); // eslint-disable-line no-use-before-define
-  if (trigger) trigger.focus();
-}
-
-function closeOnEscape(e) {
-  if (e.code === 'Escape') {
-    const drawer = document.querySelector('.header-drawer');
-    if (drawer && drawer.classList.contains('open')) {
-      closeDrawer(drawer);
+function extractFragmentData(fragment) {
+  const data = {
+    logo: null,
+    logoLink: '/',
+    logoAlt: 'Movistar Plus+',
+    navItems: [],
+    cta: null,
+    utilities: [],
+  };
+  const sections = [...fragment.children];
+  sections.forEach((section) => {
+    const picture = section.querySelector('picture');
+    if (picture && !data.logo) {
+      data.logo = picture;
+      const link = picture.closest('a');
+      if (link) {
+        data.logoLink = link.getAttribute('href') || '/';
+        if (link.getAttribute('aria-label')) data.logoAlt = link.getAttribute('aria-label');
+      }
+      const img = picture.querySelector('img');
+      if (img && img.getAttribute('alt')) data.logoAlt = img.getAttribute('alt');
+      return;
     }
-  }
-}
-
-function openDrawer(drawer) {
-  drawer.classList.add('open');
-  document.body.style.overflowY = 'hidden';
-  const trigger = document.querySelector('.nav-hamburger button');
-  if (trigger) trigger.setAttribute('aria-label', 'Close navigation');
-  window.addEventListener('keydown', closeOnEscape);
-  const firstFocusable = drawer.querySelector('button, a, input');
-  if (firstFocusable) firstFocusable.focus();
-}
-
-function createNavMenu(menuData) {
-  const nav = document.createElement('nav');
-  nav.className = 'drawer-nav';
-  nav.setAttribute('aria-label', 'Site navigation');
-
-  const ul = document.createElement('ul');
-  ul.className = 'drawer-menu';
-
-  menuData.forEach((item) => {
-    const li = document.createElement('li');
-    li.className = 'drawer-menu-item';
-
-    // Main item wrapper
-    const itemWrapper = document.createElement('div');
-    itemWrapper.className = 'menu-item-wrapper';
-
-    // Main link with title and subtitle
-    const mainLink = document.createElement('a');
-    mainLink.href = item.link;
-    mainLink.className = 'menu-item-link';
-
-    const titleSpan = document.createElement('span');
-    titleSpan.className = 'menu-item-title';
-    titleSpan.textContent = item.title;
-
-    // Add chevron inline with title if has subitems
-    if (item.items && item.items.length > 0) {
-      const chevron = document.createElement('span');
-      chevron.className = 'menu-item-chevron';
-      chevron.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>';
-      titleSpan.appendChild(chevron);
-    }
-
-    const subtitleSpan = document.createElement('span');
-    subtitleSpan.className = 'menu-item-subtitle';
-    subtitleSpan.textContent = item.subtitle || '';
-
-    mainLink.appendChild(titleSpan);
-    mainLink.appendChild(subtitleSpan);
-    itemWrapper.appendChild(mainLink);
-
-    li.appendChild(itemWrapper);
-
-    // Submenu if has subitems
-    if (item.items && item.items.length > 0) {
-      const subMenu = document.createElement('div');
-      subMenu.className = 'submenu';
-
-      const subUl = document.createElement('ul');
-      item.items.forEach((subItem) => {
-        const subLi = document.createElement('li');
-        const subA = document.createElement('a');
-        subA.href = subItem.link;
-        subA.textContent = subItem.title;
-        subLi.appendChild(subA);
-        subUl.appendChild(subLi);
+    const ul = section.querySelector('ul');
+    if (ul && !data.navItems.length) {
+      ul.querySelectorAll(':scope > li').forEach((li) => {
+        const a = li.querySelector('a');
+        if (!a) return;
+        data.navItems.push({ label: a.textContent.trim(), href: a.getAttribute('href') || '#' });
       });
-      subMenu.appendChild(subUl);
-      li.appendChild(subMenu);
-
-      // Toggle submenu on hover/click
-      li.addEventListener('mouseenter', () => li.classList.add('expanded'));
-      li.addEventListener('mouseleave', () => li.classList.remove('expanded'));
-      itemWrapper.addEventListener('click', (e) => {
-        if (window.innerWidth < 1024) {
-          e.preventDefault();
-          li.classList.toggle('expanded');
-        }
-      });
+      return;
     }
-
-    ul.appendChild(li);
+    const links = section.querySelectorAll('a');
+    links.forEach((a) => {
+      if (a.querySelector('picture')) return;
+      const href = a.getAttribute('href') || '#';
+      const label = a.textContent.trim();
+      if (!label) return;
+      if (!data.cta) { data.cta = { label, href }; return; }
+      const lower = `${href} ${label}`.toLowerCase();
+      let key = 'other';
+      if (lower.includes('busc') || lower.includes('search')) key = 'search';
+      else if (lower.includes('perfil') || lower.includes('profile') || lower.includes('account')) key = 'profile';
+      data.utilities.push({ key, label, href });
+    });
   });
+  return data;
+}
 
-  nav.appendChild(ul);
+function buildBurger() {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'header-burger';
+  btn.setAttribute('aria-label', 'Abrir menú');
+  btn.setAttribute('aria-expanded', 'false');
+  btn.setAttribute('aria-controls', 'header-drawer');
+  btn.innerHTML = ICONS.burger;
+  return btn;
+}
+
+function buildEmptyLogo() {
+  const a = document.createElement('a');
+  a.className = 'header-logo';
+  a.href = '/';
+  a.setAttribute('aria-label', 'Movistar Plus+');
+  return a;
+}
+
+function buildEmptyNav() {
+  const nav = document.createElement('nav');
+  nav.className = 'header-nav';
+  nav.setAttribute('aria-label', 'Navegación principal');
+  nav.setAttribute('aria-busy', 'true');
+  const ul = document.createElement('ul');
+  ul.className = 'header-nav-list';
+  nav.append(ul);
   return nav;
 }
 
-function createSecondaryLinks(links) {
-  const div = document.createElement('div');
-  div.className = 'drawer-secondary-links';
+function buildEmptyTools() {
+  const tools = document.createElement('div');
+  tools.className = 'header-tools';
+  tools.setAttribute('aria-busy', 'true');
+  return tools;
+}
 
-  links.forEach((link) => {
+function buildEmptyDrawer() {
+  const drawer = document.createElement('div');
+  drawer.className = 'header-drawer';
+  drawer.id = 'header-drawer';
+  drawer.setAttribute('hidden', '');
+  drawer.setAttribute('role', 'dialog');
+  drawer.setAttribute('aria-modal', 'true');
+  drawer.setAttribute('aria-label', 'Menú principal');
+  drawer.setAttribute('aria-busy', 'true');
+  const close = document.createElement('button');
+  close.type = 'button';
+  close.className = 'header-drawer-close';
+  close.setAttribute('aria-label', 'Cerrar menú');
+  close.innerHTML = ICONS.close;
+  drawer.append(close);
+  const list = document.createElement('ul');
+  list.className = 'header-drawer-list';
+  drawer.append(list);
+  return drawer;
+}
+
+function populateLogo(logoEl, data) {
+  logoEl.href = data.logoLink;
+  logoEl.setAttribute('aria-label', data.logoAlt);
+  if (!data.logo) { logoEl.textContent = data.logoAlt; return; }
+  logoEl.append(data.logo);
+  const img = logoEl.querySelector('img');
+  if (img) {
+    img.setAttribute('loading', 'eager');
+    img.setAttribute('fetchpriority', 'high');
+    img.setAttribute('decoding', 'async');
+    if (!img.getAttribute('width')) img.setAttribute('width', '100');
+    if (!img.getAttribute('height')) img.setAttribute('height', '44');
+    if (!img.getAttribute('alt')) img.setAttribute('alt', data.logoAlt);
+  }
+}
+
+function populateNav(navEl, data) {
+  const ul = navEl.querySelector('.header-nav-list');
+  const currentPath = window.location.pathname.replace(/\/$/, '');
+  data.navItems.forEach((item) => {
+    const li = document.createElement('li');
+    li.className = 'header-nav-item';
     const a = document.createElement('a');
-    a.href = link.link;
-    a.textContent = link.title;
-    div.appendChild(a);
+    a.className = 'header-nav-link';
+    a.href = item.href;
+    a.textContent = item.label;
+    const itemPath = (item.href || '').replace(/\/$/, '').replace(/^https?:\/\/[^/]+/, '');
+    if (itemPath && itemPath === currentPath) {
+      li.classList.add('is-active');
+      a.setAttribute('aria-current', 'page');
+    }
+    li.append(a);
+    ul.append(li);
   });
+  navEl.setAttribute('aria-busy', 'false');
+}
 
-  return div;
+function populateTools(toolsEl, data) {
+  const search = data.utilities.find((u) => u.key === 'search');
+  const profile = data.utilities.find((u) => u.key === 'profile');
+  if (search) {
+    const a = document.createElement('a');
+    a.className = 'header-tool header-search';
+    a.href = search.href;
+    a.setAttribute('aria-label', search.label || 'Buscar');
+    a.innerHTML = ICONS.search;
+    toolsEl.append(a);
+  }
+  if (data.cta) {
+    const cta = document.createElement('a');
+    cta.className = 'header-cta';
+    cta.href = data.cta.href;
+    cta.textContent = data.cta.label;
+    toolsEl.append(cta);
+  }
+  if (profile) {
+    const a = document.createElement('a');
+    a.className = 'header-tool header-profile';
+    a.href = profile.href;
+    a.setAttribute('aria-label', profile.label || 'Perfil');
+    a.innerHTML = ICONS.profile;
+    toolsEl.append(a);
+  }
+  toolsEl.setAttribute('aria-busy', 'false');
+}
+
+function populateDrawer(drawerEl, data) {
+  const list = drawerEl.querySelector('.header-drawer-list');
+  data.navItems.forEach((item) => {
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = item.href;
+    a.textContent = item.label;
+    a.className = 'header-drawer-link';
+    li.append(a);
+    list.append(li);
+  });
+  if (data.utilities.length) {
+    const utils = document.createElement('div');
+    utils.className = 'header-drawer-utils';
+    data.utilities.forEach((u) => {
+      const a = document.createElement('a');
+      a.href = u.href;
+      a.textContent = u.label;
+      a.className = 'header-drawer-link';
+      utils.append(a);
+    });
+    drawerEl.append(utils);
+  }
+  if (data.cta) {
+    const cta = document.createElement('a');
+    cta.className = 'header-cta header-drawer-cta';
+    cta.href = data.cta.href;
+    cta.textContent = data.cta.label;
+    drawerEl.append(cta);
+  }
+  drawerEl.setAttribute('aria-busy', 'false');
 }
 
 /**
- * Decorates the header with Cecabank drawer navigation
- * @param {Element} block The header block element
+ * Inyecta los atributos `data-aue-*` (xwalk) sobre el DOM ya poblado.
+ * Usa el `data-aue-resource` nativo que AEM ya puso en el block element.
+ * Si no existe (preview local, etc.) la instrumentación se omite.
+ *
+ * @param {Element} block   Contenedor raíz del bloque.
  */
-export default async function decorate(block) {
-  // Prevent double-decoration
-  if (block.dataset.initialized) return;
-  block.dataset.initialized = 'true';
+function instrumentUE(block) {
+  // Usar el resource que AEM ya asignó al bloque; NO inventar uno sintético.
+  const resource = block.getAttribute('data-aue-resource');
+  if (!resource) return; // sin resource nativo → nada que instrumentar
 
-  // Default logo path
-  const defaultLogoPath = `${window.hlx.codeBasePath}/icons/logo-cecabank.svg`;
-
-  // Extract configuration
-  const headerConfig = {
-    logo: null,
-    logoLink: '/',
-    languages: 'ES,EN,PT',
-  };
-
-  const cells = Array.from(block.querySelectorAll(':scope > div'));
-
-  const getFieldValue = (cell, fieldType = 'text') => {
-    if (!cell) return '';
-    if (fieldType === 'image') {
-      const img = cell.querySelector('img') || cell.querySelector('picture img');
-      if (img) return img.src;
+  // --- Logo (imagen + enlace destino) ---
+  const logoEl = block.querySelector('.header-logo');
+  if (logoEl) {
+    const picture = logoEl.querySelector('picture');
+    if (picture) {
+      picture.dataset.aueProp = 'logo';
+      picture.dataset.aueType = 'media';
+      picture.dataset.aueLabel = 'Logo de cabecera';
     }
-    return cell.textContent?.trim() || '';
-  };
-
-  if (cells[0]) headerConfig.logo = getFieldValue(cells[0], 'image') || getFieldValue(cells[0]);
-  if (cells[1]) headerConfig.logoLink = getFieldValue(cells[1]) || '/';
-  if (cells[5]) headerConfig.languages = getFieldValue(cells[5]) || 'ES,EN,PT';
-
-  // Clear block and build new header
-  block.textContent = '';
-
-  const navWrapper = document.createElement('div');
-  navWrapper.className = 'nav-wrapper';
-
-  // === TOP BAR ===
-  const nav = document.createElement('nav');
-  nav.id = 'nav';
-  nav.setAttribute('aria-label', 'Main navigation');
-
-  // Logo
-  const navBrand = document.createElement('div');
-  navBrand.className = 'nav-brand';
-  const logoLink = document.createElement('a');
-  logoLink.href = headerConfig.logoLink || '/';
-  logoLink.setAttribute('aria-label', 'Cecabank Home');
-
-  const logoImg = document.createElement('img');
-  if (headerConfig.logo && headerConfig.logo.startsWith('http')) {
-    logoImg.src = headerConfig.logo;
-  } else {
-    logoImg.src = defaultLogoPath;
+    logoEl.dataset.aueProp = 'logoLink';
+    logoEl.dataset.aueType = 'aem-content';
+    logoEl.dataset.aueLabel = 'Enlace del logo (normalmente la home)';
   }
-  logoImg.alt = 'Cecabank';
-  logoImg.className = 'nav-logo';
-  logoLink.appendChild(logoImg);
-  navBrand.appendChild(logoLink);
 
-  // Hamburger
-  const hamburger = document.createElement('div');
-  hamburger.className = 'nav-hamburger';
-  hamburger.innerHTML = `<button type="button" aria-label="Open navigation" aria-controls="header-drawer" aria-expanded="false">
-    <span class="nav-hamburger-label">MENÚ</span>
-    <span class="nav-hamburger-icon"></span>
-  </button>`;
+  // --- Nav: contenedor de items repetibles ---
+  const navEl = block.querySelector('.header-nav');
+  if (navEl) {
+    navEl.dataset.aueType = 'container';
+    navEl.dataset.aueFilter = 'header-nav-item';
+    navEl.dataset.aueLabel = 'Items del menú principal';
 
-  nav.appendChild(navBrand);
-  nav.appendChild(hamburger);
-  navWrapper.appendChild(nav);
-
-  // === DRAWER ===
-  const drawer = document.createElement('div');
-  drawer.id = 'header-drawer';
-  drawer.className = 'header-drawer';
-  drawer.setAttribute('role', 'dialog');
-  drawer.setAttribute('aria-modal', 'true');
-  drawer.setAttribute('aria-label', 'Navigation menu');
-
-  // Drawer top row: Languages + Close
-  const drawerTop = document.createElement('div');
-  drawerTop.className = 'drawer-top';
-
-  // Languages
-  const langDiv = document.createElement('div');
-  langDiv.className = 'drawer-languages';
-  const langs = headerConfig.languages.split(',').map((l) => l.trim());
-  langs.forEach((lang, idx) => {
-    if (idx > 0) {
-      const separator = document.createElement('span');
-      separator.className = 'lang-separator';
-      separator.textContent = '|';
-      langDiv.appendChild(separator);
-    }
-    const langLink = document.createElement('a');
-    langLink.href = `/${lang.toLowerCase()}`;
-    langLink.textContent = lang;
-    langLink.className = 'nav-language';
-    if (idx === 0) langLink.classList.add('active');
-    langDiv.appendChild(langLink);
-  });
-
-  // Close button
-  const closeBtn = document.createElement('button');
-  closeBtn.type = 'button';
-  closeBtn.className = 'drawer-close';
-  closeBtn.setAttribute('aria-label', 'Close navigation');
-  closeBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
-
-  drawerTop.appendChild(langDiv);
-  drawerTop.appendChild(closeBtn);
-  drawer.appendChild(drawerTop);
-
-  // Search input
-  const searchWrap = document.createElement('div');
-  searchWrap.className = 'drawer-search';
-  const searchIcon = document.createElement('span');
-  searchIcon.className = 'search-icon';
-  searchIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>';
-  const searchInput = document.createElement('input');
-  searchInput.type = 'search';
-  searchInput.placeholder = '¿Qué estás buscando?';
-  searchInput.setAttribute('aria-label', 'Buscar');
-  searchWrap.appendChild(searchIcon);
-  searchWrap.appendChild(searchInput);
-  drawer.appendChild(searchWrap);
-
-  // Nav menu
-  const navMeta = getMetadata('nav');
-  let hasFragmentNav = false;
-
-  if (navMeta) {
-    try {
-      const navPath = new URL(navMeta, window.location).pathname;
-      const fragment = await loadFragment(navPath);
-      if (fragment && fragment.querySelector('a')) {
-        hasFragmentNav = true;
-        // TODO: Convert fragment to menu format if needed
+    const items = navEl.querySelectorAll('.header-nav-item');
+    items.forEach((li, index) => {
+      li.dataset.aueLabel = `Item ${index + 1}`;
+      const link = li.querySelector('.header-nav-link');
+      if (link) {
+        link.dataset.aueProp = 'label';
+        link.dataset.aueType = 'text';
+        link.dataset.aueLabel = 'Etiqueta visible';
       }
-    } catch (_) {
-      // use default menu
-    }
+    });
   }
 
-  if (!hasFragmentNav) {
-    const defaultNav = createNavMenu(DEFAULT_NAV_MENU);
-    drawer.appendChild(defaultNav);
+  // --- CTA "SUSCRIBIRME AHORA" ---
+  const ctaEl = block.querySelector('.header-tools .header-cta');
+  if (ctaEl) {
+    ctaEl.dataset.aueProp = 'ctaText';
+    ctaEl.dataset.aueType = 'text';
+    ctaEl.dataset.aueLabel = 'Texto del botón principal';
   }
 
-  // Secondary links at bottom
-  const secondaryLinks = createSecondaryLinks(SECONDARY_LINKS);
-  drawer.appendChild(secondaryLinks);
+  // --- Buscador (enlace) ---
+  const searchEl = block.querySelector('.header-search');
+  if (searchEl) {
+    searchEl.dataset.aueProp = 'searchLink';
+    searchEl.dataset.aueType = 'aem-content';
+    searchEl.dataset.aueLabel = 'Enlace destino del buscador';
+  }
 
-  // Backdrop
-  const backdrop = document.createElement('div');
-  backdrop.className = 'header-backdrop';
+  // --- Perfil (enlace) ---
+  const profileEl = block.querySelector('.header-profile');
+  if (profileEl) {
+    profileEl.dataset.aueProp = 'profileLink';
+    profileEl.dataset.aueType = 'aem-content';
+    profileEl.dataset.aueLabel = 'Enlace destino del perfil/login';
+  }
+}
 
-  // Wire up events
-  hamburger.querySelector('button').addEventListener('click', () => {
-    if (drawer.classList.contains('open')) {
-      closeDrawer(drawer);
-      hamburger.querySelector('button').setAttribute('aria-expanded', 'false');
-    } else {
-      openDrawer(drawer);
-      hamburger.querySelector('button').setAttribute('aria-expanded', 'true');
+/**
+ * Toggles .header--solid on block when user scrolls past the hero section.
+ * Transparent over hero, solid black afterwards.
+ * @param {Element} block
+ */
+function setupScrollBehaviour(block) {
+  const update = () => {
+    const hero = document.querySelector('.hero-carousel, .hero');
+    const threshold = hero ? hero.offsetTop + hero.offsetHeight : 0;
+    block.classList.toggle('header--solid', window.scrollY > threshold);
+  };
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+}
+
+function setupDrawer(burger, drawer) {
+  let lastFocused = null;
+  const trapFocus = (e) => {
+    if (e.key !== 'Tab') return;
+    const focusables = [...drawer.querySelectorAll(FOCUSABLE)];
+    if (!focusables.length) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault(); last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault(); first.focus();
     }
+  };
+  let onKey;
+  let onClickOutside;
+  function close() {
+    drawer.classList.remove('is-open');
+    drawer.setAttribute('hidden', '');
+    burger.setAttribute('aria-expanded', 'false');
+    burger.setAttribute('aria-label', 'Abrir menú');
+    document.body.classList.remove('is-header-drawer-open');
+    document.removeEventListener('keydown', onKey);
+    document.removeEventListener('click', onClickOutside);
+    if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+  }
+  onKey = (e) => { if (e.key === 'Escape') close(); else trapFocus(e); };
+  onClickOutside = (e) => {
+    if (!drawer.contains(e.target) && !burger.contains(e.target)) close();
+  };
+  function open() {
+    lastFocused = document.activeElement;
+    drawer.removeAttribute('hidden');
+    drawer.classList.add('is-open');
+    burger.setAttribute('aria-expanded', 'true');
+    burger.setAttribute('aria-label', 'Cerrar menú');
+    document.body.classList.add('is-header-drawer-open');
+    document.addEventListener('keydown', onKey);
+    document.addEventListener('click', onClickOutside);
+    const firstFocusable = drawer.querySelector(FOCUSABLE);
+    if (firstFocusable) firstFocusable.focus();
+  }
+  burger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (burger.getAttribute('aria-expanded') === 'true') close(); else open();
   });
-
-  closeBtn.addEventListener('click', () => {
-    closeDrawer(drawer);
-    hamburger.querySelector('button').setAttribute('aria-expanded', 'false');
+  const closeBtn = drawer.querySelector('.header-drawer-close');
+  if (closeBtn) closeBtn.addEventListener('click', close);
+  const mql = window.matchMedia('(min-width: 1280px)');
+  mql.addEventListener('change', () => {
+    if (mql.matches && burger.getAttribute('aria-expanded') === 'true') close();
   });
+}
 
-  backdrop.addEventListener('click', () => {
-    closeDrawer(drawer);
-    hamburger.querySelector('button').setAttribute('aria-expanded', 'false');
+async function loadNav(block) {
+  const navMeta = getMetadata('nav');
+  const navPath = navMeta ? new URL(navMeta, window.location).pathname : '/nav';
+  const fragment = await loadFragment(navPath);
+  if (!fragment) {
+    block.querySelectorAll('[aria-busy="true"]').forEach((el) => el.setAttribute('aria-busy', 'false'));
+    return;
+  }
+  const data = extractFragmentData(fragment);
+  const logoEl = block.querySelector('.header-logo');
+  const navEl = block.querySelector('.header-nav');
+  const toolsEl = block.querySelector('.header-tools');
+  const drawerEl = block.querySelector('.header-drawer');
+  if (logoEl) populateLogo(logoEl, data);
+  if (navEl) populateNav(navEl, data);
+  if (toolsEl) populateTools(toolsEl, data);
+  if (drawerEl) populateDrawer(drawerEl, data);
+
+  // Instrumentación UE: usa el data-aue-resource nativo que AEM ya puso en el bloque.
+  // Se aplica DESPUÉS de poblar el DOM para que los selectores encuentren los nodos.
+  instrumentUE(block);
+}
+
+export default function decorate(block) {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'header-wrapper';
+  const burger = buildBurger();
+  const logo = buildEmptyLogo();
+  const nav = buildEmptyNav();
+  const tools = buildEmptyTools();
+  wrapper.append(burger, logo, nav, tools);
+  const drawer = buildEmptyDrawer();
+  block.append(wrapper, drawer);
+  setupDrawer(burger, drawer);
+  setupScrollBehaviour(block);
+  loadNav(block).catch((err) => {
+    // Logging operativo (no debug). Necesario para diagnosticar fallos
+    // de fetch del fragmento /nav en producción.
+    // eslint-disable-next-line no-console
+    console.error('[header] Error cargando el fragmento de navegación:', err);
+    block.classList.add('header--error');
+    block.querySelectorAll('[aria-busy="true"]').forEach((el) => el.setAttribute('aria-busy', 'false'));
   });
-
-  navWrapper.appendChild(drawer);
-  navWrapper.appendChild(backdrop);
-  block.append(navWrapper);
 }

@@ -8,28 +8,24 @@
   {
     "id": "section",
     "components": [
-      "action-button",
+      "text",
+      "image",
       "button",
+      "title",
+      "hero",
       "cards",
-      "carousel",
+      "channel-logos",
       "columns",
-      "contentfragment",
-      "dm-asset",
-      "dm-template",
-      "find-a-doctor",
+      "content-carousel",
+      "faq-accordion",
+      "feature-icons-band",
       "footer",
-      "forex",
       "fragment",
       "header",
-      "hero",
-      "iframe",
-      "image",
-      "search",
-      "separator",
-      "teaser",
-      "text",
-      "title",
-      "video"
+      "hero-carousel",
+      "media-grid",
+      "plan-selector",
+      "promo-band"
     ]
   },
   {
@@ -39,21 +35,9 @@
     ]
   },
   {
-    "id": "hero",
+    "id": "channel-logos",
     "components": [
-      "hero-slide"
-    ]
-  },
-  {
-    "id": "header",
-    "components": [
-      "navigation-item"
-    ]
-  },
-  {
-    "id": "footer",
-    "components": [
-      "footer-section"
+      "channel-logos-item"
     ]
   },
   {
@@ -65,13 +49,76 @@
   {
     "id": "column",
     "components": [
-      "button",
-      "dm-asset",
-      "dm-template",
-      "image",
       "text",
-      "title",
-      "video"
+      "image",
+      "button",
+      "title"
+    ]
+  },
+  {
+    "id": "content-carousel",
+    "components": [
+      "content-carousel-item"
+    ]
+  },
+  {
+    "id": "faq-accordion",
+    "components": [
+      "faq-accordion-item"
+    ]
+  },
+  {
+    "id": "feature-icons-band",
+    "components": [
+      "feature-icons-band-item"
+    ]
+  },
+  {
+    "id": "footer-columns",
+    "components": [
+      "footer-column"
+    ]
+  },
+  {
+    "id": "footer-column-links",
+    "components": [
+      "footer-link"
+    ]
+  },
+  {
+    "id": "footer-legal-links",
+    "components": [
+      "footer-link"
+    ]
+  },
+  {
+    "id": "footer-social-links",
+    "components": [
+      "footer-social"
+    ]
+  },
+  {
+    "id": "header",
+    "components": [
+      "header-nav-item"
+    ]
+  },
+  {
+    "id": "hero-carousel",
+    "components": [
+      "hero-carousel-item"
+    ]
+  },
+  {
+    "id": "media-grid",
+    "components": [
+      "media-grid-cell"
+    ]
+  },
+  {
+    "id": "plan-selector",
+    "components": [
+      "plan-selector-item"
     ]
   }
 ]

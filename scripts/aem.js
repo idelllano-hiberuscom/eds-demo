@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Adobe. All rights reserved.
+ * Copyright 2026 Adobe. All rights reserved.
  * This file is licensed to you under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License. You may obtain a copy
  * of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -16,15 +16,24 @@ function sampleRUM(checkpoint, data) {
   const timeShift = () => (window.performance ? window.performance.now() : Date.now() - window.hlx.rum.firstReadTime);
   try {
     window.hlx = window.hlx || {};
-    sampleRUM.enhance = () => {};
-    if (!window.hlx.rum) {
-      const param = new URLSearchParams(window.location.search).get('rum');
-      const weight = (window.SAMPLE_PAGEVIEWS_AT_RATE === 'high' && 10)
-        || (window.SAMPLE_PAGEVIEWS_AT_RATE === 'low' && 1000)
-        || (param === 'on' && 1)
-        || 100;
-      const id = Math.random().toString(36).slice(-4);
-      const isSelected = param !== 'off' && Math.random() * weight < 1;
+    if (!window.hlx.rum || !window.hlx.rum.collector) {
+      sampleRUM.enhance = () => {};
+      const params = new URLSearchParams(window.location.search);
+      const { currentScript } = document;
+      const rate = params.get('rum')
+        || window.SAMPLE_PAGEVIEWS_AT_RATE
+        || params.get('optel')
+        || (currentScript && currentScript.dataset.rate);
+      const rateValue = {
+        on: 1,
+        off: 0,
+        high: 10,
+        low: 1000,
+      }[rate];
+      const weight = rateValue !== undefined ? rateValue : 100;
+      const id = (window.hlx.rum && window.hlx.rum.id) || crypto.randomUUID().slice(-9);
+      const isSelected = (window.hlx.rum && window.hlx.rum.isSelected)
+        || (weight > 0 && Math.random() * weight < 1);
       // eslint-disable-next-line object-curly-newline, max-len
       window.hlx.rum = {
         weight,
@@ -40,13 +49,15 @@ function sampleRUM(checkpoint, data) {
           const errData = { source: 'undefined error' };
           try {
             errData.target = error.toString();
-            errData.source = error.stack
-              .split('\n')
-              .filter((line) => line.match(/https?:\/\//))
-              .shift()
-              .replace(/at ([^ ]+) \((.+)\)/, '$1@$2')
-              .replace(/ at /, '@')
-              .trim();
+            if (error.stack) {
+              errData.source = error.stack
+                .split('\n')
+                .filter((line) => line.match(/https?:\/\//))
+                .shift()
+                .replace(/at ([^ ]+) \((.+)\)/, '$1@$2')
+                .replace(/ at /, '@')
+                .trim();
+            }
           } catch (err) {
             /* error structure was not as expected */
           }
@@ -69,7 +80,17 @@ function sampleRUM(checkpoint, data) {
           sampleRUM('error', errData);
         });
 
-        sampleRUM.baseURL = sampleRUM.baseURL || new URL(window.RUM_BASE || '/', new URL('https://rum.hlx.page'));
+        window.addEventListener('securitypolicyviolation', (e) => {
+          if (e.blockedURI.includes('helix-rum-enhancer') && e.disposition === 'enforce') {
+            const errData = {
+              source: 'csp',
+              target: e.blockedURI,
+            };
+            sampleRUM.sendPing('error', timeShift(), errData);
+          }
+        });
+
+        sampleRUM.baseURL = sampleRUM.baseURL || new URL(window.RUM_BASE || '/', new URL('https://ot.aem.live'));
         sampleRUM.collectBaseURL = sampleRUM.collectBaseURL || sampleRUM.baseURL;
         sampleRUM.sendPing = (ck, time, pingData = {}) => {
           // eslint-disable-next-line max-len, object-curly-newline
@@ -82,10 +103,10 @@ function sampleRUM(checkpoint, data) {
             ...pingData,
           });
           const urlParams = window.RUM_PARAMS
-            ? `?${new URLSearchParams(window.RUM_PARAMS).toString()}`
+            ? new URLSearchParams(window.RUM_PARAMS).toString() || ''
             : '';
           const { href: url, origin } = new URL(
-            `.rum/${weight}${urlParams}`,
+            `.rum/${weight}${urlParams ? `?${urlParams}` : ''}`,
             sampleRUM.collectBaseURL,
           );
           const body = origin === window.location.origin
@@ -256,15 +277,9 @@ async function loadCSS(href) {
  */
 async function loadScript(src, attrs) {
   return new Promise((resolve, reject) => {
-    if (!src || src.trim() === '') {
-      resolve();
-      return;
-    }
-
     if (!document.querySelector(`head > script[src="${src}"]`)) {
       const script = document.createElement('script');
       script.src = src;
-      script.async = true;
       if (attrs) {
         // eslint-disable-next-line no-restricted-syntax, guard-for-in
         for (const attr in attrs) {
@@ -272,8 +287,7 @@ async function loadScript(src, attrs) {
         }
       }
       script.onload = resolve;
-      // script.onerror = reject;
-      script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+      script.onerror = reject;
       document.head.append(script);
     } else {
       resolve();
@@ -308,7 +322,6 @@ function createOptimizedPicture(
   alt = '',
   eager = false,
   breakpoints = [{ media: '(min-width: 600px)', width: '2000' }, { width: '750' }],
-  fetchpriority = null,
 ) {
   const url = new URL(src, window.location.href);
   const picture = document.createElement('picture');
@@ -334,9 +347,6 @@ function createOptimizedPicture(
     } else {
       const img = document.createElement('img');
       img.setAttribute('loading', eager ? 'eager' : 'lazy');
-      if (fetchpriority || eager) {
-        img.setAttribute('fetchpriority', fetchpriority || 'high');
-      }
       img.setAttribute('alt', alt);
       picture.appendChild(img);
       img.setAttribute('src', `${pathname}?width=${br.width}&format=${ext}&optimize=medium`);
@@ -379,6 +389,7 @@ function wrapTextNodes(block) {
     'H4',
     'H5',
     'H6',
+    'HR',
   ];
 
   const wrap = (el) => {
@@ -526,77 +537,6 @@ function decorateSections(main) {
 }
 
 /**
- * Gets placeholders object.
- * @param {string} [prefix] Location of placeholders
- * @returns {object} Window placeholders object
- */
-async function fetchPlaceholders(prefix = 'default') {
-  window.placeholders = window.placeholders || {};
-  if (!window.placeholders[prefix]) {
-    window.placeholders[prefix] = new Promise((resolve) => {
-      fetch(`${prefix === 'default' ? '' : prefix}/placeholders.json`)
-        .then((resp) => {
-          if (resp.ok) {
-            // Clone the response before reading
-            return resp.clone().json();
-          }
-          return {};
-        })
-        .then((json) => {
-          const placeholders = {};
-          json.data
-            ?.filter((placeholder) => placeholder.Key)
-            .forEach((placeholder) => {
-              placeholders[toCamelCase(placeholder.Key)] = placeholder.Text;
-            });
-          window.placeholders[prefix] = placeholders;
-          resolve(window.placeholders[prefix]);
-        })
-        .catch((error) => {
-          console.error('Error loading placeholders:', error);
-          window.placeholders[prefix] = {};
-          resolve(window.placeholders[prefix]);
-        });
-    });
-  }
-  return window.placeholders[`${prefix}`];
-}
-
-/*
-// eslint-disable-next-line import/prefer-default-export
-async function fetchPlaceholders(prefix = 'default') {
-  window.placeholders = window.placeholders || {};
-  if (!window.placeholders[prefix]) {
-    window.placeholders[prefix] = new Promise((resolve) => {
-      fetch(`${prefix === 'default' ? '' : prefix}/placeholders.json`)
-        .then((resp) => {
-          if (resp.ok) {
-            return resp.json();
-          }
-          return {};
-        })
-        .then((json) => {
-          const placeholders = {};
-          json.data
-            .filter((placeholder) => placeholder.Key)
-            .forEach((placeholder) => {
-              placeholders[toCamelCase(placeholder.Key)] = placeholder.Text;
-            });
-          window.placeholders[prefix] = placeholders;
-          resolve(window.placeholders[prefix]);
-        })
-        .catch(() => {
-          // error loading placeholders
-          window.placeholders[prefix] = {};
-          resolve(window.placeholders[prefix]);
-        });
-    });
-  }
-  return window.placeholders[`${prefix}`];
-}
-*/
-
-/**
  * Builds a block DOM Element from a two dimensional array, string, or object
  * @param {string} blockName name of the block
  * @param {*} content two dimensional array or string or object of content
@@ -649,7 +589,7 @@ async function loadBlock(block) {
             }
           } catch (error) {
             // eslint-disable-next-line no-console
-            console.log(`failed to load module for ${blockName}`, error);
+            console.error(`failed to load module for ${blockName}`, error);
           }
           resolve();
         })();
@@ -657,7 +597,7 @@ async function loadBlock(block) {
       await Promise.all([cssLoaded, decorationComplete]);
     } catch (error) {
       // eslint-disable-next-line no-console
-      console.log(`failed to load block ${blockName}`, error);
+      console.error(`failed to load block ${blockName}`, error);
     }
     block.dataset.blockStatus = 'loaded';
   }
@@ -725,7 +665,6 @@ async function waitForFirstImage(section) {
   await new Promise((resolve) => {
     if (lcpCandidate && !lcpCandidate.complete) {
       lcpCandidate.setAttribute('loading', 'eager');
-      lcpCandidate.setAttribute('fetchpriority', 'high');
       lcpCandidate.addEventListener('load', resolve);
       lcpCandidate.addEventListener('error', resolve);
     } else {
@@ -751,44 +690,6 @@ async function loadSection(section, loadCallback) {
     if (loadCallback) await loadCallback(section);
     section.dataset.sectionStatus = 'loaded';
     section.style.display = null;
-  }
-}
-
-/**
- * Updates all section status in a container element.
- * @param {Element} main The container element
- */
-function updateSectionsStatus(main) {
-  const sections = [...main.querySelectorAll(':scope > div.section')];
-  for (let i = 0; i < sections.length; i += 1) {
-    const section = sections[i];
-    const status = section.dataset.sectionStatus;
-    if (status !== 'loaded') {
-      const loadingBlock = section.querySelector(
-        '.block[data-block-status="initialized"], .block[data-block-status="loading"]',
-      );
-      if (loadingBlock) {
-        section.dataset.sectionStatus = 'loading';
-        break;
-      } else {
-        section.dataset.sectionStatus = 'loaded';
-        section.style.display = null;
-      }
-    }
-  }
-}
-
-/**
- * Loads JS and CSS for all blocks in a container element.
- * @param {Element} main The container element
- */
-async function loadBlocks(main) {
-  updateSectionsStatus(main);
-  const blocks = [...main.querySelectorAll('div.block')];
-  for (let i = 0; i < blocks.length; i += 1) {
-    // eslint-disable-next-line no-await-in-loop
-    await loadBlock(blocks[i]);
-    updateSectionsStatus(main);
   }
 }
 
@@ -819,17 +720,14 @@ export {
   decorateIcons,
   decorateSections,
   decorateTemplateAndTheme,
-  fetchPlaceholders,
   getMetadata,
   loadBlock,
-  loadBlocks,
   loadCSS,
   loadFooter,
   loadHeader,
   loadScript,
   loadSection,
   loadSections,
-  updateSectionsStatus,
   readBlockConfig,
   sampleRUM,
   setup,

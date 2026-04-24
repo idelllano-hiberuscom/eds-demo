@@ -1,166 +1,23 @@
-/*
-import { patternDecorate } from '../../scripts/blockTemplate.js';
-
-export default async function decorate(block) {
-  patternDecorate(block);
-}
-*/
-
 import { createOptimizedPicture } from '../../scripts/aem.js';
 import { moveInstrumentation } from '../../scripts/scripts.js';
 
-export default async function decorate(block) {
-  // Lazy-load video modal if this is a video-card variant
-  const isVideoCard = block.classList.contains('video-card');
-  let openVideoModal;
-  if (isVideoCard) {
-    const mod = await import('../../scripts/video-modal.js');
-    openVideoModal = mod.openVideoModal;
-  }
-
+export default function decorate(block) {
+  /* change to ul, li */
   const ul = document.createElement('ul');
   [...block.children].forEach((row) => {
     const li = document.createElement('li');
-
-    // Read card style from the third div (index 2)
-    const styleDiv = row.children[2];
-    const styleParagraph = styleDiv?.querySelector('p');
-    const cardStyle = styleParagraph?.textContent?.trim() || 'default';
-    if (cardStyle && cardStyle !== 'default') {
-      li.className = cardStyle;
-    }
-
-    // Read optional button text from the fourth div (index 3)
-    const btnTextDiv = row.children[3];
-    const btnText = btnTextDiv?.querySelector('p')?.textContent?.trim() || '';
-
-    // Read optional button link from the fifth div (index 4)
-    const btnLinkDiv = row.children[4];
-    const btnLink = btnLinkDiv?.querySelector('a')?.href
-      || btnLinkDiv?.querySelector('p')?.textContent?.trim() || '';
-
     moveInstrumentation(row, li);
     while (row.firstElementChild) li.append(row.firstElementChild);
-
-    // Process the li children to identify and style them correctly
-    [...li.children].forEach((div, index) => {
-      // First div (index 0) - Image
-      if (index === 0) {
-        div.className = 'cards-card-image';
-      } else if (index === 1) {
-      // Second div (index 1) - Content with button
-        div.className = 'cards-card-body';
-      } else {
-      // All other divs are config (style, button text, button link)
-        div.className = 'cards-config';
-      }
+    [...li.children].forEach((div) => {
+      if (div.children.length === 1 && div.querySelector('picture')) div.className = 'cards-card-image';
+      else div.className = 'cards-card-body';
     });
-
-    // Add optional button to card body
-    if (btnText) {
-      const cardBody = li.querySelector('.cards-card-body');
-      if (cardBody) {
-        const btnContainer = document.createElement('p');
-        btnContainer.className = 'button-container';
-        const btnAnchor = document.createElement('a');
-        btnAnchor.href = btnLink || '#';
-        btnAnchor.className = 'button';
-        btnAnchor.textContent = btnText;
-        btnContainer.appendChild(btnAnchor);
-        cardBody.appendChild(btnContainer);
-      }
-    }
-
     ul.append(li);
   });
-
   ul.querySelectorAll('picture > img').forEach((img) => {
     const optimizedPic = createOptimizedPicture(img.src, img.alt, false, [{ width: '750' }]);
     moveInstrumentation(img, optimizedPic.querySelector('img'));
     img.closest('picture').replaceWith(optimizedPic);
   });
-
-  block.textContent = '';
-  block.append(ul);
-
-  // Add play button overlay on ALL cards with images
-  const playIconPath = `${window.hlx.codeBasePath}/icons/play-circle.svg`;
-  ul.querySelectorAll('li').forEach((card) => {
-    const imgWrapper = card.querySelector('.cards-card-image');
-    if (imgWrapper && imgWrapper.querySelector('img')) {
-      const playBtn = document.createElement('button');
-      playBtn.type = 'button';
-      playBtn.className = 'play-btn-overlay';
-      playBtn.setAttribute('aria-label', 'Play');
-
-      const playIcon = document.createElement('img');
-      playIcon.src = playIconPath;
-      playIcon.alt = 'Play';
-      playIcon.setAttribute('loading', 'lazy');
-      playBtn.appendChild(playIcon);
-
-      imgWrapper.appendChild(playBtn);
-    }
-  });
-
-  // Video-card variant: add click handler for video modal
-  if (isVideoCard && openVideoModal) {
-    ul.querySelectorAll('li').forEach((card) => {
-      // Find a video URL in any text node or link href within hidden config divs
-      let videoUrl = '';
-      card.querySelectorAll('.cards-config, [style*="display: none"]').forEach((cfg) => {
-        const text = cfg.textContent.trim();
-        if (!videoUrl && (text.includes('http') && (text.includes('youtu') || text.includes('.mp4')))) {
-          videoUrl = text;
-        }
-      });
-      // Also check any anchor href that looks like a video
-      if (!videoUrl) {
-        card.querySelectorAll('a').forEach((a) => {
-          if (!videoUrl && (a.href.includes('youtu') || a.href.includes('.mp4'))) {
-            videoUrl = a.href;
-            a.remove(); // remove link, play button handles it
-          }
-        });
-      }
-
-      if (videoUrl) {
-        const playBtn = card.querySelector('.play-btn-overlay');
-        if (playBtn) {
-          playBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            openVideoModal(videoUrl, playBtn);
-          });
-        }
-      }
-    });
-  }
-
-  // Make entire card clickeable (UX improvement)
-  ul.querySelectorAll('li').forEach((card) => {
-    const link = card.querySelector('a');
-    if (link) {
-      // Add cursor pointer to card
-      card.style.cursor = 'pointer';
-
-      // Make entire card clickeable
-      card.addEventListener('click', (e) => {
-        // Don't trigger if clicking directly on the link (prevent double trigger)
-        if (e.target !== link && !link.contains(e.target)) {
-          link.click();
-        }
-      });
-
-      // Keyboard accessibility
-      card.setAttribute('tabindex', '0');
-      card.setAttribute('role', 'article');
-
-      card.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          link.click();
-        }
-      });
-    }
-  });
+  block.replaceChildren(ul);
 }

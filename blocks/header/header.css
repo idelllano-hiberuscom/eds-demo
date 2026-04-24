@@ -1,558 +1,368 @@
-/* header and nav layout - Cecabank Theme */
-header .nav-wrapper {
-  background-color: var(--background-color);
-  width: 100%;
-  z-index: 200;
+/**
+ * Header Block — Styles
+ * Figma reference: MovistarPlus Header (desktop 122px)
+ * Model: xwalk (EDS + Universal Editor)
+ *
+ * Mobile-first. Tokens consumidos desde /styles/styles.css y /styles/fonts.css.
+ */
+
+/* ---------- 1. Variables locales del bloque ---------- */
+.header.block {
+  --header-bg: var(--color-black, #000);
+  --header-fg: var(--color-white, #fff);
+  --header-accent: var(--color-brand-blue, #06f);
+  --header-height-mobile: 64px; /* ⚠️ TODO: valor no extraído de Figma — confirmar */
+  --header-height-desktop: var(--height-header-desktop, 122px);
+  --header-padding-x-mobile: 16px;
+  --header-padding-x-desktop: 63.23px;
+  --header-nav-gap: 40px;
+  --header-tools-gap: 10px;
+  --header-cta-padding-y: 12.6px;
+  --header-cta-padding-x: 20.4px;
+  --header-cta-radius: var(--radius-button, 5px);
+  --header-font-family: var(--font-family-primary, 'Helvetica Neue', Helvetica, Arial, sans-serif);
+  --header-nav-size: var(--font-size-nav, 18px);
+}
+
+/* ---------- 2. Contenedor raíz (fixed, transparent over hero, solid on scroll) ---------- */
+.header.block {
   position: fixed;
   top: 0;
   left: 0;
-  border-bottom: 1px solid var(--border-color);
-  box-shadow: var(--box-shadow-sm);
+  right: 0;
+  z-index: 100;
+  width: 100%;
+  background-color: transparent;
+  color: var(--header-fg);
+  font-family: var(--header-font-family);
+  transition: background-color 0.3s ease;
+
+  /* Reservar altura para evitar CLS */
+  min-height: var(--header-height-mobile);
 }
 
-header nav {
-  box-sizing: border-box;
+/* Solid background when scrolled past the hero */
+.header.block.header--solid {
+  background-color: var(--header-bg);
+}
+
+/* ---------- 3. Wrapper interno: layout horizontal ---------- */
+.header-wrapper {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
-  height: var(--cecabank-header-height);
-  max-width: 1248px;
-  margin: 0 auto;
+  gap: 12px;
+  height: var(--header-height-mobile);
+  padding: 0 var(--header-padding-x-mobile);
+  box-sizing: border-box;
 }
 
-/* === BRAND / LOGO === */
-.nav-brand {
-  flex: 0 0 auto;
-}
-
-.nav-brand a {
-  display: flex;
+/* ---------- 4. Logo ---------- */
+.header-logo {
+  display: inline-flex;
   align-items: center;
+  flex-shrink: 0;
   text-decoration: none;
-  color: var(--primary-color);
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-lg);
+  color: inherit;
 }
 
-.nav-brand a::after {
-  display: none;
-}
-
-.nav-logo {
-  height: 36px;
-  width: auto;
-  max-width: 160px;
-}
-
-/* === HAMBURGER (always visible) === */
-.nav-hamburger {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-}
-
-.nav-hamburger button {
-  width: auto;
-  height: 40px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  color: var(--text-color);
-  padding: 8px;
-  gap: 10px;
-  transition: color var(--transition-base);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.nav-hamburger button::after {
-  display: none;
-}
-
-.nav-hamburger-label {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--accent-color);
-  line-height: 1;
-}
-
-.nav-hamburger button:hover {
-  color: var(--primary-color);
-}
-
-.nav-hamburger button:hover .nav-hamburger-label {
-  color: var(--primary-color);
-}
-
-.nav-hamburger-icon,
-.nav-hamburger-icon::before,
-.nav-hamburger-icon::after {
+.header-logo picture,
+.header-logo img {
   display: block;
-  width: 22px;
-  height: 2px;
-  background: var(--accent-color);
-  border-radius: 2px;
-  position: relative;
-  transition: all 0.35s cubic-bezier(0.77, 0.2, 0.05, 1);
+  width: auto;
+  height: 32px; /* mobile */
+  max-width: 140px;
 }
 
-.nav-hamburger-icon::before,
-.nav-hamburger-icon::after {
+/* ---------- 5. Nav principal (oculto en mobile, visible en desktop) ---------- */
+.header-nav {
+  display: none;
+}
+
+.header-nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--header-nav-gap);
+}
+
+.header-nav-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Dot azul separador a la derecha de cada item excepto el último */
+.header-nav-item:not(:last-child)::after {
   content: '';
   position: absolute;
-  left: 0;
+  right: calc(var(--header-nav-gap) / -2 - 2px);
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 2px;
+  background-color: var(--header-accent);
+  transform: translateY(-50%);
 }
 
-.nav-hamburger-icon::before {
-  top: -7px;
+.header-nav-link {
+  color: var(--header-fg);
+  text-decoration: none;
+  font-size: var(--header-nav-size);
+  line-height: 1.2;
+  font-weight: var(--font-weight-regular, 400);
+  transition: color 0.15s ease;
 }
 
-.nav-hamburger-icon::after {
-  top: 7px;
+.header-nav-link:hover {
+  /* ⚠️ TODO Confirmar color hover nav items con diseño */
+  color: var(--header-accent);
 }
 
-/* X icon when aria-expanded=true - smooth animation */
-.nav-hamburger button[aria-expanded='true'] .nav-hamburger-icon {
-  background: transparent;
+.header-nav-item.is-active > .header-nav-link {
+  font-weight: var(--font-weight-bold, 700);
 }
 
-.nav-hamburger button[aria-expanded='true'] .nav-hamburger-icon::before {
-  top: 0;
-  transform: rotate(45deg);
-  background: var(--primary-color);
+/* ---------- 6. Tools (CTA + iconos) ---------- */
+.header-tools {
+  display: flex;
+  align-items: center;
+  gap: var(--header-tools-gap);
+  flex-shrink: 0;
 }
 
-.nav-hamburger button[aria-expanded='true'] .nav-hamburger-icon::after {
-  top: 0;
-  transform: rotate(-45deg);
-  background: var(--primary-color);
+.header-tool {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--header-fg);
+  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
 }
 
-/* === DRAWER === */
+.header-tool svg {
+  display: block;
+}
+
+.header-search svg {
+  width: 17.4px;
+  height: 18.4px;
+}
+
+.header-profile {
+  /* En mobile el perfil se mueve al drawer; el desktop sí lo muestra aquí. */
+  display: none;
+}
+
+.header-profile svg {
+  width: 34px;
+  height: 34px;
+}
+
+/* CTA "SUSCRIBIRME AHORA" */
+.header-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--header-accent);
+  color: var(--header-fg);
+  text-decoration: none;
+  text-transform: uppercase;
+  font-family: var(--header-font-family);
+  font-weight: var(--font-weight-bold, 700);
+  font-size: 14px;
+  line-height: 1.2;
+  padding: 10px 14px;
+  border-radius: var(--header-cta-radius);
+  transition: filter 0.15s ease;
+  white-space: nowrap;
+}
+
+.header-cta:hover {
+  /* ⚠️ TODO Confirmar color hover CTA con diseño */
+  filter: brightness(0.9);
+}
+
+/* ---------- 7. Botón hamburguesa (solo mobile) ---------- */
+.header-burger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--header-fg);
+  padding: 8px;
+  cursor: pointer;
+}
+
+/* ---------- 8. Drawer móvil ---------- */
 .header-drawer {
   position: fixed;
   top: 0;
-  right: 0;
-  height: 100vh;
+  left: 0;
+  width: 100%;
   height: 100dvh;
-  width: min(450px, 90vw);
-  background: #fff;
-  z-index: 300;
-  transform: translateX(100%);
-  transition: transform 0.4s cubic-bezier(0.77, 0.2, 0.05, 1);
+  background-color: var(--header-bg);
+  color: var(--header-fg);
+  z-index: 200;
   display: flex;
   flex-direction: column;
+  padding: 24px var(--header-padding-x-mobile);
+  box-sizing: border-box;
   overflow-y: auto;
-  padding: 0;
-  box-shadow: -4px 0 24px rgb(0 0 0 / 25%);
-  text-align: left;
-  align-items: stretch;
 }
 
-.header-drawer.open {
-  transform: translateX(0);
-}
-
-/* === DRAWER TOP ROW (languages + close) === */
-.drawer-top {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-direction: row;
-  gap: 1rem;
-  padding: 1.25rem 1.5rem 0.25rem;
-  background: #fff;
-  position: relative;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* Languages in drawer top */
-.drawer-languages {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: var(--font-size-sm);
-  flex: 0 0 auto;
-}
-
-.drawer-languages .nav-language {
-  color: var(--text-color-light);
-  text-decoration: none;
-  font-weight: var(--font-weight-medium);
-  transition: color var(--transition-base);
-  padding: 2px 4px;
-}
-
-.drawer-languages .nav-language::after {
+.header-drawer[hidden] {
   display: none;
 }
 
-.drawer-languages .nav-language.active {
-  color: var(--primary-color);
-  font-weight: var(--font-weight-bold);
-}
-
-.drawer-languages .nav-language:hover:not(.active) {
-  color: var(--primary-color);
-  text-decoration: none;
-}
-
-.drawer-languages .lang-separator {
-  color: var(--text-color-light);
-  font-size: 0.875rem;
-}
-
-/* Close button */
-.drawer-close {
-  background: transparent;
+.header-drawer-close {
+  align-self: flex-end;
+  background: none;
   border: none;
+  color: var(--header-fg);
+  padding: 8px;
   cursor: pointer;
-  color: var(--text-color);
-  line-height: 1;
-  padding: 0;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all var(--transition-base);
-  border-radius: 50%;
-  flex: 0 0 auto;
-  position: absolute;
-  right: 1.5rem;
-  top: 1.25rem;
 }
 
-.drawer-close::after {
-  display: none;
-}
-
-.drawer-close:hover {
-  color: var(--primary-color);
-  background: var(--background-alt);
-}
-
-.drawer-close svg {
-  width: 24px;
-  height: 24px;
-}
-
-/* === SEARCH INPUT === */
-.drawer-search {
-  padding: 0.375rem 1.5rem 0 1.5rem;
-  display: flex;
-  align-items: center;
-  position: relative;
-  background: #fff;
-  text-align: left;
-  justify-content: flex-start;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.drawer-search input[type='search'] {
-  flex: 1;
-  width: 100%;
-  padding: 10px 14px;
-  padding-left: 40px;
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  font-size: var(--font-size-base);
-  outline: none;
-  transition: border-color var(--transition-base), box-shadow var(--transition-base);
-  box-sizing: border-box;
-  background: #fff;
-  color: var(--text-color);
-  text-align: left;
-}
-
-.drawer-search input[type='search']::placeholder {
-  color: var(--text-color-light);
-}
-
-.drawer-search input[type='search']:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px rgb(0 168 181 / 20%);
-}
-
-.drawer-search .search-icon {
-  position: absolute;
-  left: 28px;
-  color: var(--text-color-light);
-  display: flex;
-  align-items: center;
-  pointer-events: none;
-}
-
-/* === DRAWER NAV MENU === */
-.drawer-nav {
-  flex: 1;
-  padding: 0;
-  margin-top: 0;
-  text-align: left;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.drawer-menu {
+.header-drawer-list {
   list-style: none;
-  margin: 0;
+  margin: 24px 0 0;
   padding: 0;
-  text-align: left;
-  width: 100%;
-}
-
-.drawer-menu-item {
-  position: relative;
-  text-align: left;
-  width: 100%;
-}
-
-/* Menu item wrapper (contains link + chevron) */
-.menu-item-wrapper {
-  display: block;
-  padding: 0.5rem 1.5rem 0.375rem 1.5rem;
-  cursor: pointer;
-  transition: background var(--transition-base);
-  text-align: left;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.drawer-menu-item:first-child .menu-item-wrapper {
-  padding-top: 0.125rem;
-}
-
-.menu-item-wrapper:hover {
-  background: var(--background-alt);
-}
-
-/* Menu item link with title and subtitle */
-.menu-item-link {
   display: flex;
   flex-direction: column;
-  text-decoration: none;
-  gap: 0;
-  align-items: flex-start;
-  text-align: left;
-  width: 100%;
+  gap: 16px;
 }
 
-.menu-item-link::after {
-  display: none;
-}
-
-.menu-item-title {
-  font-size: 1rem;
-  font-weight: var(--font-weight-medium);
-  color: var(--primary-color);
-  line-height: 1.2;
-  transition: color var(--transition-base);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  text-align: left;
-  justify-content: flex-start;
-}
-
-.menu-item-subtitle {
-  font-size: 0.8125rem;
-  color: var(--text-color-light);
-  line-height: 1.2;
+.header-drawer-link {
   display: block;
-  text-align: left;
+  color: var(--header-fg);
+  text-decoration: none;
+  font-size: 22px;
+  line-height: 1.3;
+  padding: 8px 0;
 }
 
-.menu-item-wrapper:hover .menu-item-title {
-  color: var(--dark-color);
+.header-drawer-utils {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid rgb(255 255 255 / 15%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-/* Chevron icon - inside title */
-.menu-item-chevron {
-  color: var(--primary-color);
-  transition: transform 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  vertical-align: middle;
+.header-drawer-cta {
+  margin-top: auto;
+  margin-bottom: 16px;
+  padding: var(--header-cta-padding-y) var(--header-cta-padding-x);
+  font-size: 19px;
+  line-height: 1.2;
+  text-align: center;
 }
 
-.menu-item-chevron svg {
-  width: 12px;
-  height: 12px;
-}
-
-.drawer-menu-item.expanded .menu-item-chevron {
-  transform: rotate(180deg);
-}
-
-/* === SUBMENU (hover expandable) === */
-.submenu {
-  max-height: 0;
+/* Bloquear scroll del body cuando el drawer está abierto */
+body.is-header-drawer-open {
   overflow: hidden;
-  background: transparent;
-  transition: max-height 0.35s ease;
-  width: 100%;
-  text-align: left;
-  transform-origin: top;
-  padding-top: 0;
 }
 
-.drawer-menu-item.expanded .submenu {
-  max-height: 500px;
-  padding-top: 0.25rem;
+/* ---------- 8.b Estado aria-busy (placeholders mientras carga /nav) ---------- */
+
+/* El esqueleto se monta síncronamente sin contenido; ocultamos visualmente los
+   contenedores marcados como aria-busy="true" para evitar un flash de cajas
+   vacías. Permanecen accesibles al lector de pantalla (no usamos display:none). */
+.header-nav[aria-busy="true"],
+.header-tools[aria-busy="true"] {
+  visibility: hidden;
 }
 
-.submenu ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  text-align: left;
-  width: 100%;
+/* ---------- 9. Estados de focus (WCAG 2.4.7) ---------- */
+.header-logo:focus-visible,
+.header-nav-link:focus-visible,
+.header-tool:focus-visible,
+.header-cta:focus-visible,
+.header-burger:focus-visible,
+.header-drawer-close:focus-visible,
+.header-drawer-link:focus-visible {
+  outline: 2px solid var(--header-fg);
+  outline-offset: 2px;
 }
 
-.submenu ul li {
-  margin: 0;
-  text-align: left;
-}
+/* ---------- 10. Tablet (768–1279) ---------- */
 
-.submenu ul li a {
-  display: block;
-  padding: 0.25rem 1.5rem 0.25rem 1.5rem;
-  font-size: 0.875rem;
-  color: var(--text-color);
-  text-decoration: none;
-  transition: color var(--transition-base);
-  text-align: left;
-}
+/* ⚠️ TODO Confirmar layout exacto tablet 768 (nodo Figma 3:6698).
+   Por defecto: incrementamos altura y padding pero mantenemos hamburguesa
+   hasta el breakpoint desktop. */
+@media (width >= 768px) {
+  .header.block {
+    min-height: 80px;
+  }
 
-.submenu ul li a::after {
-  display: none;
-}
-
-.submenu ul li a:hover {
-  color: var(--primary-color);
-  text-decoration: none;
-}
-
-/* === SECONDARY LINKS (bottom) === */
-.drawer-secondary-links {
-  padding: 0.5rem 1.5rem 1.5rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.625rem;
-  background: #fff;
-  margin-top: 0.5rem;
-  text-align: left;
-  align-items: flex-start;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.drawer-secondary-links a {
-  font-size: 1rem;
-  color: var(--primary-color);
-  text-decoration: none;
-  transition: color var(--transition-base);
-  text-align: left;
-  font-weight: var(--font-weight-medium);
-}
-
-.drawer-secondary-links a::after {
-  display: none;
-}
-
-.drawer-secondary-links a:hover {
-  color: var(--dark-color);
-  text-decoration: underline;
-}
-
-/* === BACKDROP === */
-.header-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgb(0 0 0 / 40%);
-  z-index: 250;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s ease;
-}
-
-.header-drawer.open ~ .header-backdrop {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* === RESPONSIVE === */
-@media (width >= 900px) {
-  header nav {
+  .header-wrapper {
+    height: 80px;
     padding: 0 32px;
-    max-width: 1280px;
   }
 
-  .nav-logo {
-    height: 40px;
-  }
-
-  .header-drawer {
-    width: 480px;
-  }
-}
-
-@media (width >= 1200px) {
-  .header-drawer {
-    width: 520px;
-  }
-}
-
-/* Mobile adjustments */
-@media (width < 600px) {
-  .drawer-top {
-    padding: 1rem 1rem 0.125rem;
-  }
-
-  .drawer-languages {
-    font-size: 0.8125rem;
-  }
-
-  .drawer-close {
-    width: 36px;
+  .header-logo img {
     height: 36px;
-    right: 1rem;
-    top: 1rem;
+    max-width: 160px;
+  }
+}
+
+/* ---------- 11. Desktop (≥1280) ---------- */
+@media (width >= 1280px) {
+  .header.block {
+    min-height: var(--header-height-desktop);
   }
 
-  .drawer-search {
-    padding: 0.25rem 1rem 0 1rem;
+  .header-wrapper {
+    height: var(--header-height-desktop);
+    padding: 0 var(--header-padding-x-desktop);
+    gap: 24px;
   }
 
-  .menu-item-wrapper {
-    padding: 0.375rem 1rem 0.25rem 1rem;
+  .header-burger {
+    display: none;
   }
 
-  .drawer-menu-item:first-child .menu-item-wrapper {
-    padding-top: 0.125rem;
+  .header-nav {
+    display: flex;
+    flex: 1;
+    justify-content: center;
   }
 
-  .submenu ul li a {
-    padding: 0.25rem 1rem 0.25rem 2rem;
+  .header-logo img {
+    height: 44px;
+    max-width: 100px;
   }
 
-  .submenu ul li a:hover {
-    padding-left: 2.25rem;
+  .header-profile {
+    display: inline-flex;
   }
 
-  .drawer-secondary-links {
-    padding: 0.375rem 1rem 1rem;
-    gap: 0.625rem;
-    margin-top: 0.5rem;
+  .header-cta {
+    font-size: 19px;
+    line-height: 22.8px;
+    padding: var(--header-cta-padding-y) var(--header-cta-padding-x);
   }
 
-  .drawer-secondary-links a {
-    font-size: 0.9375rem;
+  /* En desktop el drawer no se usa: lo ocultamos con selector específico
+     en vez de !important para respetar la regla "no !important" del proyecto. */
+  .header.block .header-drawer,
+  .header.block .header-drawer.is-open {
+    display: none;
+  }
+}
+
+/* ---------- 12. Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .header-nav-link,
+  .header-cta {
+    transition: none;
   }
 }

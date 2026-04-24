@@ -70,10 +70,7 @@
               "page": {
                 "resourceType": "core/franklin/components/section/v1/section",
                 "template": {
-                  "name": "Section",
-                  "model": "section",
-                  "style": "default",
-                  "filter": "section"
+                  "model": "section"
                 }
               }
             }
@@ -85,53 +82,6 @@
       "title": "Blocks",
       "id": "blocks",
       "components": [
-        {
-          "title": "Accordion",
-          "id": "accordion",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Accordion",
-                  "filter": "accordion"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Accordion Item",
-          "id": "accordion-item",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block/item",
-                "template": {
-                  "name": "Accordion Item",
-                  "model": "accordion-item",
-                  "summary": "Lorem Ipsum",
-                  "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur volutpat consequat dui, sit amet ...</p>"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Action Button",
-          "id": "action-button",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Action Button",
-                  "model": "action-button"
-                }
-              }
-            }
-          }
-        },
         {
           "title": "Cards",
           "id": "cards",
@@ -163,23 +113,31 @@
           }
         },
         {
-          "title": "Carousel",
-          "id": "carousel",
+          "title": "Channel Logos",
+          "id": "channel-logos",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
-                  "name": "Carousel",
-                  "model": "carousel",
-                  "filter": "carousel",
-                  "item1": {
-                    "sling:resourceType": "core/franklin/components/block/v1/block/item",
-                    "name": "Card",
-                    "model": "card",
-                    "image": "/content/dam/wknd-universal/images/placeholder-black.png",
-                    "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus blandit nunc a felis dapibus, et placerat lorem ullamcorper. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.</p>"
-                  }
+                  "name": "Channel Logos",
+                  "filter": "channel-logos",
+                  "model": "channel-logos"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Channel Logos Item",
+          "id": "channel-logos-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Channel Logos Item",
+                  "model": "channel-logos-item"
                 }
               }
             }
@@ -201,61 +159,93 @@
           }
         },
         {
-          "title": "Content Fragment",
-          "id": "contentfragment",
+          "title": "Content Carousel",
+          "id": "content-carousel",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
-                  "name": "Content Fragment",
-                  "model": "contentfragment"
+                  "name": "Content Carousel",
+                  "filter": "content-carousel",
+                  "model": "content-carousel"
                 }
               }
             }
           }
         },
         {
-          "title": "DynamicMedia Image",
-          "id": "dm-asset",
+          "title": "Content Carousel Item",
+          "id": "content-carousel-item",
           "plugins": {
             "xwalk": {
               "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
+                "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
-                  "name": "DynamicMedia Image",
-                  "model": "dm-asset"
+                  "name": "Content Carousel Item",
+                  "model": "content-carousel-item"
                 }
               }
             }
           }
         },
         {
-          "title": "Embed Adaptive Form",
-          "id": "embed-adaptive-form",
+          "title": "FAQ Accordion",
+          "id": "faq-accordion",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
-                  "name": "Embed Adaptive Form",
-                  "model": "embed-adaptive-form"
+                  "name": "FAQ Accordion",
+                  "filter": "faq-accordion",
+                  "model": "faq-accordion"
                 }
               }
             }
           }
         },
         {
-          "title": "Find a Doctor",
-          "id": "find-a-doctor",
+          "title": "FAQ Accordion Item",
+          "id": "faq-accordion-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "FAQ Accordion Item",
+                  "model": "faq-accordion-item"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Feature Icons Band",
+          "id": "feature-icons-band",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
-                  "name": "Find a Doctor",
-                  "model": "find-a-doctor",
-                  "key-value": true
+                  "name": "Feature Icons Band",
+                  "model": "feature-icons-band",
+                  "filter": "feature-icons-band"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Feature Icons Band Item",
+          "id": "feature-icons-band-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Feature Icons Band Item",
+                  "model": "feature-icons-band-item"
                 }
               }
             }
@@ -270,526 +260,52 @@
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
                   "name": "Footer",
-                  "filter": "footer"
+                  "model": "footer"
                 }
               }
             }
           }
         },
         {
-          "title": "Footer Section",
-          "id": "footer-section",
+          "title": "Footer Column",
+          "id": "footer-column",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
-                  "name": "Footer Section",
-                  "model": "footer-section"
+                  "name": "Footer Column",
+                  "model": "footer-column"
                 }
               }
             }
           }
         },
         {
-          "title": "Foreign Exchange Rates",
-          "id": "forex",
+          "title": "Footer Link",
+          "id": "footer-link",
           "plugins": {
             "xwalk": {
               "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
+                "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
-                  "name": "Forex",
-                  "model": "forex"
+                  "name": "Footer Link",
+                  "model": "footer-link"
                 }
               }
             }
           }
         },
         {
-          "title": "Adaptive Form",
-          "id": "form",
+          "title": "Footer Social",
+          "id": "footer-social",
           "plugins": {
             "xwalk": {
               "page": {
-                "resourceType": "fd/franklin/components/form/v1/form",
+                "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
-                  "fieldType": "form",
-                  "fd:version": "2.1"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Button",
-          "id": "form-button",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/fd/components/form/button/v1/button",
-                "template": {
-                  "jcr:title": "Button",
-                  "fieldType": "button"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Checkbox group",
-          "id": "checkbox-group",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/fd/components/form/checkboxgroup/v1/checkboxgroup",
-                "template": {
-                  "jcr:title": "Checkbox Group",
-                  "fieldType": "checkbox-group",
-                  "enum": [
-                    "0",
-                    "1"
-                  ],
-                  "enumNames": [
-                    "Item 1",
-                    "Item 2"
-                  ],
-                  "orientation": "horizontal",
-                  "type": "string[]"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Checkbox",
-          "id": "checkbox",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/fd/components/form/checkbox/v1/checkbox",
-                "template": {
-                  "jcr:title": "Checkbox",
-                  "fieldType": "checkbox",
-                  "checkedValue": "on"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Date Input",
-          "id": "date-input",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/fd/components/form/datepicker/v1/datepicker",
-                "template": {
-                  "jcr:title": "Date Input",
-                  "fieldType": "date-input"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Dropdown List",
-          "id": "drop-down",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/fd/components/form/dropdown/v1/dropdown",
-                "template": {
-                  "jcr:title": "Drop Down List",
-                  "fieldType": "drop-down",
-                  "enum": [
-                    "0",
-                    "1"
-                  ],
-                  "enumNames": [
-                    "Item 1",
-                    "Item 2"
-                  ],
-                  "type": "string"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Email",
-          "id": "email",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/fd/components/form/emailinput/v1/emailinput",
-                "template": {
-                  "jcr:title": "Email Input",
-                  "fieldType": "email"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "File Attachment",
-          "id": "file-input",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/fd/components/form/fileinput/v2/fileinput",
-                "template": {
-                  "jcr:title": "File Attachment",
-                  "fieldType": "file-input",
-                  "accept": [
-                    "audio/*",
-                    "video/*",
-                    "image/*",
-                    "text/*",
-                    "application/pdf"
-                  ],
-                  "buttonText": "Attach",
-                  "dragDropText": "Drag and Drop To Upload",
-                  "type": "file"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Form Fragment",
-          "id": "form-fragment",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/fd/components/form/fragment/v1/fragment",
-                "template": {
-                  "jcr:title": "Fragment",
-                  "fieldType": "panel",
-                  "minOccur": 1
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Image",
-          "id": "form-image",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/fd/components/form/image/v1/image",
-                "template": {
-                  "jcr:title": "Image",
-                  "fieldType": "image"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Number Input",
-          "id": "number-input",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/fd/components/form/numberinput/v1/numberinput",
-                "template": {
-                  "jcr:title": "Number Input",
-                  "fieldType": "number-input"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Panel",
-          "id": "panel",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/fd/components/form/panelcontainer/v1/panelcontainer",
-                "template": {
-                  "jcr:title": "Panel",
-                  "fieldType": "panel",
-                  "minOccur": 1
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Radio Group",
-          "id": "radio-group",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/fd/components/form/radiobutton/v1/radiobutton",
-                "template": {
-                  "jcr:title": "Radio Group",
-                  "fieldType": "radio-group",
-                  "enum": [
-                    "0",
-                    "1"
-                  ],
-                  "enumNames": [
-                    "Item 1",
-                    "Item 2"
-                  ],
-                  "orientation": "horizontal"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Captcha (Invisible)",
-          "id": "captcha",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/fd/components/form/recaptcha/v1/recaptcha",
-                "template": {
-                  "jcr:title": "Captcha (Invisible)",
-                  "fieldType": "captcha"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Reset",
-          "id": "form-reset-button",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/fd/components/form/actions/reset/v1/reset",
-                "template": {
-                  "jcr:title": "Reset",
-                  "buttonType": "reset",
-                  "fieldType": "button"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Submit",
-          "id": "form-submit-button",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/fd/components/form/actions/submit/v1/submit",
-                "template": {
-                  "jcr:title": "Submit",
-                  "buttonType": "submit",
-                  "fieldType": "button"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Telephone input",
-          "id": "telephone-input",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/fd/components/form/telephoneinput/v1/telephoneinput",
-                "template": {
-                  "jcr:title": "Telephone Input",
-                  "fieldType": "text-input"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Text Input",
-          "id": "text-input",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/fd/components/form/textinput/v1/textinput",
-                "template": {
-                  "jcr:title": "Text Input",
-                  "fieldType": "text-input"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Text",
-          "id": "plain-text",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/fd/components/form/text/v1/text",
-                "template": {
-                  "jcr:title": "Text",
-                  "fieldType": "plain-text",
-                  "textIsRich": true,
-                  "value": "Adaptive Form Text Component"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Accordion",
-          "id": "form-accordion",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/fd/components/form/panelcontainer/v1/panelcontainer",
-                "template": {
-                  "jcr:title": "Accordion",
-                  "fieldType": "panel",
-                  "fd:viewType": "accordion",
-                  "minOccur": 1,
-                  "panel1": {
-                    "jcr:title": "Item 1",
-                    "fieldType": "panel",
-                    "sling:resourceType": "core/fd/components/form/panelcontainer/v1/panelcontainer"
-                  },
-                  "panel2": {
-                    "jcr:title": "Item 2",
-                    "fieldType": "panel",
-                    "sling:resourceType": "core/fd/components/form/panelcontainer/v1/panelcontainer"
-                  }
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Modal",
-          "id": "form-modal",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/fd/components/form/panelcontainer/v1/panelcontainer",
-                "template": {
-                  "jcr:title": "Modal",
-                  "fieldType": "panel",
-                  "fd:viewType": "modal",
-                  "visible": false
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Password",
-          "id": "password",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/fd/components/form/textinput/v1/textinput",
-                "template": {
-                  "jcr:title": "Password",
-                  "fieldType": "text-input",
-                  "fd:viewType": "password"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Rating",
-          "id": "rating",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/fd/components/form/numberinput/v1/numberinput",
-                "template": {
-                  "jcr:title": "Rating",
-                  "fieldType": "number-input",
-                  "fd:viewType": "rating"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Terms and conditions",
-          "id": "tnc",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/fd/components/form/termsandconditions/v1/termsandconditions",
-                "template": {
-                  "jcr:title": "Terms and conditions",
-                  "fieldType": "panel",
-                  "fd:viewType": "tnc",
-                  "text": {
-                    "value": "Text related to the terms and conditions come here.",
-                    "sling:resourceType": "core/fd/components/form/text/v1/text",
-                    "fieldType": "plain-text",
-                    "textIsRich": true
-                  },
-                  "link": {
-                    "enum": [
-                      "dummy-link-1"
-                    ],
-                    "type": "string[]",
-                    "fd:viewType": "toggleable-link",
-                    "title": "I agree to the terms & conditions",
-                    "enumNames": [
-                      "Privacy policy."
-                    ],
-                    "sling:resourceType": "core/fd/components/form/checkboxgroup/v1/checkboxgroup",
-                    "fieldType": "checkbox-group",
-                    "fd:rules": {
-                      "jcr:primaryType": "nt:unstructured",
-                      "validationStatus": "valid"
-                    },
-                    "fd:events": {
-                      "jcr:primaryType": "nt:unstructured",
-                      "change": [
-                        "if(length($field.$value) == length($field.$enum), dispatchEvent($parent.approvalcheckbox, 'custom:setProperty', {enabled : true()}), {})"
-                      ]
-                    }
-                  },
-                  "approvalcheckbox": {
-                    "name": "approvalcheckbox",
-                    "jcr:title": "I agree to the terms & conditions.",
-                    "sling:resourceType": "core/fd/components/form/checkbox/v1/checkbox",
-                    "fieldType": "checkbox",
-                    "required": true,
-                    "type": "string",
-                    "enum": [
-                      "true"
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Wizard",
-          "id": "wizard",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/fd/components/form/panelcontainer/v1/panelcontainer",
-                "template": {
-                  "jcr:title": "Wizard",
-                  "fieldType": "panel",
-                  "fd:viewType": "wizard",
-                  "minOccur": 1,
-                  "panel1": {
-                    "jcr:title": "Item 1",
-                    "fieldType": "panel",
-                    "sling:resourceType": "core/fd/components/form/panelcontainer/v1/panelcontainer"
-                  },
-                  "panel2": {
-                    "jcr:title": "Item 2",
-                    "fieldType": "panel",
-                    "sling:resourceType": "core/fd/components/form/panelcontainer/v1/panelcontainer"
-                  }
+                  "name": "Footer Social",
+                  "model": "footer-social"
                 }
               }
             }
@@ -819,23 +335,53 @@
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
                   "name": "Header",
-                  "model": "header",
-                  "filter": "header"
+                  "model": "header"
                 }
               }
             }
           }
         },
         {
-          "title": "Navigation Item",
-          "id": "navigation-item",
+          "title": "Nav Item",
+          "id": "header-nav-item",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
-                  "name": "Navigation Item",
-                  "model": "navigation-item"
+                  "name": "Nav Item",
+                  "model": "header-nav-item"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Hero Carousel",
+          "id": "hero-carousel",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Hero Carousel",
+                  "filter": "hero-carousel",
+                  "model": "hero-carousel"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Hero Carousel Item",
+          "id": "hero-carousel-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Hero Carousel Item",
+                  "model": "hero-carousel-item"
                 }
               }
             }
@@ -850,98 +396,84 @@
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
                   "name": "Hero",
-                  "filter": "hero"
+                  "model": "hero"
                 }
               }
             }
           }
         },
         {
-          "title": "Hero Slide",
-          "id": "hero-slide",
+          "title": "Media Grid",
+          "id": "media-grid",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Media Grid",
+                  "filter": "media-grid",
+                  "model": "media-grid"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Media Grid Cell",
+          "id": "media-grid-cell",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
-                  "name": "Hero Slide",
-                  "model": "hero-slide"
+                  "name": "Media Grid Cell",
+                  "model": "media-grid-cell"
                 }
               }
             }
           }
         },
         {
-          "title": "Iframe",
-          "id": "iframe",
+          "title": "Plan Selector",
+          "id": "plan-selector",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
-                  "name": "Iframe",
-                  "model": "iframe"
+                  "name": "Plan Selector",
+                  "filter": "plan-selector",
+                  "model": "plan-selector"
                 }
               }
             }
           }
         },
         {
-          "title": "Search",
-          "id": "search",
+          "title": "Plan Selector Item",
+          "id": "plan-selector-item",
           "plugins": {
             "xwalk": {
               "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
+                "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
-                  "name": "Search",
-                  "model": "search"
+                  "name": "Plan Selector Item",
+                  "model": "plan-selector-item"
                 }
               }
             }
           }
         },
         {
-          "title": "Separator",
-          "id": "separator",
+          "title": "Promo Band",
+          "id": "promo-band",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
-                  "name": "Separator",
-                  "model": "separator"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Teaser",
-          "id": "teaser",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Teaser",
-                  "model": "teaser",
-                  "key-value": true
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Video",
-          "id": "video",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Video",
-                  "model": "video"
+                  "name": "Promo Band",
+                  "model": "promo-band"
                 }
               }
             }

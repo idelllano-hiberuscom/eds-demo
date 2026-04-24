@@ -1,4 +1,3 @@
-/* === HERO CECABANK - Canvas Constellation === */
 .hero-container .hero-wrapper {
   max-width: unset;
   padding: 0;
@@ -6,54 +5,33 @@
 
 .hero {
   position: relative;
-  height: 500px;
-  background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  overflow: hidden;
-  padding: 0 48px;
+  padding: 40px 24px;
+  min-height: 300px;
 }
 
-/* Canvas node network */
-.hero-canvas {
+.hero h1 {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  color: var(--background-color);
+}
+
+.hero picture {
   position: absolute;
+  z-index: -1;
   inset: 0;
-  z-index: 0;
-  display: block;
+  object-fit: cover;
+  box-sizing: border-box;
 }
 
-/* Title */
-.hero-title {
-  position: relative;
-  z-index: 1;
-  color: var(--primary-color);
-  font-family: var(--font-family-heading);
-  font-size: clamp(1.75rem, 4vw, 4rem);
-  font-weight: 400;
-  line-height: var(--line-height-tight);
-  max-width: 700px;
-  margin: 0;
-  text-align: left;
+.hero img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
 }
 
-/* Mobile */
-@media (width <= 599px) {
-  .hero {
-    padding: 0 24px;
-    height: 500px;
-    justify-content: center;
-  }
-
-  .hero-title {
-    font-size: clamp(1.75rem, 7vw, 2.25rem);
-    text-align: center;
-  }
-}
-
-/* Desktop */
 @media (width >= 900px) {
-  .hero-title {
-    font-size: clamp(3.25rem, 4vw, 4rem);
+  .hero {
+    padding: 40px 32px;
   }
 }
