@@ -1,208 +1,81 @@
 /**
- * Hero block � Cecabank canvas constellation
- * Replaces the previous carousel implementation.
+ * Hero Block — AEM Edge Delivery Services
  *
- * Authored table structure:
- * | hero        |
- * | title text  |
+ * Figma reference: O2 Online hero section (oso azul)
+ * Model: xwalk (EDS + Universal Editor)
+ * UE instrumentation: ✅ Completado (Fase 3)
+ * QA audit: ✅ Validado
  *
- * The first cell of the first row is used as the h1 title.
+ * QA Changes:
+ * - Sin cambios necesarios en la lógica del Developer
+ *
+ * DOM de entrada (matriz EDS):
+ *   block [data-block-name="hero"]
+ *     └── div (fila 0)
+ *           ├── div (col 0) → <picture> con <source> y <img> (imagen de fondo)
+ *           └── div (col 1) → richtext: <h1> + <p> destacado
+ *               + <p.button-container><a.button> CTA
+ *
+ * @param {Element} block - Root element of the block
  */
 export default function decorate(block) {
-  if (block.dataset.initialized) return;
-  block.dataset.initialized = 'true';
+  const rows = [...block.children];
 
-  // Extract title from first row
-  const firstRow = block.querySelector(':scope > div');
-  let titleText = '';
-  if (firstRow) {
-    const titleEl = firstRow.querySelector('h1, h2, h3, h4, h5, h6, p');
-    titleText = titleEl ? titleEl.textContent.trim() : firstRow.textContent.trim();
-  }
+  rows.forEach((row) => {
+    const cols = [...row.children];
 
-  // Clear block
-  block.textContent = '';
+    // col 0 — imagen de fondo del hero
+    if (cols[0]) {
+      cols[0].classList.add('hero-media');
 
-  // Canvas (behind content)
-  const canvas = document.createElement('canvas');
-  canvas.setAttribute('aria-hidden', 'true');
-  canvas.className = 'hero-canvas';
-  block.appendChild(canvas);
+      // Imagen LCP — above the fold, loading eager + fetchpriority high
+      const img = cols[0].querySelector('picture img');
+      if (img) {
+        img.setAttribute('loading', 'eager');
+        img.setAttribute('fetchpriority', 'high');
+      }
+    }
 
-  // Title
-  const titleH1 = document.createElement('h1');
-  titleH1.className = 'hero-title';
-  titleH1.textContent = titleText;
-  block.appendChild(titleH1);
+    // col 1 — contenido de texto (h1 + highlight + CTA)
+    if (cols[1]) {
+      cols[1].classList.add('hero-content');
 
-  // === Canvas Constellation Engine ===
-  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const isTouchOnly = window.matchMedia('(hover: none)');
+      // Marcar el H1 con clase semántica
+      const heading = cols[1].querySelector('h1');
+      if (heading) {
+        heading.classList.add('hero-title');
+      }
 
-  const NODE_COUNT = 80;
-  const PROXIMITY = 130;
-  const ATTRACTION_RADIUS = 250; // larger zone so nodes track the cursor from farther away
-  const NODE_SPEED = 0.3; // slower base drift
-
-  const tealColor = getComputedStyle(document.documentElement)
-    .getPropertyValue('--primary-color').trim() || '#00A8B5';
-
-  let ctx;
-  let nodes = [];
-  const mouse = { x: -9999, y: -9999, active: false };
-  let animationId = null;
-
-  function hexToRgb(hex) {
-    const clean = hex.replace('#', '');
-    const bigint = parseInt(clean, 16);
-    /* eslint-disable no-bitwise */
-    return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
-    /* eslint-enable no-bitwise */
-  }
-
-  const [r, g, b] = hexToRgb(tealColor);
-
-  function resizeCanvas() {
-    canvas.width = block.offsetWidth;
-    canvas.height = block.offsetHeight;
-  }
-
-  function createNodes() {
-    nodes = [];
-    for (let i = 0; i < NODE_COUNT; i += 1) {
-      const bvx = (Math.random() - 0.5) * NODE_SPEED;
-      const bvy = (Math.random() - 0.5) * NODE_SPEED;
-      nodes.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: bvx,
-        vy: bvy,
-        baseVx: bvx,
-        baseVy: bvy,
+      // Marcar el primer <p> que NO sea .button-container como texto destacado
+      const paragraphs = cols[1].querySelectorAll('p');
+      paragraphs.forEach((p) => {
+        if (!p.classList.contains('button-container') && !p.querySelector('a.button')) {
+          p.classList.add('hero-highlight');
+        }
       });
     }
+  });
+
+  // --- INSTRUMENTACIÓN UE (xwalk) ---
+
+  // Block-level: keep existing data-aue-resource from AEM
+  block.dataset.aueType = 'component';
+  block.dataset.aueModel = 'hero';
+  block.dataset.aueLabel = 'Hero';
+
+  // Col 0 — imagen de fondo (campo "image" en _hero.json)
+  const mediaCol = block.querySelector('.hero-media');
+  if (mediaCol) {
+    mediaCol.dataset.aueProp = 'image';
+    mediaCol.dataset.aueType = 'media';
+    mediaCol.dataset.aueLabel = 'Imagen de fondo';
   }
 
-  function draw() {
-    if (!ctx) return;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    nodes.forEach((node) => {
-      // Cursor tracking (desktop only) — nodes actively follow the pointer
-      if (!isTouchOnly.matches && mouse.active) {
-        const dx = mouse.x - node.x;
-        const dy = mouse.y - node.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < ATTRACTION_RADIUS && dist > 0) {
-          // Strong pull: closer nodes follow faster
-          const strength = 1 - dist / ATTRACTION_RADIUS;
-          node.vx += (dx / dist) * strength * 1.5;
-          node.vy += (dy / dist) * strength * 1.5;
-        }
-      }
-
-      // Light drift back to base when cursor is away
-      if (!mouse.active) {
-        node.vx = node.vx * 0.97 + node.baseVx * 0.03;
-        node.vy = node.vy * 0.97 + node.baseVy * 0.03;
-      } else {
-        // Gentle drag when cursor is active so nodes don't fly off
-        node.vx *= 0.88;
-        node.vy *= 0.88;
-      }
-
-      // Clamp speed
-      const speed = Math.sqrt(node.vx ** 2 + node.vy ** 2);
-      const maxSpeed = mouse.active ? NODE_SPEED * 8 : NODE_SPEED * 3;
-      if (speed > maxSpeed) {
-        node.vx = (node.vx / speed) * maxSpeed;
-        node.vy = (node.vy / speed) * maxSpeed;
-      }
-
-      node.x += node.vx;
-      node.y += node.vy;
-
-      // Bounce off edges
-      if (node.x < 0 || node.x > canvas.width) {
-        node.vx *= -1;
-        node.baseVx *= -1;
-        node.x = Math.max(0, Math.min(canvas.width, node.x));
-      }
-      if (node.y < 0 || node.y > canvas.height) {
-        node.vy *= -1;
-        node.baseVy *= -1;
-        node.y = Math.max(0, Math.min(canvas.height, node.y));
-      }
-    });
-
-    // Draw connections
-    for (let i = 0; i < nodes.length; i += 1) {
-      for (let j = i + 1; j < nodes.length; j += 1) {
-        const dx = nodes[i].x - nodes[j].x;
-        const dy = nodes[i].y - nodes[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < PROXIMITY) {
-          const alpha = (1 - dist / PROXIMITY) * 0.6;
-          ctx.beginPath();
-          ctx.strokeStyle = `rgba(${r},${g},${b},${alpha})`;
-          ctx.lineWidth = 1;
-          ctx.moveTo(nodes[i].x, nodes[i].y);
-          ctx.lineTo(nodes[j].x, nodes[j].y);
-          ctx.stroke();
-        }
-      }
-    }
-
-    // Draw nodes
-    nodes.forEach((node) => {
-      ctx.beginPath();
-      ctx.arc(node.x, node.y, 2.5, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${r},${g},${b},0.8)`;
-      ctx.fill();
-    });
-
-    animationId = requestAnimationFrame(draw);
+  // Col 1 — contenido richtext (campo "text" en _hero.json)
+  const contentCol = block.querySelector('.hero-content');
+  if (contentCol) {
+    contentCol.dataset.aueProp = 'text';
+    contentCol.dataset.aueType = 'richtext';
+    contentCol.dataset.aueLabel = 'Contenido de texto';
   }
-
-  function init() {
-    ctx = canvas.getContext('2d');
-    resizeCanvas();
-    createNodes();
-    if (!prefersReduced.matches) {
-      draw();
-    }
-  }
-
-  // Mouse interaction
-  block.addEventListener('mousemove', (e) => {
-    if (isTouchOnly.matches) return;
-    const rect = canvas.getBoundingClientRect();
-    mouse.x = e.clientX - rect.left;
-    mouse.y = e.clientY - rect.top;
-    mouse.active = true;
-  });
-
-  block.addEventListener('mouseleave', () => {
-    mouse.active = false;
-    mouse.x = -9999;
-    mouse.y = -9999;
-  });
-
-  // Resize handler
-  const resizeObs = new ResizeObserver(() => {
-    resizeCanvas();
-  });
-  resizeObs.observe(block);
-
-  // Respect reduced motion preference change
-  prefersReduced.addEventListener('change', () => {
-    if (prefersReduced.matches) {
-      if (animationId) cancelAnimationFrame(animationId);
-      animationId = null;
-    } else {
-      draw();
-    }
-  });
-
-  init();
 }

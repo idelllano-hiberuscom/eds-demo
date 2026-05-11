@@ -1,7 +1,7 @@
 import {
   loadHeader,
   loadFooter,
-  decorateButtons as libDecorateButtons,
+  decorateButtons,
   decorateIcons,
   decorateSections,
   decorateBlocks,
@@ -9,24 +9,8 @@ import {
   waitForFirstImage,
   loadSection,
   loadSections,
-  loadBlocks,
   loadCSS,
-  fetchPlaceholders,
-  getMetadata,
-  loadScript,
-  toClassName,
-  toCamelCase,
 } from './aem.js';
-import { picture, source, img } from './dom-helpers.js';
-
-import {
-  getLanguage,
-  formatDate,
-  setPageLanguage,
-  PATH_PREFIX,
-  createSource,
-  getHostname,
-} from './utils.js';
 
 /**
  * Moves all the attributes from a given elmenet to another given element.
@@ -41,23 +25,10 @@ export function moveAttributes(from, to, attributes) {
   attributes.forEach((attr) => {
     const value = from.getAttribute(attr);
     if (value) {
-      to.setAttribute(attr, value);
+      to?.setAttribute(attr, value);
       from.removeAttribute(attr);
     }
   });
-}
-
-export function isAuthorEnvironment() {
-  if (window?.location?.origin?.includes('author')) {
-    return true;
-  }
-  return false;
-
-  /*
-  if(document.querySelector('*[data-aue-resource]') !== null){
-    return true;
-  } */
-  // return false;
 }
 
 /**
@@ -88,29 +59,6 @@ async function loadFonts() {
 }
 
 /**
- * Return the placeholder file specific to language
- * @returns
- */
-export async function fetchLanguagePlaceholders() {
-  const langCode = getLanguage();
-  try {
-    // Try fetching placeholders with the specified language
-    return await fetchPlaceholders(`${PATH_PREFIX}/${langCode}`);
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(`Error fetching placeholders for lang: ${langCode}. Will try to get en placeholders`, error);
-    // Retry without specifying a language (using the default language)
-    try {
-      return await fetchPlaceholders(`${PATH_PREFIX}/en`);
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error('Error fetching placeholders:', err);
-    }
-  }
-  return {}; // default to empty object
-}
-
-/**
  * Builds all synthetic blocks in a container element.
  * @param {Element} main The container element
  */
@@ -121,58 +69,6 @@ function buildAutoBlocks() {
     // eslint-disable-next-line no-console
     console.error('Auto Blocking failed', error);
   }
-}
-
-/**
- * Builds all synthetic blocks in a container element.
- * @param {Element} main The container element
- */
-function decorateButtons(main) {
-  main.querySelectorAll('img').forEach((img) => {
-    let altT = decodeURIComponent(img.alt);
-
-    if (altT && altT.includes('https://delivery-')) {
-      try {
-        altT = JSON.parse(altT);
-        const { altText, deliveryUrl } = altT;
-        const url = new URL(deliveryUrl);
-        const imgName = url.pathname.substring(url.pathname.lastIndexOf('/') + 1);
-        const block = whatBlockIsThis(img);
-        const bp = getMetadata(block);
-        let breakpoints = [{ media: '(min-width: 600px)', width: '2000' }, { width: '750' }];
-        if (bp) {
-          const bps = bp.split('|');
-          const bpS = bps.map((b) => b.split(',').map((p) => p.trim()));
-          breakpoints = bpS.map((n) => {
-            const obj = {};
-            n.forEach((i) => {
-              const t = i.split(/:(.*)/s);
-              obj[t[0].trim()] = t[1].trim();
-            });
-            return obj;
-          });
-        } else {
-          const format = getMetadata(imgName.toLowerCase().replace('.', '-'));
-          const formats = format.split('|');
-          const formatObj = {};
-          formats.forEach((i) => {
-            const [a, b] = i.split('=');
-            formatObj[a] = b;
-          });
-          breakpoints = breakpoints.map((n) => (
-            { ...n, ...formatObj }
-          ));
-        }
-        const picture = createOptimizedPicture(deliveryUrl, altText, false, breakpoints);
-        img.parentElement.replaceWith(picture);
-      } catch (error) {
-        img.setAttribute('style', 'border:5px solid red');
-        img.setAttribute('data-asset-type', 'video');
-        img.setAttribute('title', 'Update block to render video.');
-      }
-    }
-  });
-  libDecorateButtons(main);
 }
 
 /**
@@ -187,28 +83,6 @@ export function decorateMain(main) {
   buildAutoBlocks(main);
   decorateSections(main);
   decorateBlocks(main);
-  decorateDMImages(main);
-}
-
-async function renderWBDataLayer() {
-  // const config = await fetchPlaceholders();
-  const lastPubDateStr = getMetadata('published-time');
-  const firstPubDateStr = getMetadata('content_date') || lastPubDateStr;
-  const hostnameFromPlaceholders = await getHostname();
-  window.wbgData.page = {
-    pageInfo: {
-      pageCategory: getMetadata('pagecategory'),
-      channel: getMetadata('channel'),
-      themecfreference: getMetadata('theme_cf_reference'),
-      contentType: getMetadata('content_type'),
-      pageUid: getMetadata('pageuid'),
-      pageName: getMetadata('pagename'),
-      hostName: hostnameFromPlaceholders || getMetadata('hostname'),
-      pageFirstPub: formatDate(firstPubDateStr),
-      pageLastMod: formatDate(lastPubDateStr),
-      webpackage: '',
-    },
-  };
 }
 
 /**
@@ -216,9 +90,8 @@ async function renderWBDataLayer() {
  * @param {Element} doc The container element
  */
 async function loadEager(doc) {
-  setPageLanguage();
+  document.documentElement.lang = 'en';
   decorateTemplateAndTheme();
-  renderWBDataLayer();
   const main = doc.querySelector('main');
   if (main) {
     decorateMain(main);
@@ -237,163 +110,23 @@ async function loadEager(doc) {
 }
 
 /**
- * Create section background image
- *
- * @param {*} doc
- */
-// function decorateSectionImages(doc) {
-//   const sectionImgContainers = doc.querySelectorAll('main .section[data-image]');
-//   sectionImgContainers.forEach((sectionImgContainer) => {
-//     const sectionImg = sectionImgContainer.dataset.image;
-//     const sectionTabImg = sectionImgContainer.dataset.tabImage;
-//     const sectionMobImg = sectionImgContainer.dataset.mobImage;
-//     let defaultImgUrl = null;
-
-//     const newPic = document.createElement('picture');
-//     if (sectionImg) {
-//       newPic.appendChild(createSource(sectionImg, 1920, '(min-width: 1024px)'));
-//       defaultImgUrl = sectionImg;
-//     }
-
-//     if (sectionTabImg) {
-//       newPic.appendChild(createSource(sectionTabImg, 1024, '(min-width: 768px)'));
-//       defaultImgUrl = sectionTabImg;
-//     }
-
-//     if (sectionMobImg) {
-//       newPic.appendChild(createSource(sectionTabImg, 600, '(max-width: 767px)'));
-//       defaultImgUrl = sectionMobImg;
-//     }
-
-//     const newImg = document.createElement('img');
-//     newImg.src = defaultImgUrl;
-//     newImg.alt = '';
-//     newImg.className = 'sec-img';
-//     newImg.loading = 'lazy';
-//     newImg.width = '768';
-//     newImg.height = '100%';
-
-//     if (defaultImgUrl) {
-//       newPic.appendChild(newImg);
-//       sectionImgContainer.prepend(newPic);
-//     }
-//   });
-// }
-
-/**
  * Loads everything that doesn't need to be delayed.
  * @param {Element} doc The container element
  */
 async function loadLazy(doc) {
+  loadHeader(doc.querySelector('header'));
+
   const main = doc.querySelector('main');
   await loadSections(main);
-  // decorateSectionImages(doc);
+
   const { hash } = window.location;
   const element = hash ? doc.getElementById(hash.substring(1)) : false;
   if (hash && element) element.scrollIntoView();
-  // decorateSectionImages(doc);
-  // Only load header/footer if not already populated (avoids duplicates in Universal Editor)
-  const headerEl = doc.querySelector('header');
-  if (!headerEl.querySelector('.header.block')) loadHeader(headerEl);
-  const footerEl = doc.querySelector('footer');
-  if (!footerEl.querySelector('.footer.block')) loadFooter(footerEl);
+
+  loadFooter(doc.querySelector('footer'));
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();
-}
-
-/**
- * Decorates Dynamic Media images by modifying their URLs to include specific parameters
- * and creating a <picture> element with different sources for different image formats and sizes.
- *
- * @param {HTMLElement} main - The main container element that includes the links to be processed.
- */
-export function decorateDMImages(main) {
-  main.querySelectorAll('a[href^="https://delivery-p"]').forEach((a) => {
-    const url = new URL(a.href.split('?')[0]);
-    if (url.hostname.endsWith('.adobeaemcloud.com')) {
-      const blockBeingDecorated = whatBlockIsThis(a);
-      let blockName = '';
-      let rotate = '';
-      let flip = '';
-      let crop = '';
-      if (blockBeingDecorated) {
-        blockName = Array.from(blockBeingDecorated.classList).find((className) => className !== 'block');
-      }
-      if (blockName && blockName === 'dynamicmedia-image') {
-        rotate = blockBeingDecorated?.children[3]?.textContent?.trim();
-        flip = blockBeingDecorated?.children[4]?.textContent?.trim();
-        crop = blockBeingDecorated?.children[5]?.textContent?.trim();
-      }
-
-      const uuidPattern = /([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})/i;
-      const match = url.href?.match(uuidPattern);
-      let aliasname = '';
-      if (!match) {
-        throw new Error('No asset UUID found in URL');
-      } else {
-        aliasname = match[1];
-      }
-      const hrefWOExtn = url.href?.substring(0, url.href?.lastIndexOf('.'))?.replace(/\/original\/(?=as\/)/, '/');
-      const pictureEl = picture(
-        source({
-          srcset: `${hrefWOExtn}.webp?width=1400&quality=85&preferwebp=true${rotate ? `&rotate=${rotate}` : ''}${flip ? `&flip=${flip.toLowerCase()}` : ''}${crop ? `&crop=${crop.toLowerCase()}` : ''}`,
-          type: 'image/webp',
-          media: '(min-width: 992px)',
-        }),
-        source({
-          srcset: `${hrefWOExtn}.webp?width=1320&quality=85&preferwebp=true${rotate ? `&rotate=${rotate}` : ''}${flip ? `&flip=${flip.toLowerCase()}` : ''}${crop ? `&crop=${crop.toLowerCase()}` : ''}`,
-          type: 'image/webp',
-          media: '(min-width: 768px)',
-        }),
-        source({
-          srcset: `${hrefWOExtn}.webp?width=780&quality=85&preferwebp=true${rotate ? `&rotate=${rotate}` : ''}${flip ? `&flip=${flip.toLowerCase()}` : ''}${crop ? `&crop=${crop.toLowerCase()}` : ''}`,
-          type: 'image/webp',
-          media: '(min-width: 320px)',
-        }),
-        source({
-          srcset: `${hrefWOExtn}.webp?width=1400&quality=85${rotate ? `&rotate=${rotate}` : ''}${flip ? `&flip=${flip.toLowerCase()}` : ''}${crop ? `&crop=${crop.toLowerCase()}` : ''}`,
-          media: '(min-width: 992px)',
-        }),
-        source({
-          srcset: `${hrefWOExtn}.webp?width=1320&quality=85${rotate ? `&rotate=${rotate}` : ''}${flip ? `&flip=${flip.toLowerCase()}` : ''}${crop ? `&crop=${crop.toLowerCase()}` : ''}`,
-          media: '(min-width: 768px)',
-        }),
-        source({
-          srcset: `${hrefWOExtn}.webp?width=780&quality=85${rotate ? `&rotate=${rotate}` : ''}${flip ? `&flip=${flip.toLowerCase()}` : ''}${crop ? `&crop=${crop.toLowerCase()}` : ''}`,
-          media: '(min-width: 320px)',
-        }),
-        img({
-          src: `${hrefWOExtn}.webp?width=1400&quality=85${rotate ? `&rotate=${rotate}` : ''}${flip ? `&flip=${flip.toLowerCase()}` : ''}${crop ? `&crop=${crop.toLowerCase()}` : ''}`,
-          alt: a.innerText,
-        }),
-      );
-      a.replaceWith(pictureEl);
-    }
-  });
-}
-
-function whatBlockIsThis(element) {
-  let currentElement = element;
-
-  while (currentElement.parentElement) {
-    if (currentElement.parentElement.classList.contains('block')) return currentElement.parentElement;
-    currentElement = currentElement.parentElement;
-    if (currentElement.classList.length > 0) return currentElement.classList[0];
-  }
-  return null;
-}
-
-/**
- * remove the adujusts the auto images
- * @param {Element} main The container element
- */
-function adjustAutoImages(main) {
-  const pictureElement = main.querySelector('div > p > picture');
-  if (pictureElement) {
-    const pElement = pictureElement.parentElement;
-    pElement.className = 'auto-image-container';
-  }
 }
 
 /**
@@ -407,24 +140,9 @@ function loadDelayed() {
 }
 
 async function loadPage() {
-  window.wbgData ||= {};
   await loadEager(document);
   await loadLazy(document);
   loadDelayed();
-
-  // Sticky header with scroll shadow
-  const header = document.querySelector('header');
-  if (header) {
-    window.addEventListener('scroll', () => {
-      const currentScroll = window.pageYOffset;
-
-      if (currentScroll > 50) {
-        header.classList.add('scrolled');
-      } else {
-        header.classList.remove('scrolled');
-      }
-    }, { passive: true });
-  }
 }
 
 loadPage();

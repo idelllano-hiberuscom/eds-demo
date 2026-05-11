@@ -1,59 +1,152 @@
-/* === HERO CECABANK - Canvas Constellation === */
+/**
+ * Hero Block — Styles
+ * Figma reference: O2 Online hero section (oso azul)
+ * Model: xwalk (EDS + Universal Editor)
+ *
+ * QA audit: ✅ Validado
+ * QA Changes:
+ * - Sin cambios necesarios
+ */
+
+/* Container overrides */
 .hero-container .hero-wrapper {
   max-width: unset;
   padding: 0;
 }
 
+/* Contenedor raíz */
 .hero {
   position: relative;
-  height: 500px;
-  background: #fff;
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  align-items: flex-end;
+  padding: 0 24px 60px;
+  min-height: 420px;
   overflow: hidden;
-  padding: 0 48px;
+  color: #fff;
 }
 
-/* Canvas node network */
-.hero-canvas {
+/* Fila — ocupa todo el bloque */
+.hero > div {
+  display: contents;
+}
+
+/* Imagen de fondo (col 0) */
+.hero-media {
   position: absolute;
+  z-index: -1;
   inset: 0;
-  z-index: 0;
-  display: block;
 }
 
-/* Title */
-.hero-title {
+.hero-media picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-media picture img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+/* Contenido de texto (col 1) */
+.hero-content {
   position: relative;
   z-index: 1;
-  color: var(--primary-color);
-  font-family: var(--font-family-heading);
-  font-size: clamp(1.75rem, 4vw, 4rem);
-  font-weight: 400;
-  line-height: var(--line-height-tight);
-  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs, 8px);
+  max-width: 600px;
+}
+
+/* H1 — Roboto Condensed 700 (más pequeño que el highlight) */
+.hero .hero-title {
+  font-family: var(--heading-font-family);
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 28px;
+  color: #fff;
   margin: 0;
-  text-align: left;
 }
 
-/* Mobile */
-@media (width <= 599px) {
+/* Texto destacado — visualmente mayor que H1 */
+.hero .hero-highlight {
+  font-family: var(--heading-font-family);
+  font-weight: 900;
+  font-size: 28px;
+  line-height: 36px;
+  color: #fff;
+  margin: 0;
+}
+
+/* CTA button */
+.hero a.button:any-link {
+  background-color: var(--color-primary, #0050ff);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius-button, 60px);
+  padding: 10px 24px;
+  font-family: var(--heading-font-family);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  text-decoration: none;
+  display: inline-block;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.hero a.button:hover {
+  background-color: #003dcc;
+}
+
+.hero a.button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* Button container — reset margin */
+.hero .button-container {
+  margin: 0;
+}
+
+/* Tablet (≥768px) */
+@media (width >= 768px) {
   .hero {
-    padding: 0 24px;
-    height: 500px;
-    justify-content: center;
+    padding: 0 48px 80px;
+    min-height: 480px;
   }
 
-  .hero-title {
-    font-size: clamp(1.75rem, 7vw, 2.25rem);
-    text-align: center;
+  .hero .hero-title {
+    font-size: 24px;
+    line-height: 30px;
+  }
+
+  .hero .hero-highlight {
+    font-size: 34px;
+    line-height: 42px;
   }
 }
 
-/* Desktop */
+/* Desktop (≥900px) */
 @media (width >= 900px) {
-  .hero-title {
-    font-size: clamp(3.25rem, 4vw, 4rem);
+  .hero {
+    padding: 0 65px 100px;
+    min-height: 560px;
+  }
+
+  .hero .hero-content {
+    max-width: 650px;
+    gap: var(--spacing-s, 12px);
+  }
+
+  .hero .hero-title {
+    font-size: 28px;
+    line-height: 34px;
+  }
+
+  .hero .hero-highlight {
+    font-size: 44px;
+    line-height: 52px;
   }
 }

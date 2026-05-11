@@ -8,52 +8,33 @@
   {
     "id": "section",
     "components": [
-      "action-button",
-      "button",
-      "cards",
-      "carousel",
-      "columns",
-      "contentfragment",
-      "dm-asset",
-      "dm-template",
-      "find-a-doctor",
-      "footer",
-      "forex",
-      "fragment",
-      "header",
-      "hero",
-      "iframe",
-      "image",
-      "search",
-      "separator",
-      "teaser",
       "text",
+      "image",
+      "button",
       "title",
-      "video"
+      "hero",
+      "cards",
+      "columns",
+      "fragment",
+      "coverage-cta",
+      "pricing-tabs",
+      "promo-carousel",
+      "why-o2",
+      "app-promo",
+      "benefits-cards",
+      "support-cta"
+    ]
+  },
+  {
+    "id": "benefits-cards",
+    "components": [
+      "benefits-cards-item"
     ]
   },
   {
     "id": "cards",
     "components": [
       "card"
-    ]
-  },
-  {
-    "id": "hero",
-    "components": [
-      "hero-slide"
-    ]
-  },
-  {
-    "id": "header",
-    "components": [
-      "navigation-item"
-    ]
-  },
-  {
-    "id": "footer",
-    "components": [
-      "footer-section"
     ]
   },
   {
@@ -65,13 +46,28 @@
   {
     "id": "column",
     "components": [
-      "button",
-      "dm-asset",
-      "dm-template",
-      "image",
       "text",
-      "title",
-      "video"
+      "image",
+      "button",
+      "title"
+    ]
+  },
+  {
+    "id": "pricing-tabs",
+    "components": [
+      "pricing-tabs-card"
+    ]
+  },
+  {
+    "id": "promo-carousel",
+    "components": [
+      "promo-carousel-item"
+    ]
+  },
+  {
+    "id": "why-o2",
+    "components": [
+      "why-o2-item"
     ]
   }
 ]

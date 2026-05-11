@@ -1,0 +1,399 @@
+/**
+ * Pricing Tabs Block — Styles
+ * Model: xwalk (EDS + Universal Editor)
+ */
+
+/* 1. Block-level custom properties */
+.pricing-tabs {
+  --pricing-bg: #f5f5f5;
+  --pricing-card-bg: #fff;
+  --pricing-card-radius: 16px;
+  --pricing-card-shadow: 0 2px 8px rgb(0 0 0 / 8%);
+  --pricing-tab-active-bg: #0050ff;
+  --pricing-tab-active-color: #fff;
+  --pricing-tab-inactive-bg: transparent;
+  --pricing-tab-inactive-color: #4a4a4a;
+  --pricing-tab-inactive-border: 1px solid #dadada;
+  --pricing-tab-radius: 60px;
+  --pricing-cta-primary-bg: #0050ff;
+  --pricing-cta-primary-color: #fff;
+  --pricing-cta-secondary-color: #0050ff;
+  --pricing-banner-bg: #fff;
+
+  /* 2. Root container */
+  background-color: var(--pricing-bg);
+  padding: 40px 16px;
+  font-family: var(--body-font-family);
+  box-sizing: border-box;
+}
+
+/* 3. Config rows and meta cells hidden */
+.pricing-tabs-config,
+.pricing-tabs-card-meta {
+  display: none;
+}
+
+/* 4. Card meta cells hidden */
+.pricing-tabs-card-meta {
+  display: none;
+}
+
+/* 5. Title row */
+.pricing-tabs-title-row {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.pricing-tabs-title {
+  font-family: var(--heading-font-family);
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 900;
+  color: #000019;
+  margin: 0;
+}
+
+/* 6. Tablist container */
+.pricing-tabs-tablist-container {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.pricing-tabs-tablist-container::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  background: linear-gradient(to right, transparent, var(--pricing-bg));
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 7. Tablist */
+.pricing-tabs-tablist {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 4px;
+}
+
+.pricing-tabs-tablist::-webkit-scrollbar {
+  display: none;
+}
+
+/* 8. Tab buttons */
+.pricing-tabs-tab {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  appearance: none;
+  border: var(--pricing-tab-inactive-border);
+  background: var(--pricing-tab-inactive-bg);
+  color: var(--pricing-tab-inactive-color);
+  border-radius: var(--pricing-tab-radius);
+  padding: 8px 20px;
+  font-family: var(--body-font-family);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.pricing-tabs-tab-active {
+  background: var(--pricing-tab-active-bg);
+  color: var(--pricing-tab-active-color);
+  border-color: var(--pricing-tab-active-bg);
+}
+
+.pricing-tabs-tab:focus-visible {
+  outline: 2px solid var(--pricing-tab-active-bg);
+  outline-offset: 2px;
+}
+
+.pricing-tabs-tab:hover:not(.pricing-tabs-tab-active) {
+  border-color: var(--pricing-tab-active-bg);
+  color: var(--pricing-tab-active-bg);
+}
+
+/* 9. Cards grid */
+.pricing-tabs-cards {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* 10. Card */
+.pricing-tabs-card {
+  background: var(--pricing-card-bg);
+  border-radius: var(--pricing-card-radius);
+  box-shadow: var(--pricing-card-shadow);
+  padding: 24px;
+  width: 100%;
+  max-width: 340px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: box-shadow 0.2s ease;
+}
+
+.pricing-tabs-card:hover {
+  box-shadow: 0 4px 16px rgb(0 0 0 / 12%);
+}
+
+/* 11. Card top section (info + price) */
+.pricing-tabs-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.pricing-tabs-card-info {
+  flex: 1;
+}
+
+.pricing-tabs-card-info p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 22px;
+  color: #000019;
+}
+
+.pricing-tabs-card-info strong {
+  font-weight: 900;
+}
+
+/* 12. Price */
+.pricing-tabs-card-price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.pricing-tabs-card-price-value {
+  font-family: var(--heading-font-family);
+  font-size: 32px;
+  line-height: 36px;
+  font-weight: 900;
+  color: #000019;
+  white-space: nowrap;
+}
+
+.pricing-tabs-card-price-note {
+  font-size: 13px;
+  line-height: 18px;
+  color: #4a4a4a;
+}
+
+/* 13. Badge */
+.pricing-tabs-card-badge {
+  line-height: 0;
+}
+
+.pricing-tabs-card-badge picture {
+  display: inline-block;
+  width: 48px;
+  height: 24px;
+}
+
+.pricing-tabs-card-badge picture img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* 14. Card actions */
+.pricing-tabs-card-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+/* 14. CTA buttons */
+.pricing-tabs-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border-radius: var(--pricing-tab-radius);
+  font-family: var(--body-font-family);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.pricing-tabs-cta-primary {
+  background: var(--pricing-cta-primary-bg);
+  color: var(--pricing-cta-primary-color);
+}
+
+.pricing-tabs-cta-primary:hover {
+  background: #003cc7;
+}
+
+.pricing-tabs-cta-primary:focus-visible {
+  outline: 2px solid var(--pricing-cta-primary-bg);
+  outline-offset: 2px;
+}
+
+.pricing-tabs-cta-secondary {
+  background: transparent;
+  color: var(--pricing-cta-secondary-color);
+  text-decoration: none;
+}
+
+.pricing-tabs-cta-secondary:hover {
+  text-decoration: underline;
+}
+
+.pricing-tabs-cta-secondary:focus-visible {
+  outline: 2px solid var(--pricing-cta-secondary-color);
+  outline-offset: 2px;
+}
+
+/* 15. Banner (líneas adicionales) */
+.pricing-tabs-banner {
+  background: var(--pricing-banner-bg);
+  border-radius: var(--pricing-card-radius);
+  box-shadow: var(--pricing-card-shadow);
+  padding: 20px 24px;
+  margin: 24px auto 0;
+  max-width: 900px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.pricing-tabs-banner-content {
+  flex: 1;
+}
+
+.pricing-tabs-banner-content p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.pricing-tabs-banner-image {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+}
+
+.pricing-tabs-banner-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* 16. Footer (beneficios) */
+.pricing-tabs-footer {
+  background: var(--pricing-banner-bg);
+  border-radius: var(--pricing-card-radius);
+  box-shadow: var(--pricing-card-shadow);
+  padding: 16px 24px;
+  margin: 16px auto 0;
+  max-width: 900px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.pricing-tabs-footer p {
+  margin: 0;
+}
+
+/* 17. Tablet */
+@media (width >= 768px) {
+  .pricing-tabs {
+    padding: 48px 24px;
+  }
+
+  .pricing-tabs-cards {
+    flex-flow: row wrap;
+    justify-content: center;
+  }
+
+  .pricing-tabs-card {
+    width: calc(50% - 8px);
+    max-width: 320px;
+  }
+
+  .pricing-tabs-banner-image {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+/* 18. Desktop */
+@media (width >= 1024px) {
+  .pricing-tabs {
+    padding: 64px 40px;
+  }
+
+  .pricing-tabs-title {
+    font-size: 46px;
+    line-height: 52px;
+  }
+
+  .pricing-tabs-tablist-container::after {
+    display: none;
+  }
+
+  .pricing-tabs-tablist {
+    justify-content: center;
+    overflow-x: visible;
+  }
+
+  .pricing-tabs-cards {
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: stretch;
+  }
+
+  .pricing-tabs-card {
+    width: 280px;
+    max-width: 280px;
+    flex: 0 0 280px;
+  }
+
+  .pricing-tabs-card-price-value {
+    font-size: 38px;
+    line-height: 42px;
+  }
+
+  .pricing-tabs-banner {
+    max-width: 1100px;
+  }
+
+  .pricing-tabs-banner-image {
+    width: 104px;
+    height: 80px;
+  }
+
+  .pricing-tabs-footer {
+    max-width: 1100px;
+    flex-wrap: nowrap;
+  }
+}

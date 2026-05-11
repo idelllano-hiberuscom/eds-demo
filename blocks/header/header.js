@@ -1,359 +1,166 @@
 import { getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
 
-// Default navigation menu structure (same as cecabank.es)
-const DEFAULT_NAV_MENU = [
-  {
-    title: 'Podemos ayudarte',
-    subtitle: 'Nuestros servicios',
-    link: '/servicios',
-    items: [
-      { title: 'Securities Services', link: '/servicios/securities-services' },
-      { title: 'Tesorería', link: '/servicios/tesoreria' },
-      { title: 'Pagos', link: '/servicios/pagos' },
-      { title: 'Plataformas Tecnológicas', link: '/servicios/plataformas-tecnologicas' },
-    ],
-  },
-  {
-    title: '¿Por qué Cecabank?',
-    subtitle: 'Conócenos',
-    link: '/por-que-cecabank',
-    items: [
-      { title: 'Especialización y Solvencia', link: '/por-que-cecabank/especializacion-solvencia' },
-      { title: 'Sostenibilidad', link: '/por-que-cecabank/sostenibilidad' },
-      { title: 'Negocio internacional', link: '/por-que-cecabank/negocio-internacional' },
-    ],
-  },
-  {
-    title: 'Cecabank al día',
-    subtitle: 'Actualidad',
-    link: '/noticias',
-    items: [
-      { title: 'Notas de prensa', link: '/noticias/notas-prensa' },
-      { title: 'Cecabank en los medios', link: '/noticias/en-medios' },
-      { title: 'Brand Center', link: '/noticias/brand-center' },
-    ],
-  },
-  {
-    title: '¿Hablamos?',
-    subtitle: 'Contacta con nosotros',
-    link: '/contacto',
-    items: [],
-  },
-];
-
-// Secondary links for the header (bottom)
-const SECONDARY_LINKS = [
-  { title: 'Información corporativa', link: '/informacion-corporativa' },
-  { title: 'Informe de mercados', link: '/informe-mercados' },
-  { title: 'Oficina de cambio de divisas', link: '/oficina-cambio' },
-  { title: 'Banca electrónica', link: '/banca-electronica' },
-  { title: 'Portal de proveedores', link: '/portal-proveedores' },
-];
-
-function closeDrawer(drawer) {
-  drawer.classList.remove('open');
-  document.body.style.overflowY = '';
-  const trigger = document.querySelector('.nav-hamburger button');
-  if (trigger) trigger.setAttribute('aria-label', 'Open navigation');
-  window.removeEventListener('keydown', closeOnEscape); // eslint-disable-line no-use-before-define
-  if (trigger) trigger.focus();
-}
+// media query match that indicates mobile/tablet width
+const isDesktop = window.matchMedia('(min-width: 900px)');
 
 function closeOnEscape(e) {
   if (e.code === 'Escape') {
-    const drawer = document.querySelector('.header-drawer');
-    if (drawer && drawer.classList.contains('open')) {
-      closeDrawer(drawer);
+    const nav = document.getElementById('nav');
+    const navSections = nav.querySelector('.nav-sections');
+    const navSectionExpanded = navSections.querySelector('[aria-expanded="true"]');
+    if (navSectionExpanded && isDesktop.matches) {
+      // eslint-disable-next-line no-use-before-define
+      toggleAllNavSections(navSections);
+      navSectionExpanded.focus();
+    } else if (!isDesktop.matches) {
+      // eslint-disable-next-line no-use-before-define
+      toggleMenu(nav, navSections);
+      nav.querySelector('button').focus();
     }
   }
 }
 
-function openDrawer(drawer) {
-  drawer.classList.add('open');
-  document.body.style.overflowY = 'hidden';
-  const trigger = document.querySelector('.nav-hamburger button');
-  if (trigger) trigger.setAttribute('aria-label', 'Close navigation');
-  window.addEventListener('keydown', closeOnEscape);
-  const firstFocusable = drawer.querySelector('button, a, input');
-  if (firstFocusable) firstFocusable.focus();
+function closeOnFocusLost(e) {
+  const nav = e.currentTarget;
+  if (!nav.contains(e.relatedTarget)) {
+    const navSections = nav.querySelector('.nav-sections');
+    const navSectionExpanded = navSections.querySelector('[aria-expanded="true"]');
+    if (navSectionExpanded && isDesktop.matches) {
+      // eslint-disable-next-line no-use-before-define
+      toggleAllNavSections(navSections, false);
+    } else if (!isDesktop.matches) {
+      // eslint-disable-next-line no-use-before-define
+      toggleMenu(nav, navSections, false);
+    }
+  }
 }
 
-function createNavMenu(menuData) {
-  const nav = document.createElement('nav');
-  nav.className = 'drawer-nav';
-  nav.setAttribute('aria-label', 'Site navigation');
-
-  const ul = document.createElement('ul');
-  ul.className = 'drawer-menu';
-
-  menuData.forEach((item) => {
-    const li = document.createElement('li');
-    li.className = 'drawer-menu-item';
-
-    // Main item wrapper
-    const itemWrapper = document.createElement('div');
-    itemWrapper.className = 'menu-item-wrapper';
-
-    // Main link with title and subtitle
-    const mainLink = document.createElement('a');
-    mainLink.href = item.link;
-    mainLink.className = 'menu-item-link';
-
-    const titleSpan = document.createElement('span');
-    titleSpan.className = 'menu-item-title';
-    titleSpan.textContent = item.title;
-
-    // Add chevron inline with title if has subitems
-    if (item.items && item.items.length > 0) {
-      const chevron = document.createElement('span');
-      chevron.className = 'menu-item-chevron';
-      chevron.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>';
-      titleSpan.appendChild(chevron);
-    }
-
-    const subtitleSpan = document.createElement('span');
-    subtitleSpan.className = 'menu-item-subtitle';
-    subtitleSpan.textContent = item.subtitle || '';
-
-    mainLink.appendChild(titleSpan);
-    mainLink.appendChild(subtitleSpan);
-    itemWrapper.appendChild(mainLink);
-
-    li.appendChild(itemWrapper);
-
-    // Submenu if has subitems
-    if (item.items && item.items.length > 0) {
-      const subMenu = document.createElement('div');
-      subMenu.className = 'submenu';
-
-      const subUl = document.createElement('ul');
-      item.items.forEach((subItem) => {
-        const subLi = document.createElement('li');
-        const subA = document.createElement('a');
-        subA.href = subItem.link;
-        subA.textContent = subItem.title;
-        subLi.appendChild(subA);
-        subUl.appendChild(subLi);
-      });
-      subMenu.appendChild(subUl);
-      li.appendChild(subMenu);
-
-      // Toggle submenu on hover/click
-      li.addEventListener('mouseenter', () => li.classList.add('expanded'));
-      li.addEventListener('mouseleave', () => li.classList.remove('expanded'));
-      itemWrapper.addEventListener('click', (e) => {
-        if (window.innerWidth < 1024) {
-          e.preventDefault();
-          li.classList.toggle('expanded');
-        }
-      });
-    }
-
-    ul.appendChild(li);
-  });
-
-  nav.appendChild(ul);
-  return nav;
+function openOnKeydown(e) {
+  const focused = document.activeElement;
+  const isNavDrop = focused.className === 'nav-drop';
+  if (isNavDrop && (e.code === 'Enter' || e.code === 'Space')) {
+    const dropExpanded = focused.getAttribute('aria-expanded') === 'true';
+    // eslint-disable-next-line no-use-before-define
+    toggleAllNavSections(focused.closest('.nav-sections'));
+    focused.setAttribute('aria-expanded', dropExpanded ? 'false' : 'true');
+  }
 }
 
-function createSecondaryLinks(links) {
-  const div = document.createElement('div');
-  div.className = 'drawer-secondary-links';
-
-  links.forEach((link) => {
-    const a = document.createElement('a');
-    a.href = link.link;
-    a.textContent = link.title;
-    div.appendChild(a);
-  });
-
-  return div;
+function focusNavSection() {
+  document.activeElement.addEventListener('keydown', openOnKeydown);
 }
 
 /**
- * Decorates the header with Cecabank drawer navigation
+ * Toggles all nav sections
+ * @param {Element} sections The container element
+ * @param {Boolean} expanded Whether the element should be expanded or collapsed
+ */
+function toggleAllNavSections(sections, expanded = false) {
+  sections.querySelectorAll('.nav-sections .default-content-wrapper > ul > li').forEach((section) => {
+    section.setAttribute('aria-expanded', expanded);
+  });
+}
+
+/**
+ * Toggles the entire nav
+ * @param {Element} nav The container element
+ * @param {Element} navSections The nav sections within the container element
+ * @param {*} forceExpanded Optional param to force nav expand behavior when not null
+ */
+function toggleMenu(nav, navSections, forceExpanded = null) {
+  const expanded = forceExpanded !== null ? !forceExpanded : nav.getAttribute('aria-expanded') === 'true';
+  const button = nav.querySelector('.nav-hamburger button');
+  document.body.style.overflowY = (expanded || isDesktop.matches) ? '' : 'hidden';
+  nav.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+  toggleAllNavSections(navSections, expanded || isDesktop.matches ? 'false' : 'true');
+  button.setAttribute('aria-label', expanded ? 'Open navigation' : 'Close navigation');
+  // enable nav dropdown keyboard accessibility
+  const navDrops = navSections.querySelectorAll('.nav-drop');
+  if (isDesktop.matches) {
+    navDrops.forEach((drop) => {
+      if (!drop.hasAttribute('tabindex')) {
+        drop.setAttribute('tabindex', 0);
+        drop.addEventListener('focus', focusNavSection);
+      }
+    });
+  } else {
+    navDrops.forEach((drop) => {
+      drop.removeAttribute('tabindex');
+      drop.removeEventListener('focus', focusNavSection);
+    });
+  }
+
+  // enable menu collapse on escape keypress
+  if (!expanded || isDesktop.matches) {
+    // collapse menu on escape press
+    window.addEventListener('keydown', closeOnEscape);
+    // collapse menu on focus lost
+    nav.addEventListener('focusout', closeOnFocusLost);
+  } else {
+    window.removeEventListener('keydown', closeOnEscape);
+    nav.removeEventListener('focusout', closeOnFocusLost);
+  }
+}
+
+/**
+ * loads and decorates the header, mainly the nav
  * @param {Element} block The header block element
  */
 export default async function decorate(block) {
-  // Prevent double-decoration
-  if (block.dataset.initialized) return;
-  block.dataset.initialized = 'true';
+  // load nav as fragment
+  const navMeta = getMetadata('nav');
+  const navPath = navMeta ? new URL(navMeta, window.location).pathname : '/nav';
+  const fragment = await loadFragment(navPath);
 
-  // Default logo path
-  const defaultLogoPath = `${window.hlx.codeBasePath}/icons/logo-cecabank.svg`;
-
-  // Extract configuration
-  const headerConfig = {
-    logo: null,
-    logoLink: '/',
-    languages: 'ES,EN,PT',
-  };
-
-  const cells = Array.from(block.querySelectorAll(':scope > div'));
-
-  const getFieldValue = (cell, fieldType = 'text') => {
-    if (!cell) return '';
-    if (fieldType === 'image') {
-      const img = cell.querySelector('img') || cell.querySelector('picture img');
-      if (img) return img.src;
-    }
-    return cell.textContent?.trim() || '';
-  };
-
-  if (cells[0]) headerConfig.logo = getFieldValue(cells[0], 'image') || getFieldValue(cells[0]);
-  if (cells[1]) headerConfig.logoLink = getFieldValue(cells[1]) || '/';
-  if (cells[5]) headerConfig.languages = getFieldValue(cells[5]) || 'ES,EN,PT';
-
-  // Clear block and build new header
+  // decorate nav DOM
   block.textContent = '';
+  const nav = document.createElement('nav');
+  nav.id = 'nav';
+  while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
+
+  const classes = ['brand', 'sections', 'tools'];
+  classes.forEach((c, i) => {
+    const section = nav.children[i];
+    if (section) section.classList.add(`nav-${c}`);
+  });
+
+  const navBrand = nav.querySelector('.nav-brand');
+  const brandLink = navBrand.querySelector('.button');
+  if (brandLink) {
+    brandLink.className = '';
+    brandLink.closest('.button-container').className = '';
+  }
+
+  const navSections = nav.querySelector('.nav-sections');
+  if (navSections) {
+    navSections.querySelectorAll(':scope .default-content-wrapper > ul > li').forEach((navSection) => {
+      if (navSection.querySelector('ul')) navSection.classList.add('nav-drop');
+      navSection.addEventListener('click', () => {
+        if (isDesktop.matches) {
+          const expanded = navSection.getAttribute('aria-expanded') === 'true';
+          toggleAllNavSections(navSections);
+          navSection.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+        }
+      });
+    });
+  }
+
+  // hamburger for mobile
+  const hamburger = document.createElement('div');
+  hamburger.classList.add('nav-hamburger');
+  hamburger.innerHTML = `<button type="button" aria-controls="nav" aria-label="Open navigation">
+      <span class="nav-hamburger-icon"></span>
+    </button>`;
+  hamburger.addEventListener('click', () => toggleMenu(nav, navSections));
+  nav.prepend(hamburger);
+  nav.setAttribute('aria-expanded', 'false');
+  // prevent mobile nav behavior on window resize
+  toggleMenu(nav, navSections, isDesktop.matches);
+  isDesktop.addEventListener('change', () => toggleMenu(nav, navSections, isDesktop.matches));
 
   const navWrapper = document.createElement('div');
   navWrapper.className = 'nav-wrapper';
-
-  // === TOP BAR ===
-  const nav = document.createElement('nav');
-  nav.id = 'nav';
-  nav.setAttribute('aria-label', 'Main navigation');
-
-  // Logo
-  const navBrand = document.createElement('div');
-  navBrand.className = 'nav-brand';
-  const logoLink = document.createElement('a');
-  logoLink.href = headerConfig.logoLink || '/';
-  logoLink.setAttribute('aria-label', 'Cecabank Home');
-
-  const logoImg = document.createElement('img');
-  if (headerConfig.logo && headerConfig.logo.startsWith('http')) {
-    logoImg.src = headerConfig.logo;
-  } else {
-    logoImg.src = defaultLogoPath;
-  }
-  logoImg.alt = 'Cecabank';
-  logoImg.className = 'nav-logo';
-  logoLink.appendChild(logoImg);
-  navBrand.appendChild(logoLink);
-
-  // Hamburger
-  const hamburger = document.createElement('div');
-  hamburger.className = 'nav-hamburger';
-  hamburger.innerHTML = `<button type="button" aria-label="Open navigation" aria-controls="header-drawer" aria-expanded="false">
-    <span class="nav-hamburger-label">MENÚ</span>
-    <span class="nav-hamburger-icon"></span>
-  </button>`;
-
-  nav.appendChild(navBrand);
-  nav.appendChild(hamburger);
-  navWrapper.appendChild(nav);
-
-  // === DRAWER ===
-  const drawer = document.createElement('div');
-  drawer.id = 'header-drawer';
-  drawer.className = 'header-drawer';
-  drawer.setAttribute('role', 'dialog');
-  drawer.setAttribute('aria-modal', 'true');
-  drawer.setAttribute('aria-label', 'Navigation menu');
-
-  // Drawer top row: Languages + Close
-  const drawerTop = document.createElement('div');
-  drawerTop.className = 'drawer-top';
-
-  // Languages
-  const langDiv = document.createElement('div');
-  langDiv.className = 'drawer-languages';
-  const langs = headerConfig.languages.split(',').map((l) => l.trim());
-  langs.forEach((lang, idx) => {
-    if (idx > 0) {
-      const separator = document.createElement('span');
-      separator.className = 'lang-separator';
-      separator.textContent = '|';
-      langDiv.appendChild(separator);
-    }
-    const langLink = document.createElement('a');
-    langLink.href = `/${lang.toLowerCase()}`;
-    langLink.textContent = lang;
-    langLink.className = 'nav-language';
-    if (idx === 0) langLink.classList.add('active');
-    langDiv.appendChild(langLink);
-  });
-
-  // Close button
-  const closeBtn = document.createElement('button');
-  closeBtn.type = 'button';
-  closeBtn.className = 'drawer-close';
-  closeBtn.setAttribute('aria-label', 'Close navigation');
-  closeBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
-
-  drawerTop.appendChild(langDiv);
-  drawerTop.appendChild(closeBtn);
-  drawer.appendChild(drawerTop);
-
-  // Search input
-  const searchWrap = document.createElement('div');
-  searchWrap.className = 'drawer-search';
-  const searchIcon = document.createElement('span');
-  searchIcon.className = 'search-icon';
-  searchIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>';
-  const searchInput = document.createElement('input');
-  searchInput.type = 'search';
-  searchInput.placeholder = '¿Qué estás buscando?';
-  searchInput.setAttribute('aria-label', 'Buscar');
-  searchWrap.appendChild(searchIcon);
-  searchWrap.appendChild(searchInput);
-  drawer.appendChild(searchWrap);
-
-  // Nav menu
-  const navMeta = getMetadata('nav');
-  let hasFragmentNav = false;
-
-  if (navMeta) {
-    try {
-      const navPath = new URL(navMeta, window.location).pathname;
-      const fragment = await loadFragment(navPath);
-      if (fragment && fragment.querySelector('a')) {
-        hasFragmentNav = true;
-        // TODO: Convert fragment to menu format if needed
-      }
-    } catch (_) {
-      // use default menu
-    }
-  }
-
-  if (!hasFragmentNav) {
-    const defaultNav = createNavMenu(DEFAULT_NAV_MENU);
-    drawer.appendChild(defaultNav);
-  }
-
-  // Secondary links at bottom
-  const secondaryLinks = createSecondaryLinks(SECONDARY_LINKS);
-  drawer.appendChild(secondaryLinks);
-
-  // Backdrop
-  const backdrop = document.createElement('div');
-  backdrop.className = 'header-backdrop';
-
-  // Wire up events
-  hamburger.querySelector('button').addEventListener('click', () => {
-    if (drawer.classList.contains('open')) {
-      closeDrawer(drawer);
-      hamburger.querySelector('button').setAttribute('aria-expanded', 'false');
-    } else {
-      openDrawer(drawer);
-      hamburger.querySelector('button').setAttribute('aria-expanded', 'true');
-    }
-  });
-
-  closeBtn.addEventListener('click', () => {
-    closeDrawer(drawer);
-    hamburger.querySelector('button').setAttribute('aria-expanded', 'false');
-  });
-
-  backdrop.addEventListener('click', () => {
-    closeDrawer(drawer);
-    hamburger.querySelector('button').setAttribute('aria-expanded', 'false');
-  });
-
-  navWrapper.appendChild(drawer);
-  navWrapper.appendChild(backdrop);
+  navWrapper.append(nav);
   block.append(navWrapper);
 }
