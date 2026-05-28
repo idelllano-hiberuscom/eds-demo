@@ -53,6 +53,12 @@
     ]
   },
   {
+    "id": "logo-carousel-filter",
+    "components": [
+      "core/franklin/components/block/v1/block/item"
+    ]
+  },
+  {
     "id": "pricing-tabs",
     "components": [
       "pricing-tabs-card"
