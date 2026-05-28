@@ -6024,6 +6024,49 @@
     ]
   },
   {
+    "id": "logo-carousel",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Título de sección",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "boolean",
+        "name": "autoplay",
+        "label": "Rotación automática",
+        "valueType": "boolean"
+      }
+    ]
+  },
+  {
+    "id": "logo-carousel-item",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "logoImage",
+        "label": "Imagen del logo",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "logoImageAlt",
+        "label": "Texto alternativo del logo",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "logoLink",
+        "label": "Enlace del logo",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "search",
     "fields": [
       {

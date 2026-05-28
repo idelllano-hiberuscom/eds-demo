@@ -24,6 +24,7 @@
       "hero",
       "iframe",
       "image",
+      "logo-carousel",
       "search",
       "separator",
       "teaser",
@@ -72,6 +73,12 @@
       "text",
       "title",
       "video"
+    ]
+  },
+  {
+    "id": "logo-carousel-filter",
+    "components": [
+      "core/franklin/components/block/v1/block/item"
     ]
   }
 ]
