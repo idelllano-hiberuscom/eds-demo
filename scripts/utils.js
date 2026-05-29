@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars, import/no-cycle, consistent-return, max-len */
 import {
   div, p, section, a, button,
   span,

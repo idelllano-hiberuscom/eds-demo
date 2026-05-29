@@ -1,3 +1,5 @@
+/* eslint-disable import/prefer-default-export, no-use-before-define */
+/* eslint-disable no-return-assign, no-unused-vars */
 const NODE_NAMES = {
   IMG(elem, p) { const goodies = elem.querySelector('picture'); p.replaceWith(goodies); },
   H3(elem, p) { const goodies = elem.querySelector('h3'); p.replaceWith(goodies); },

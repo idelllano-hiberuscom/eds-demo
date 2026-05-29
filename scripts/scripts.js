@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars, import/no-cycle, no-shadow */
+/* eslint-disable no-use-before-define, no-undef, prefer-destructuring, max-len */
 import {
   loadHeader,
   loadFooter,

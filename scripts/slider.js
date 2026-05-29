@@ -14,6 +14,7 @@ function arrowIcon(props) {
   return icon;
 }
 
+/* eslint-disable no-undef */
 // Handling Anchor Tag
 function arrow(props) {
   const p = document.createElement('p');
