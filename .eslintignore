@@ -1,2 +1,10 @@
 helix-importer-ui
 dompurify.min.js
+blocks/form/rules/
+blocks/form/rules-doc/
+scripts/at-lsig.js
+blocks/content-fragment/
+blocks/dynamicmedia-image/
+blocks/dynamicmedia-template/
+blocks/find-a-doctor/
+blocks/search/
