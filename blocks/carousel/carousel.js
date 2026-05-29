@@ -40,29 +40,21 @@ export default function decorate(block) {
         // First div (index 0) - Image
         if (index === 0) {
           div.className = 'cards-card-image';
-        }
-        // Second div (index 1) - Content with button
-        else if (index === 1) {
+        } else if (index === 1) {
           div.className = 'cards-card-body';
-        }
-        // Third div (index 2) - Card style configuration
-        else if (index === 2) {
+        } else if (index === 2) {
           div.className = 'cards-config';
           const p = div.querySelector('p');
           if (p) {
             p.style.display = 'none'; // Hide the configuration text
           }
-        }
-        // Fourth div (index 3) - CTA style configuration
-        else if (index === 3) {
+        } else if (index === 3) {
           div.className = 'cards-config';
           const p = div.querySelector('p');
           if (p) {
             p.style.display = 'none'; // Hide the configuration text
           }
-        }
-        // Any other divs
-        else {
+        } else {
           div.className = 'cards-card-body';
         }
       });

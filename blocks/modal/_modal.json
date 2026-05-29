@@ -1,0 +1,56 @@
+{
+  "definitions": [
+    {
+      "title": "Modal",
+      "id": "modal",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Modal",
+              "model": "modal-block"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "modal-block",
+      "fields": [
+        {
+          "component": "text",
+          "name": "modalTitle",
+          "label": "Título del modal",
+          "valueType": "string",
+          "required": true,
+          "value": "¿Hablamos?"
+        },
+        {
+          "component": "richtext",
+          "name": "modalContent",
+          "label": "Contenido del modal",
+          "valueType": "string",
+          "required": true
+        },
+        {
+          "component": "select",
+          "name": "classes",
+          "label": "Variante",
+          "valueType": "string",
+          "required": true,
+          "value": "contact",
+          "options": [
+            {
+              "name": "Contacto",
+              "value": "contact"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

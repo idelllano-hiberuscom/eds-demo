@@ -1,22 +1,23 @@
 {
   "definitions": [
     {
-      "title": "Logo Carousel",
-      "id": "logo-carousel",
+      "title": "Features",
+      "id": "features",
       "plugins": {
         "xwalk": {
           "page": {
             "resourceType": "core/franklin/components/block/v1/block",
             "template": {
-              "name": "Logo Carousel",
-              "model": "logo-carousel",
-              "filter": "logo-carousel-filter",
+              "name": "Features",
+              "model": "features",
+              "filter": "features-filter",
               "item1": {
                 "sling:resourceType": "core/franklin/components/block/v1/block/item",
-                "name": "Logo",
-                "model": "logo-carousel-item",
-                "logoImage": "/content/dam/cecabank/logos/placeholder.png",
-                "logoImageAlt": "Logo"
+                "name": "Feature Node",
+                "model": "features-item",
+                "icon": "",
+                "iconAlt": "Feature icon",
+                "description": "Feature description"
               }
             }
           }
@@ -26,52 +27,52 @@
   ],
   "models": [
     {
-      "id": "logo-carousel",
+      "id": "features",
       "fields": [
         {
           "component": "text",
           "name": "sectionTitle",
           "label": "Título de sección",
-          "valueType": "string",
-          "required": true
-        },
-        {
-          "component": "boolean",
-          "name": "autoplay",
-          "label": "Rotación automática",
-          "valueType": "boolean"
+          "valueType": "string"
         }
       ]
     },
     {
-      "id": "logo-carousel-item",
+      "id": "features-item",
       "fields": [
         {
           "component": "reference",
-          "name": "logoImage",
-          "label": "Imagen del logo",
+          "name": "icon",
+          "label": "Icono o ilustración",
           "valueType": "string",
           "required": true
         },
         {
           "component": "text",
-          "name": "logoImageAlt",
-          "label": "Texto alternativo del logo",
+          "name": "iconAlt",
+          "label": "Texto alternativo",
           "valueType": "string",
           "required": true
         },
         {
           "component": "text",
-          "name": "logoLink",
-          "label": "Enlace del logo",
+          "name": "title",
+          "label": "Título del nodo",
           "valueType": "string"
+        },
+        {
+          "component": "richtext",
+          "name": "description",
+          "label": "Descripción",
+          "valueType": "string",
+          "required": true
         }
       ]
     }
   ],
   "filters": [
     {
-      "id": "logo-carousel-filter",
+      "id": "features-filter",
       "components": [
         "core/franklin/components/block/v1/block/item"
       ]

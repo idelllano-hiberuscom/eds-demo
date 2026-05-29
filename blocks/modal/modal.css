@@ -1,0 +1,197 @@
+/**
+ * Modal Block — Styles
+ * Native <dialog> implementation scoped to .modal
+ * Model: xwalk (EDS + Universal Editor)
+ */
+
+/* === Variables locales === */
+.modal {
+  --modal-radius: var(--border-radius-large);
+  --modal-padding: var(--spacing-medium);
+  --modal-header-padding: var(--spacing-small) var(--spacing-medium);
+  --modal-shadow: var(--box-shadow-lg);
+  --modal-transition-duration: 280ms;
+  --modal-backdrop-bg: rgb(0 0 0 / 60%);
+
+  position: relative;
+}
+
+/* === Dialog base (closed state — hidden by browser) === */
+.modal-dialog {
+  border: none;
+  border-radius: var(--modal-radius);
+  padding: 0;
+  box-shadow: var(--modal-shadow);
+  background: var(--background-color);
+  max-width: min(48rem, calc(100vw - 2rem));
+  max-height: min(90vh, 56rem);
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transform: translateY(-1rem);
+  transition:
+    opacity var(--modal-transition-duration) ease,
+    transform var(--modal-transition-duration) ease;
+}
+
+/* === Open state animation === */
+.modal-dialog[open] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* === Closing state (reverse animation) === */
+.modal-is-closing .modal-dialog {
+  opacity: 0;
+  transform: translateY(-1rem);
+}
+
+/* === Backdrop === */
+.modal-dialog::backdrop {
+  background: var(--modal-backdrop-bg);
+  backdrop-filter: blur(2px);
+}
+
+/* === Header === */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--modal-header-padding);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+/* === Title === */
+.modal-title {
+  margin: 0;
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-bold);
+  color: var(--heading-color);
+  line-height: var(--line-height-tight);
+}
+
+/* === Close button === */
+.modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  min-width: 2.75rem;
+  border: none;
+  background: transparent;
+  border-radius: var(--border-radius-medium);
+  cursor: pointer;
+  color: var(--text-color);
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+.modal-close:hover {
+  background-color: var(--background-alt);
+  color: var(--primary-color);
+}
+
+.modal-close:focus-visible {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
+}
+
+.modal-close .icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* === Body === */
+.modal-body {
+  padding: var(--modal-padding);
+  overflow-y: auto;
+  flex: 1 1 auto;
+}
+
+/* === Content wrapper === */
+.modal-content {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  color: var(--text-color);
+}
+
+/* === Footer === */
+.modal-footer {
+  padding: 0 var(--modal-padding) var(--spacing-small);
+  min-height: 1.5rem;
+  flex-shrink: 0;
+}
+
+.modal-footer:empty {
+  display: none;
+}
+
+/* === State modifiers === */
+.modal.loading .modal-body::after {
+  content: '';
+  display: block;
+  width: 2rem;
+  height: 2rem;
+  margin: var(--spacing-medium) auto;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  animation: modal-spin 0.8s linear infinite;
+}
+
+@keyframes modal-spin {
+  to { transform: rotate(360deg); }
+}
+
+.modal.success .modal-footer {
+  color: var(--secondary-color);
+}
+
+.modal.error .modal-footer {
+  color: #c0392b;
+}
+
+/* === Scroll lock (on html) === */
+html.scroll-locked {
+  overflow: hidden;
+}
+
+/* === Responsive — Mobile === */
+@media (width < 768px) {
+  .modal-dialog {
+    max-width: calc(100vw - 1rem);
+    max-height: calc(100dvh - 2rem);
+    border-radius: var(--border-radius-medium);
+  }
+
+  .modal-header {
+    padding: var(--spacing-small);
+  }
+
+  .modal-body {
+    padding: var(--spacing-small);
+  }
+}
+
+/* === Tablet === */
+@media (width >= 768px) {
+  .modal-dialog {
+    max-width: 44rem;
+  }
+
+  .modal-title {
+    font-size: var(--heading-font-size-s);
+  }
+}
+
+/* === Desktop === */
+@media (width >= 1024px) {
+  .modal-dialog {
+    max-width: 48rem;
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "definitions": [
+    {
+      "title": "Post List",
+      "id": "post-list",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Post List",
+              "model": "post-list"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "post-list",
+      "fields": [
+        {
+          "component": "text",
+          "name": "sectionTitle",
+          "label": "Título de sección",
+          "valueType": "string",
+          "required": true
+        },
+        {
+          "component": "text",
+          "name": "category",
+          "label": "Categoría",
+          "valueType": "string",
+          "required": true,
+          "description": "Valor de la columna category en /query-index.json"
+        },
+        {
+          "component": "number",
+          "name": "postsPerPage",
+          "label": "Posts por página",
+          "valueType": "number",
+          "required": true,
+          "value": 4
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

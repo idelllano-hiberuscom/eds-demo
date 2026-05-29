@@ -1,0 +1,145 @@
+{
+  "definitions": [
+    {
+      "title": "Navigation Popup",
+      "id": "nav-popup",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Navigation Popup",
+              "model": "nav-popup",
+              "filter": "header-shell-filter",
+              "primaryItem1": {
+                "sling:resourceType": "core/franklin/components/block/v1/block/item",
+                "name": "Nav Card",
+                "model": "nav-popup-primary-item",
+                "icon": "",
+                "iconAlt": "",
+                "title": "Título",
+                "description": "Descripción",
+                "link": ""
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "nav-popup",
+      "fields": [
+        {
+          "component": "text",
+          "name": "dialogLabel",
+          "label": "Etiqueta accesible del diálogo",
+          "valueType": "string",
+          "value": "Menú de navegación",
+          "required": true
+        },
+        {
+          "component": "aem-content",
+          "name": "searchResultsPath",
+          "label": "Página de resultados de búsqueda",
+          "valueType": "string",
+          "required": true
+        },
+        {
+          "component": "text",
+          "name": "searchQueryParam",
+          "label": "Parámetro de búsqueda",
+          "valueType": "string",
+          "value": "q",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "nav-popup-language-item",
+      "fields": [
+        {
+          "component": "select",
+          "name": "language",
+          "label": "Idioma",
+          "valueType": "string",
+          "required": true,
+          "options": [
+            { "name": "ES", "value": "es" },
+            { "name": "EN", "value": "en" },
+            { "name": "PT", "value": "pt" }
+          ]
+        },
+        {
+          "component": "aem-content",
+          "name": "link",
+          "label": "Ruta del idioma",
+          "valueType": "string",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "nav-popup-primary-item",
+      "fields": [
+        {
+          "component": "reference",
+          "name": "icon",
+          "label": "Icono o imagen",
+          "valueType": "string",
+          "multi": false,
+          "required": true
+        },
+        {
+          "component": "text",
+          "name": "iconAlt",
+          "label": "Alt del icono",
+          "valueType": "string",
+          "required": true
+        },
+        {
+          "component": "text",
+          "name": "title",
+          "label": "Título",
+          "valueType": "string",
+          "required": true
+        },
+        {
+          "component": "textarea",
+          "name": "description",
+          "label": "Descripción",
+          "valueType": "string",
+          "required": true
+        },
+        {
+          "component": "aem-content",
+          "name": "link",
+          "label": "Destino",
+          "valueType": "string",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "nav-popup-link-item",
+      "fields": [
+        {
+          "component": "text",
+          "name": "linkText",
+          "label": "Texto del enlace",
+          "valueType": "string",
+          "required": true
+        },
+        {
+          "component": "aem-content",
+          "name": "link",
+          "label": "Destino",
+          "valueType": "string",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

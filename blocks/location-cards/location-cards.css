@@ -1,0 +1,186 @@
+/**
+ * Location Cards Block — Styles
+ * Model: xwalk (EDS + Universal Editor)
+ * BEM scoped to .location-cards
+ */
+
+/* Container */
+.location-cards {
+  --location-cards-gap: var(--spacing-regular);
+  --location-cards-radius: var(--border-radius-medium);
+
+  padding: var(--spacing-large) 0;
+}
+
+/* Header */
+.location-cards__header {
+  margin-bottom: var(--spacing-medium);
+}
+
+.location-cards__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-bold);
+  color: var(--heading-color);
+  margin: 0 0 var(--spacing-xxsmall);
+  line-height: var(--line-height-tight);
+}
+
+.location-cards__subtype {
+  font-size: var(--font-size-sm);
+  color: var(--text-color-light);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: var(--font-weight-medium);
+}
+
+/* Grid layout */
+.location-cards__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--location-cards-gap);
+}
+
+@media (width >= 768px) {
+  .location-cards__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .location-cards__title {
+    font-size: var(--heading-font-size-m);
+  }
+}
+
+@media (width >= 1024px) {
+  .location-cards__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .location-cards__title {
+    font-size: var(--heading-font-size-l);
+  }
+}
+
+/* Card item */
+.location-cards__item {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--location-cards-radius);
+  background: var(--background-color);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.location-cards__item:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--box-shadow-md);
+}
+
+/* Image */
+.location-cards__image {
+  position: relative;
+  aspect-ratio: 527 / 318;
+  overflow: hidden;
+}
+
+.location-cards__image picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.location-cards__image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Content */
+.location-cards__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xsmall);
+  padding: var(--spacing-regular);
+  flex: 1;
+}
+
+/* City name */
+.location-cards__city {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--heading-color);
+  margin: 0;
+  line-height: var(--line-height-tight);
+}
+
+/* Address */
+.location-cards__address {
+  font-style: normal;
+  font-size: var(--font-size-sm);
+  color: var(--text-color-light);
+  line-height: var(--line-height-base);
+}
+
+.location-cards__address p {
+  margin: 0;
+}
+
+/* Contact */
+.location-cards__contact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxsmall);
+  margin-top: auto;
+  padding-top: var(--spacing-xsmall);
+}
+
+.location-cards__phone {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.location-cards__phone:hover,
+.location-cards__phone:focus-visible {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+.location-cards__map-link {
+  font-size: var(--font-size-sm);
+  color: var(--text-color-light);
+  text-decoration: underline;
+}
+
+.location-cards__map-link:hover,
+.location-cards__map-link:focus-visible {
+  color: var(--primary-color);
+}
+
+/* Focus visible */
+.location-cards__phone:focus-visible,
+.location-cards__map-link:focus-visible {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
+}
+
+/* Headquarters modifier */
+.location-cards--headquarters .location-cards__item {
+  background: var(--color-light-blue-bg);
+  border-color: var(--primary-color);
+}
+
+.location-cards--headquarters .location-cards__city {
+  color: var(--accent-color);
+}
+
+@media (width >= 768px) {
+  .location-cards--headquarters .location-cards__item {
+    grid-column: span 1;
+  }
+}

@@ -558,6 +558,103 @@
     ]
   },
   {
+    "id": "cta",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Imagen",
+        "valueType": "string",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Texto alternativo",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Título",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "select",
+        "name": "titleType",
+        "label": "Nivel del título",
+        "valueType": "string",
+        "value": "h2",
+        "options": [
+          {
+            "name": "H2",
+            "value": "h2"
+          },
+          {
+            "name": "H3",
+            "value": "h3"
+          }
+        ]
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Descripción",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "cta_text",
+        "label": "Texto del CTA",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "aem-content",
+        "name": "cta_link",
+        "label": "Enlace del CTA",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "select",
+        "name": "imagePosition",
+        "label": "Posición de imagen",
+        "valueType": "string",
+        "value": "image-right",
+        "options": [
+          {
+            "name": "Imagen a la derecha",
+            "value": "image-right"
+          },
+          {
+            "name": "Imagen a la izquierda",
+            "value": "image-left"
+          }
+        ]
+      },
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Opciones",
+        "valueType": "string[]",
+        "options": [
+          {
+            "name": "Presentación",
+            "children": [
+              {
+                "name": "Compacto (sin imagen)",
+                "value": "compact"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "dm-asset",
     "fields": [
       {
@@ -742,6 +839,49 @@
         "validation": {
           "rootPath": "/content/forms/af"
         }
+      }
+    ]
+  },
+  {
+    "id": "features",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Título de sección",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "features-item",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "icon",
+        "label": "Icono o ilustración",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "iconAlt",
+        "label": "Texto alternativo",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Título del nodo",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Descripción",
+        "valueType": "string",
+        "required": true
       }
     ]
   },
@@ -6011,6 +6151,59 @@
     ]
   },
   {
+    "id": "hub-cards",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Título de sección",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "hub-cards-item",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "icon",
+        "label": "Icono",
+        "valueType": "string",
+        "multi": false,
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "cardTitle",
+        "label": "Título de tarjeta",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "reference",
+        "name": "cardImage",
+        "label": "Imagen",
+        "valueType": "string",
+        "multi": false,
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "cardImageAlt",
+        "label": "Alt de imagen",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "aem-content",
+        "name": "cardLink",
+        "label": "Enlace destino",
+        "valueType": "string",
+        "required": true
+      }
+    ]
+  },
+  {
     "id": "iframe",
     "fields": [
       {
@@ -6020,6 +6213,88 @@
         "value": "",
         "label": "iFrame URL",
         "description": "Please provide a URL to an iFrame app."
+      }
+    ]
+  },
+  {
+    "id": "location-cards",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Título de sección",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "sectionSubtype",
+        "label": "Subtipo",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "select",
+        "name": "classes",
+        "label": "Variante visual",
+        "valueType": "string",
+        "value": "",
+        "options": [
+          {
+            "name": "Por defecto",
+            "value": ""
+          },
+          {
+            "name": "Headquarters",
+            "value": "headquarters"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "location-cards-item",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "cityImage",
+        "label": "Imagen de ciudad",
+        "valueType": "string",
+        "multi": false,
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "cityImageAlt",
+        "label": "Alt de imagen",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "cityName",
+        "label": "Ciudad",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "richtext",
+        "name": "address",
+        "label": "Dirección",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "phone",
+        "label": "Teléfono",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "aem-content",
+        "name": "mapLink",
+        "label": "Enlace de mapa",
+        "valueType": "string"
       }
     ]
   },
@@ -6063,6 +6338,254 @@
         "name": "logoLink",
         "label": "Enlace del logo",
         "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "modal-block",
+    "fields": [
+      {
+        "component": "text",
+        "name": "modalTitle",
+        "label": "Título del modal",
+        "valueType": "string",
+        "required": true,
+        "value": "¿Hablamos?"
+      },
+      {
+        "component": "richtext",
+        "name": "modalContent",
+        "label": "Contenido del modal",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "select",
+        "name": "classes",
+        "label": "Variante",
+        "valueType": "string",
+        "required": true,
+        "value": "contact",
+        "options": [
+          {
+            "name": "Contacto",
+            "value": "contact"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "nav-popup",
+    "fields": [
+      {
+        "component": "text",
+        "name": "dialogLabel",
+        "label": "Etiqueta accesible del diálogo",
+        "valueType": "string",
+        "value": "Menú de navegación",
+        "required": true
+      },
+      {
+        "component": "aem-content",
+        "name": "searchResultsPath",
+        "label": "Página de resultados de búsqueda",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "searchQueryParam",
+        "label": "Parámetro de búsqueda",
+        "valueType": "string",
+        "value": "q",
+        "required": true
+      }
+    ]
+  },
+  {
+    "id": "nav-popup-language-item",
+    "fields": [
+      {
+        "component": "select",
+        "name": "language",
+        "label": "Idioma",
+        "valueType": "string",
+        "required": true,
+        "options": [
+          {
+            "name": "ES",
+            "value": "es"
+          },
+          {
+            "name": "EN",
+            "value": "en"
+          },
+          {
+            "name": "PT",
+            "value": "pt"
+          }
+        ]
+      },
+      {
+        "component": "aem-content",
+        "name": "link",
+        "label": "Ruta del idioma",
+        "valueType": "string",
+        "required": true
+      }
+    ]
+  },
+  {
+    "id": "nav-popup-primary-item",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "icon",
+        "label": "Icono o imagen",
+        "valueType": "string",
+        "multi": false,
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "iconAlt",
+        "label": "Alt del icono",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Título",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "textarea",
+        "name": "description",
+        "label": "Descripción",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "aem-content",
+        "name": "link",
+        "label": "Destino",
+        "valueType": "string",
+        "required": true
+      }
+    ]
+  },
+  {
+    "id": "nav-popup-link-item",
+    "fields": [
+      {
+        "component": "text",
+        "name": "linkText",
+        "label": "Texto del enlace",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "aem-content",
+        "name": "link",
+        "label": "Destino",
+        "valueType": "string",
+        "required": true
+      }
+    ]
+  },
+  {
+    "id": "post-list",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Título de sección",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "category",
+        "label": "Categoría",
+        "valueType": "string",
+        "required": true,
+        "description": "Valor de la columna category en /query-index.json"
+      },
+      {
+        "component": "number",
+        "name": "postsPerPage",
+        "label": "Posts por página",
+        "valueType": "number",
+        "required": true,
+        "value": 4
+      }
+    ]
+  },
+  {
+    "id": "related-cards",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Título de sección",
+        "valueType": "string",
+        "required": true
+      }
+    ]
+  },
+  {
+    "id": "related-cards-item",
+    "fields": [
+      {
+        "component": "text",
+        "name": "cardTitle",
+        "label": "Título",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "aem-content",
+        "name": "cardLink",
+        "label": "Enlace",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "reference",
+        "name": "cardImage",
+        "label": "Imagen",
+        "valueType": "string",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "name": "cardImageAlt",
+        "label": "Texto alternativo",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "search-results",
+    "fields": [
+      {
+        "component": "text",
+        "name": "searchPlaceholder",
+        "label": "Placeholder del buscador",
+        "valueType": "string",
+        "required": true,
+        "value": "¿Qué estás buscando?"
+      },
+      {
+        "component": "number",
+        "name": "resultsPerPage",
+        "label": "Resultados por página",
+        "valueType": "number",
+        "required": false,
+        "value": 10
       }
     ]
   },
@@ -6124,6 +6647,126 @@
             "value": "large"
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "solution-cards",
+    "fields": [
+      {
+        "component": "text",
+        "name": "sectionTitle",
+        "label": "Título de sección",
+        "valueType": "string",
+        "description": "Opcional. Si se informa, se renderiza antes de la lista de tarjetas."
+      },
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Opciones del bloque",
+        "valueType": "string[]",
+        "options": [
+          {
+            "name": "Layout",
+            "children": [
+              {
+                "name": "Sin alternancia automática",
+                "value": "no-alternate"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "solution-cards-item",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "cardImage",
+        "label": "Imagen",
+        "valueType": "string",
+        "multi": false,
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "cardImageAlt",
+        "label": "Texto alternativo",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "cardTitle",
+        "label": "Título",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "richtext",
+        "name": "cardDescription",
+        "label": "Descripción",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "select",
+        "name": "imagePosition",
+        "label": "Posición de imagen",
+        "valueType": "string",
+        "value": "auto",
+        "options": [
+          {
+            "name": "Automática",
+            "value": "auto"
+          },
+          {
+            "name": "Izquierda",
+            "value": "left"
+          },
+          {
+            "name": "Derecha",
+            "value": "right"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "name": "cta_text",
+        "label": "Texto CTA",
+        "valueType": "string",
+        "value": "Saber más"
+      },
+      {
+        "component": "aem-content",
+        "name": "cta_link",
+        "label": "Enlace CTA",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "tabs",
+    "fields": []
+  },
+  {
+    "id": "tabs-item",
+    "fields": [
+      {
+        "component": "text",
+        "name": "tabLabel",
+        "label": "Etiqueta de la pestaña",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "richtext",
+        "name": "tabContent",
+        "label": "Contenido de la pestaña",
+        "valueType": "string",
+        "required": true
       }
     ]
   },

@@ -1,0 +1,138 @@
+/**
+ * Hub Cards Block — Styles
+ * Model: xwalk (EDS + Universal Editor)
+ */
+
+/* 1. Container */
+.hub-cards {
+  --hub-cards-gap: var(--spacing-regular);
+  --hub-cards-card-radius: var(--border-radius-medium);
+  --hub-cards-icon-size: 40px;
+
+  padding: var(--spacing-large) 0;
+}
+
+/* 2. Header */
+.hub-cards__header {
+  margin-bottom: var(--spacing-medium);
+}
+
+.hub-cards__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-bold);
+  color: var(--heading-color);
+  margin: 0;
+}
+
+/* 3. Grid — mobile first: 1 col */
+.hub-cards__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--hub-cards-gap);
+}
+
+/* 4. Card item */
+.hub-cards__item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--hub-cards-card-radius);
+  overflow: hidden;
+  background: var(--background-color);
+  box-shadow: var(--box-shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hub-cards__item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--box-shadow-md);
+}
+
+/* 5. Icon */
+.hub-cards__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--hub-cards-icon-size);
+  height: var(--hub-cards-icon-size);
+  margin: var(--spacing-small) var(--spacing-small) 0;
+  flex-shrink: 0;
+}
+
+.hub-cards__icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* 6. Content */
+.hub-cards__content {
+  padding: var(--spacing-xsmall) var(--spacing-small);
+  flex-grow: 1;
+}
+
+.hub-cards__card-title {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-bold);
+  color: var(--heading-color);
+  margin: 0;
+}
+
+/* 7. Image */
+.hub-cards__image {
+  order: -1;
+  overflow: hidden;
+}
+
+.hub-cards__image picture {
+  display: block;
+  line-height: 0;
+}
+
+.hub-cards__image img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 527 / 318;
+  object-fit: cover;
+  display: block;
+}
+
+/* 8. Stretched link */
+.hub-cards__link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  text-decoration: none;
+  color: transparent;
+  outline: none;
+}
+
+.hub-cards__link:focus-visible {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
+  border-radius: var(--hub-cards-card-radius);
+}
+
+/* 9. Responsive — 2 cols at 768px */
+@media (width >= 768px) {
+  .hub-cards__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hub-cards__title {
+    font-size: var(--heading-font-size-s);
+  }
+}
+
+/* 10. Responsive — 3 cols at 1024px */
+@media (width >= 1024px) {
+  .hub-cards__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .hub-cards__title {
+    font-size: var(--heading-font-size-m);
+  }
+}

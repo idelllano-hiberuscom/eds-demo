@@ -216,6 +216,29 @@
           }
         },
         {
+          "title": "CTA Block",
+          "id": "cta",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "CTA Block",
+                  "model": "cta",
+                  "image": "",
+                  "imageAlt": "",
+                  "title": "Título",
+                  "titleType": "h2",
+                  "description": "<p>Descripción</p>",
+                  "cta_text": "Saber más",
+                  "cta_link": "",
+                  "imagePosition": "image-right"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "DynamicMedia Image",
           "id": "dm-asset",
           "plugins": {
@@ -240,6 +263,30 @@
                 "template": {
                   "name": "Embed Adaptive Form",
                   "model": "embed-adaptive-form"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Features",
+          "id": "features",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Features",
+                  "model": "features",
+                  "filter": "features-filter",
+                  "item1": {
+                    "sling:resourceType": "core/franklin/components/block/v1/block/item",
+                    "name": "Feature Node",
+                    "model": "features-item",
+                    "icon": "",
+                    "iconAlt": "Feature icon",
+                    "description": "Feature description"
+                  }
                 }
               }
             }
@@ -872,6 +919,32 @@
           }
         },
         {
+          "title": "Hub Cards",
+          "id": "hub-cards",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Hub Cards",
+                  "model": "hub-cards",
+                  "filter": "hub-cards-filter",
+                  "item1": {
+                    "sling:resourceType": "core/franklin/components/block/v1/block/item",
+                    "name": "Hub Card",
+                    "model": "hub-cards-item",
+                    "icon": "",
+                    "cardTitle": "Título",
+                    "cardImage": "",
+                    "cardImageAlt": "",
+                    "cardLink": ""
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Iframe",
           "id": "iframe",
           "plugins": {
@@ -881,6 +954,33 @@
                 "template": {
                   "name": "Iframe",
                   "model": "iframe"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Location Cards",
+          "id": "location-cards",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Location Cards",
+                  "model": "location-cards",
+                  "filter": "location-cards-filter",
+                  "item1": {
+                    "sling:resourceType": "core/franklin/components/block/v1/block/item",
+                    "name": "Location Card",
+                    "model": "location-cards-item",
+                    "cityImage": "",
+                    "cityImageAlt": "",
+                    "cityName": "Ciudad",
+                    "address": "<p>Dirección</p>",
+                    "phone": "+34 000 000 000",
+                    "mapLink": ""
+                  }
                 }
               }
             }
@@ -904,6 +1004,102 @@
                     "logoImage": "/content/dam/cecabank/logos/placeholder.png",
                     "logoImageAlt": "Logo"
                   }
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Modal",
+          "id": "modal",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Modal",
+                  "model": "modal-block"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Navigation Popup",
+          "id": "nav-popup",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Navigation Popup",
+                  "model": "nav-popup",
+                  "filter": "header-shell-filter",
+                  "primaryItem1": {
+                    "sling:resourceType": "core/franklin/components/block/v1/block/item",
+                    "name": "Nav Card",
+                    "model": "nav-popup-primary-item",
+                    "icon": "",
+                    "iconAlt": "",
+                    "title": "Título",
+                    "description": "Descripción",
+                    "link": ""
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Post List",
+          "id": "post-list",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Post List",
+                  "model": "post-list"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Related Cards",
+          "id": "related-cards",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Related Cards",
+                  "model": "related-cards",
+                  "filter": "related-cards-filter",
+                  "item1": {
+                    "sling:resourceType": "core/franklin/components/block/v1/block/item",
+                    "name": "Related Card",
+                    "model": "related-cards-item",
+                    "cardTitle": "Card Title",
+                    "cardLink": "",
+                    "cardImage": "",
+                    "cardImageAlt": ""
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Search Results",
+          "id": "search-results",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Search Results",
+                  "model": "search-results"
                 }
               }
             }
@@ -934,6 +1130,57 @@
                 "template": {
                   "name": "Separator",
                   "model": "separator"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Solution Cards Grid",
+          "id": "solution-cards",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Solution Cards Grid",
+                  "model": "solution-cards",
+                  "filter": "solution-cards-filter",
+                  "item1": {
+                    "sling:resourceType": "core/franklin/components/block/v1/block/item",
+                    "name": "Solution Card",
+                    "model": "solution-cards-item",
+                    "cardImage": "",
+                    "cardImageAlt": "Alt text",
+                    "cardTitle": "Card Title",
+                    "cardDescription": "<p>Description</p>",
+                    "imagePosition": "auto",
+                    "cta_text": "Saber más",
+                    "cta_link": ""
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Tabs",
+          "id": "tabs",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Tabs",
+                  "model": "tabs",
+                  "filter": "tabs-filter",
+                  "item1": {
+                    "sling:resourceType": "core/franklin/components/block/v1/block/item",
+                    "name": "Tab",
+                    "model": "tabs-item",
+                    "tabLabel": "Pestaña",
+                    "tabContent": "<p>Contenido</p>"
+                  }
                 }
               }
             }

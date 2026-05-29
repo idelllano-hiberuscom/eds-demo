@@ -1,0 +1,115 @@
+{
+  "definitions": [
+    {
+      "title": "Location Cards",
+      "id": "location-cards",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Location Cards",
+              "model": "location-cards",
+              "filter": "location-cards-filter",
+              "item1": {
+                "sling:resourceType": "core/franklin/components/block/v1/block/item",
+                "name": "Location Card",
+                "model": "location-cards-item",
+                "cityImage": "",
+                "cityImageAlt": "",
+                "cityName": "Ciudad",
+                "address": "<p>Dirección</p>",
+                "phone": "+34 000 000 000",
+                "mapLink": ""
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "location-cards",
+      "fields": [
+        {
+          "component": "text",
+          "name": "sectionTitle",
+          "label": "Título de sección",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "sectionSubtype",
+          "label": "Subtipo",
+          "valueType": "string",
+          "required": true
+        },
+        {
+          "component": "select",
+          "name": "classes",
+          "label": "Variante visual",
+          "valueType": "string",
+          "value": "",
+          "options": [
+            { "name": "Por defecto", "value": "" },
+            { "name": "Headquarters", "value": "headquarters" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "location-cards-item",
+      "fields": [
+        {
+          "component": "reference",
+          "name": "cityImage",
+          "label": "Imagen de ciudad",
+          "valueType": "string",
+          "multi": false,
+          "required": true
+        },
+        {
+          "component": "text",
+          "name": "cityImageAlt",
+          "label": "Alt de imagen",
+          "valueType": "string",
+          "required": true
+        },
+        {
+          "component": "text",
+          "name": "cityName",
+          "label": "Ciudad",
+          "valueType": "string",
+          "required": true
+        },
+        {
+          "component": "richtext",
+          "name": "address",
+          "label": "Dirección",
+          "valueType": "string",
+          "required": true
+        },
+        {
+          "component": "text",
+          "name": "phone",
+          "label": "Teléfono",
+          "valueType": "string",
+          "required": true
+        },
+        {
+          "component": "aem-content",
+          "name": "mapLink",
+          "label": "Enlace de mapa",
+          "valueType": "string"
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "location-cards-filter",
+      "components": ["core/franklin/components/block/v1/block/item"]
+    }
+  ]
+}

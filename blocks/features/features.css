@@ -1,0 +1,136 @@
+/**
+ * Features Block — Styles
+ * Model: xwalk (EDS + Universal Editor)
+ */
+
+/* 1. Local variables */
+.features {
+  --features-gap: var(--spacing-regular);
+  --features-padding: var(--spacing-large) var(--spacing-small);
+}
+
+/* 2. Container root */
+.features {
+  padding: var(--features-padding);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* 3. Header */
+.features .features__header {
+  text-align: center;
+  margin-bottom: var(--spacing-large);
+}
+
+.features .features__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-bold);
+  color: var(--heading-color);
+  line-height: var(--line-height-tight);
+  margin: 0;
+}
+
+/* 4. Grid */
+.features .features__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--features-gap);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* 5. Item */
+.features .features__element {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--spacing-medium);
+  border-radius: var(--border-radius-medium);
+  background: var(--background-color);
+}
+
+/* 6. Media */
+.features .features__media {
+  margin: 0 0 var(--spacing-small);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.features .features__media picture {
+  display: flex;
+}
+
+.features .features__media img {
+  width: 100%;
+  max-width: 80px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* 7. Content */
+.features .features__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxsmall);
+}
+
+.features .features__item-title {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-bold);
+  color: var(--heading-color);
+  line-height: var(--line-height-tight);
+  margin: 0;
+}
+
+.features .features__description {
+  font-size: var(--font-size-base);
+  color: var(--text-color);
+  line-height: var(--line-height-base);
+}
+
+.features .features__description p {
+  margin: 0;
+}
+
+/* 8. Responsive — Tablet (2 cols) */
+@media (width >= 600px) {
+  .features .features__grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--spacing-medium);
+  }
+
+  .features .features__media img {
+    max-width: 100px;
+  }
+}
+
+/* 9. Responsive — Desktop (explicit cols) */
+@media (width >= 900px) {
+  .features {
+    --features-padding: var(--spacing-xxlarge) var(--spacing-medium);
+  }
+
+  .features .features__title {
+    font-size: var(--heading-font-size-l);
+  }
+
+  .features .features__grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-large);
+  }
+
+  .features .features__media img {
+    max-width: 120px;
+  }
+}
+
+@media (width >= 1200px) {
+  .features .features__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

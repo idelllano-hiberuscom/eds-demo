@@ -1,0 +1,110 @@
+/**
+ * Tabs Block — Styles
+ * Model: xwalk (EDS + Universal Editor)
+ */
+
+/* Container */
+.tabs {
+  --tabs-border-color: var(--border-color, #e0e0e0);
+  --tabs-active-color: var(--primary-color, #00a8b5);
+  --tabs-text-color: var(--text-color, #333);
+  --tabs-active-text: var(--primary-dark, #007d87);
+  --tabs-panel-padding: var(--spacing-medium, 2rem);
+
+  width: 100%;
+}
+
+/* Tab list */
+.tabs .tabs__tab-list {
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  gap: 0;
+  border-bottom: 1px solid var(--tabs-border-color);
+  margin: 0;
+  padding: 0;
+  scrollbar-width: thin;
+}
+
+/* Individual tab button */
+.tabs .tabs__tab {
+  appearance: none;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: var(--spacing-small, 1rem) var(--spacing-regular, 1.5rem);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base, 1rem);
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--tabs-text-color);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.tabs .tabs__tab:hover {
+  color: var(--tabs-active-text);
+}
+
+.tabs .tabs__tab--active {
+  color: var(--tabs-active-text);
+  border-bottom-color: var(--tabs-active-color);
+  font-weight: var(--font-weight-bold, 700);
+}
+
+.tabs .tabs__tab:focus-visible {
+  outline: 2px solid var(--focus-color, #00a8b5);
+  outline-offset: -2px;
+  border-radius: var(--border-radius-small, 0.125rem);
+}
+
+/* Panels container */
+.tabs .tabs__panels {
+  margin-top: 0;
+}
+
+/* Individual panel */
+.tabs .tabs__panel {
+  padding: var(--tabs-panel-padding) 0;
+}
+
+.tabs .tabs__panel[hidden] {
+  display: none;
+}
+
+.tabs .tabs__panel p {
+  margin: 0 0 var(--spacing-small, 1rem);
+  line-height: var(--line-height-base, 1.5);
+}
+
+.tabs .tabs__panel p:last-child {
+  margin-bottom: 0;
+}
+
+.tabs .tabs__panel h3 {
+  margin: var(--spacing-regular, 1.5rem) 0 var(--spacing-xsmall, 0.75rem);
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-h3, 1.25rem);
+  color: var(--heading-color, #000);
+}
+
+/* Tablet+ */
+@media (width >= 768px) {
+  .tabs .tabs__tab {
+    padding: var(--spacing-small, 1rem) var(--spacing-medium, 2rem);
+    font-size: var(--font-size-lg, 1.125rem);
+  }
+
+  .tabs .tabs__panel {
+    padding: var(--spacing-large, 2.5rem) 0;
+  }
+}
+
+/* Desktop */
+@media (width >= 1024px) {
+  .tabs .tabs__tab-list {
+    overflow-x: visible;
+    flex-wrap: nowrap;
+  }
+}

@@ -14,19 +14,31 @@
       "carousel",
       "columns",
       "contentfragment",
+      "cta",
       "dm-asset",
       "dm-template",
+      "features",
       "find-a-doctor",
+      "form",
+      "location-cards",
+      "modal",
+      "nav-popup",
+      "post-list",
+      "related-cards",
+      "search-results",
+      "solution-cards",
       "footer",
       "forex",
       "fragment",
       "header",
       "hero",
+      "hub-cards",
       "iframe",
       "image",
       "logo-carousel",
       "search",
       "separator",
+      "tabs",
       "teaser",
       "text",
       "title",
@@ -77,6 +89,48 @@
   },
   {
     "id": "logo-carousel-filter",
+    "components": [
+      "core/franklin/components/block/v1/block/item"
+    ]
+  },
+  {
+    "id": "features-filter",
+    "components": [
+      "core/franklin/components/block/v1/block/item"
+    ]
+  },
+  {
+    "id": "solution-cards-filter",
+    "components": [
+      "core/franklin/components/block/v1/block/item"
+    ]
+  },
+  {
+    "id": "related-cards-filter",
+    "components": [
+      "core/franklin/components/block/v1/block/item"
+    ]
+  },
+  {
+    "id": "location-cards-filter",
+    "components": [
+      "core/franklin/components/block/v1/block/item"
+    ]
+  },
+  {
+    "id": "hub-cards-filter",
+    "components": [
+      "core/franklin/components/block/v1/block/item"
+    ]
+  },
+  {
+    "id": "tabs-filter",
+    "components": [
+      "core/franklin/components/block/v1/block/item"
+    ]
+  },
+  {
+    "id": "header-shell-filter",
     "components": [
       "core/franklin/components/block/v1/block/item"
     ]
